@@ -34,5 +34,4 @@
     </queries>
 
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions"/>
-
 </manifest>

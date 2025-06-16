@@ -2,16 +2,16 @@ package com.example.tlnapp_timemanagement.main
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.media.Image
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.util.Log
+import android.view.*
 import android.widget.*
+import java.util.*
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
-import java.util.*
 import com.example.tlnapp_timemanagement.R
 
 class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
@@ -145,6 +145,10 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     }
 
     override fun onAppSettingSaved(appInfo: ApplicationInfo, timeLimit: Int) {
+        val pm = requireContext().packageManager
+        val name = pm.getApplicationLabel(appInfo)
+        val icon = pm.getApplicationIcon(appInfo)
+        Log.d("CheckedApp", "Received app: $name - ${appInfo.packageName} - $icon")
         updateAppInfo(appInfo, timeLimit)
     }
 
