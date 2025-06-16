@@ -18,8 +18,8 @@
                 android:shape="ring"
                 android:thickness="8dp">
                 <gradient
-                    android:endColor="@color/colorProgressEnd"
-                    android:startColor="@color/colorProgressStart"
+                    android:endColor="@color/colorAccent"
+                    android:startColor="@color/colorPrimary"
                     android:type="sweep" />
             </shape>
         </rotate>
