@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">App Timer</string>
+    <string name="app_timer">App Timer</string>
+    <string name="timer">Hẹn giờ</string>
+    <string name="practice">Luyện tập</string>
+    <string name="profile">Cá nhân</string>
+
+    <string name="app_icon">App Icon</string>
+    <string name="selected_app_icon">Selected App Icon</string>
+
+    <string name="instagram">Instagram</string>
+    <string name="youtube">YouTube</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="chrome">Chrome</string>
+
+    <string name="time_limit_60_minutes">Thời gian giới hạn: %d phút</string>
+    <string name="time_remaining">Thời gian còn lại</string>
+    <string name="time_up">Hết thời gian!</string>
+
+    <string name="delete">Xóa</string>
+    <string name="setup">Thiết lập</string>
+
+    <string name="setup_time">Thiết lập thời gian</string>
+    <string name="select_app_name">Tên ứng dụng</string>
+    <string name="select_app">Chọn ứng dụng</string>
+    <string name="time_limit_minutes">Thời gian giới hạn (phút)</string>
+
+    <string name="cancel">Hủy</string>
+    <string name="save">Lưu</string>
+</resources>

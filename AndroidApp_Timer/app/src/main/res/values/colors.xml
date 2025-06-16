@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#4F46E5</color>
+    <color name="colorPrimaryDark">#4338CA</color>
+    <color name="colorAccent">#8B5CF6</color>
+    <color name="colorDanger">#EF4444</color>
+    <color name="colorDangerLight">#FEE2E2</color>
+
+    <color name="textPrimary">#1F2937</color>
+    <color name="textSecondary">#6B7280</color>
+
+    <color name="instagram">#E4405F</color>
+    <color name="youtube">#FF0000</color>
+    <color name="facebook">#1877F2</color>
+    <color name="twitter">#1DA1F2</color>
+    <color name="chrome">#4285F4</color>
+
+
+    <color name="bottom_nav_selected">#4F46E5</color>
+    <color name="bottom_nav_unselected">#9CA3AF</color>
+</resources>
