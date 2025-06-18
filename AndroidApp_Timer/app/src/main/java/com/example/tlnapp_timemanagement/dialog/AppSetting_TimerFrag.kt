@@ -122,13 +122,6 @@ class AppSetting_TimerFrag : DialogFragment() {
         val iconView = view.findViewById<ImageView>(R.id.app_icon)
         val nameView = view.findViewById<TextView>(R.id.app_name)
         val appInfo = spinnerApps.adapter.getItem(position) as ApplicationInfo
-//        if (appInfo. == null) {
-//            nameView.text = "--Chọn ứng dụng--"
-//            iconView.setImageDrawable(null)
-//        } else {
-//            iconView.setImageDrawable(pm.getApplicationIcon(appInfo))
-//            nameView.text = pm.getApplicationLabel(appInfo)
-//        }
         iconView.setImageDrawable(pm.getApplicationIcon(appInfo))
         nameView.text = pm.getApplicationLabel(appInfo)
         return view
