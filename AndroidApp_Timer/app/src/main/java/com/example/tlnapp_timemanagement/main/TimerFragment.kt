@@ -11,10 +11,15 @@ import android.widget.*
 import java.util.*
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
 import com.example.tlnapp_timemanagement.R
+import com.example.tlnapp_timemanagement.data.model.HistoryApp
+import com.example.tlnapp_timemanagement.data.viewmodel.HistoryAppViewModel
 
 class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
+    private var currentapp = HistoryApp(null)
+
 
     private lateinit var timerText: TextView
     private lateinit var timerStatus: TextView
@@ -32,7 +37,9 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     private var startTimeInMillis: Long = 0
 
     private var currentAppInfo: ApplicationInfo? = null
-    private var currentTimeLimit = 60 // Default 60 minutes
+    private var currentTimeLimit = 60
+
+    private lateinit var historyAppViewModel: HistoryAppViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +51,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        historyAppViewModel = ViewModelProvider(this).get(HistoryAppViewModel::class.java)
 
         // Initialize views
         timerText = view.findViewById(R.id.timer_text)
@@ -119,6 +127,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         updateTimerDisplay()
         timerStatus.text = "Thời gian còn lại"
         timerRunning = false
+        if (!app.packageName.equals("NULL")) historyAppViewModel.deleteHistory(app)
     }
 
     private fun updateTimerDisplay() {
@@ -146,9 +155,17 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
 
     override fun onAppSettingSaved(appInfo: ApplicationInfo, timeLimit: Int) {
         val pm = requireContext().packageManager
-        val name = pm.getApplicationLabel(appInfo)
-        val icon = pm.getApplicationIcon(appInfo)
-        Log.d("CheckedApp", "Received app: $name - ${appInfo.packageName} - $icon")
+        if currentapp != null
+        val app = HistoryApp(
+            idHistory = 0,
+            packageName = appInfo.packageName,
+            timeLimit = timeLimit,
+            beginTime = null,
+            endTime = null,
+            status = "PENDING"
+        )
+        historyAppViewModel.insertHistory(app)
+        currentapp = app
         updateAppInfo(appInfo, timeLimit)
     }
 
