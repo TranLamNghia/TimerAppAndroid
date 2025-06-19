@@ -2,14 +2,13 @@ package com.example.tlnapp_timemanagement.main
 
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.media.Image
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.util.Log
 import android.view.*
 import android.widget.*
 import java.util.*
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
@@ -18,7 +17,14 @@ import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.viewmodel.HistoryAppViewModel
 
 class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
-    private var currentapp = HistoryApp(null)
+    private var currentapp = HistoryApp(
+        idHistory = 0,
+        packageName = "Chọn ứng dụng",
+        beginTime = null,
+        endTime = null,
+        timeLimit = 60,
+        status = "PENDING"
+    )
 
 
     private lateinit var timerText: TextView
@@ -33,10 +39,9 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
 
     private var countDownTimer: CountDownTimer? = null
     private var timerRunning = false
-    private var timeLeftInMillis: Long = 0
-    private var startTimeInMillis: Long = 0
+    private var timeLeftInMillis: Long = 25
+    private var startTimeInMillis: Long = 123
 
-    private var currentAppInfo: ApplicationInfo? = null
     private var currentTimeLimit = 60
 
     private lateinit var historyAppViewModel: HistoryAppViewModel
@@ -64,43 +69,57 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         btnDelete = view.findViewById(R.id.btn_delete)
         btnSetup = view.findViewById(R.id.btn_setup)
 
-        // Set initial values
-        setDefaultApp()
-        updateTimerDisplay()
+        historyAppViewModel.getPendingApp{ beforeApp ->
+            if (beforeApp != null) {
+                currentapp = beforeApp
+            } else {
+                currentapp = HistoryApp(
+                    idHistory = 0,
+                    packageName = "Chọn ứng dụng",
+                    beginTime = null,
+                    endTime = null,
+                    timeLimit = 60,
+                    status = "PENDING"
+                )
+            }
+//            setDefaultApp()
+            updateAppInfo(currentapp)
+            updateTimerDisplay()
+        }
 
         // Set click listeners
         btnDelete.setOnClickListener { resetTimer() }
         btnSetup.setOnClickListener { showSetupDialog() }
+
     }
 
-    private fun setDefaultApp() {
-        // Set default app (you can customize this)
-        selectedAppName.text = "Chọn ứng dụng"
-        selectedAppTimeLimit.text = "Thời gian giới hạn: $currentTimeLimit phút"
-        selectedAppIcon.setImageResource(R.drawable.ic_smartphone)
+//    private fun setDefaultApp() {
+//        val pm = requireContext().packageManager
+//        selectedAppName.text = pm.getApplicationInfo(currentapp.packageName, 0).loadLabel(pm)
+//        selectedAppTimeLimit.text = currentapp.timeLimit.toString()
+//        val icon = try {
+//            requireContext().packageManager.getApplicationIcon(currentapp.packageName)
+//        } catch (e: PackageManager.NameNotFoundException) {
+//            ContextCompat.getDrawable(requireContext(), R.drawable.ic_smartphone)
+//        }
+//        selectedAppIcon.setImageDrawable(icon)
+//        startTimeInMillis = currentTimeLimit * 60 * 1000L
+//        timeLeftInMillis = startTimeInMillis
+//    }
 
-        startTimeInMillis = currentTimeLimit * 60 * 1000L
-        timeLeftInMillis = startTimeInMillis
-    }
-
-    private fun updateAppInfo(appInfo: ApplicationInfo, timeLimit: Int) {
-        currentAppInfo = appInfo
-        currentTimeLimit = timeLimit
-
+    private fun updateAppInfo(currentapp : HistoryApp) {
         val pm = requireContext().packageManager
-        try {
-            selectedAppName.text = pm.getApplicationLabel(appInfo)
-            selectedAppIcon.setImageDrawable(pm.getApplicationIcon(appInfo))
+        selectedAppName.text = pm.getApplicationInfo(currentapp.packageName, 0).loadLabel(pm)
+        selectedAppTimeLimit.text = "Thời gian giới hạn: ${currentapp.timeLimit} phút"
+        val icon = try {
+            requireContext().packageManager.getApplicationIcon(currentapp.packageName)
         } catch (e: PackageManager.NameNotFoundException) {
-            selectedAppName.text = appInfo.packageName
-            selectedAppIcon.setImageResource(R.drawable.ic_smartphone)
+            ContextCompat.getDrawable(requireContext(), R.drawable.ic_smartphone)
         }
-
-        selectedAppTimeLimit.text = "Thời gian giới hạn: $timeLimit phút"
-
-        // Reset timer with new time limit
-        startTimeInMillis = timeLimit * 60 * 1000L
-        resetTimer()
+        selectedAppIcon.setImageDrawable(icon)
+        startTimeInMillis = currentapp.timeLimit * 60 * 1000L
+        timeLeftInMillis = 123
+//        resetTimer()
     }
 
     private fun startTimer() {
@@ -127,7 +146,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         updateTimerDisplay()
         timerStatus.text = "Thời gian còn lại"
         timerRunning = false
-        if (!app.packageName.equals("NULL")) historyAppViewModel.deleteHistory(app)
+        if (!currentapp.packageName.equals("NULL")) historyAppViewModel.deleteHistory(currentapp)
     }
 
     private fun updateTimerDisplay() {
@@ -155,7 +174,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
 
     override fun onAppSettingSaved(appInfo: ApplicationInfo, timeLimit: Int) {
         val pm = requireContext().packageManager
-        if currentapp != null
         val app = HistoryApp(
             idHistory = 0,
             packageName = appInfo.packageName,
@@ -164,9 +182,17 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             endTime = null,
             status = "PENDING"
         )
-        historyAppViewModel.insertHistory(app)
+        if (currentapp.packageName.equals("NULL")) {
+            historyAppViewModel.insertHistory(app)
+        }
+        else if (currentapp.status.equals("PENDING")) {
+            historyAppViewModel.updatePendingApp(app.packageName, app.timeLimit)
+        }
+        else {
+            historyAppViewModel.insertHistory(app)
+        }
         currentapp = app
-        updateAppInfo(appInfo, timeLimit)
+        updateAppInfo(currentapp)
     }
 
     override fun onDestroy() {

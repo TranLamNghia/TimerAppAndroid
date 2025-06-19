@@ -25,11 +25,30 @@ class HistoryAppViewModel(application: Application): AndroidViewModel(applicatio
         repository.updateHistory(historyApp)
     }
 
+    fun updatePendingApp(package_name: String, timeLimit: Int) = viewModelScope.launch {
+        repository.updatePendingApp(package_name, timeLimit)
+    }
+
+    fun updateStatusForPending(newStatus: String) = viewModelScope.launch {
+        repository.updateStatusForPending(newStatus)
+    }
+
     fun deleteHistory(historyApp: HistoryApp) = viewModelScope.launch {
         repository.deleteHistory(historyApp)
     }
 
-    fun getPendingApps(): HistoryApp? = repository.getAppByStatus("PENDING")
-    fun getActiveApps(): HistoryApp? = repository.getAppByStatus("ACTIVE")
+    fun getPendingApp(onResult: (HistoryApp?) -> Unit) {
+        viewModelScope.launch {
+            val result = repository.getAppByStatus("PENDING")
+            onResult(result)
+        }
+    }
+
+    fun getActiveApp(onResult: (HistoryApp?) -> Unit) {
+        viewModelScope.launch {
+            val result = repository.getAppByStatus("ACTIVE")
+            onResult(result)
+        }
+    }
 
 }
