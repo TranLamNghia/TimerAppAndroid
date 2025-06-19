@@ -9,8 +9,10 @@ class HistoryAppRepository(private val historyAppDao: HistoryAppDAO) {
     suspend fun insertHistory(historyApp: HistoryApp) = historyAppDao.insert(historyApp)
     suspend fun updateHistory(historyApp: HistoryApp) = historyAppDao.update(historyApp)
     suspend fun deleteHistory(historyApp: HistoryApp) = historyAppDao.delete(historyApp)
+    suspend fun updatePendingApp(package_name: String, timeLimit: Int) = historyAppDao.updatePendingApp(package_name, timeLimit)
+    suspend fun updateStatusForPending(newStatus : String) = historyAppDao.updateStatusForPending(newStatus)
 
-    fun getAppByStatus(status: String) : HistoryApp? = historyAppDao.getAppByStatus(status)
+    suspend fun getAppByStatus(status: String) : HistoryApp? = historyAppDao.getAppByStatus(status)
 
     fun getAllHistory() = historyAppDao.getAllHistory()
 

@@ -23,9 +23,15 @@ interface HistoryAppDAO {
     fun getAllHistory(): HistoryApp?
 
     @Query("SELECT * FROM HistoryApp WHERE status = :status")
-    fun getAppByStatus(status: String): HistoryApp?
+    suspend fun getAppByStatus(status: String): HistoryApp?
 
 
     @Query("SELECT * FROM HistoryApp WHERE packageName = :packageName")
     fun getHistoryByPackageName(packageName: String): List<HistoryApp>
+
+    @Query("UPDATE HistoryApp SET status = :newStatus WHERE status = 'PENDING'")
+    suspend fun updateStatusForPending(newStatus: String)
+
+    @Query("UPDATE HistoryApp SET packageName = :packagename, timeLimit = :timeLimit WHERE status = 'PENDING'")
+    suspend fun updatePendingApp(packagename: String, timeLimit: Int)
 }
