@@ -14,7 +14,8 @@ class HistoryAppViewModel(application: Application): AndroidViewModel(applicatio
 
     init {
         val historyAppDao = AppDatabase.getDatabase(application).historyAppDao()
-        repository = HistoryAppRepository(historyAppDao)
+        val dailyUsageDao = AppDatabase.getDatabase(application).dailyUsageDao()
+        repository = HistoryAppRepository(historyAppDao, dailyUsageDao)
     }
 
     fun insertHistory(historyApp: HistoryApp) = viewModelScope.launch {
@@ -25,16 +26,20 @@ class HistoryAppViewModel(application: Application): AndroidViewModel(applicatio
         repository.updateHistory(historyApp)
     }
 
-    fun updatePendingApp(package_name: String, timeLimit: Int) = viewModelScope.launch {
-        repository.updatePendingApp(package_name, timeLimit)
+    fun updatePendingApp(idHistory: Int, timeLimit: Int) = viewModelScope.launch {
+        repository.updatePendingApp(idHistory, timeLimit)
     }
 
-    fun updateStatusForPending(newStatus: String) = viewModelScope.launch {
-        repository.updateStatusForPending(newStatus)
+    fun updateNewStatusByIdHistory(idHistory:Int, newStatus: String) = viewModelScope.launch {
+        repository.updateNewStatusByIdHistory(idHistory,newStatus)
     }
 
     fun deleteHistory(historyApp: HistoryApp) = viewModelScope.launch {
         repository.deleteHistory(historyApp)
+    }
+
+    fun deleteHistoryApp(status: String) = viewModelScope.launch {
+        repository.deleteHistoryApp(status)
     }
 
     fun getPendingApp(onResult: (HistoryApp?) -> Unit) {
