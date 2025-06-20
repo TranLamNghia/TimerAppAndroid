@@ -29,4 +29,11 @@
 
     <string name="cancel">Hủy</string>
     <string name="save">Lưu</string>
+
+
+    <string name="ac_service_desc">
+        App Timer cần quyền Trợ năng để nhận biết khi bạn mở ứng dụng,
+        ghi thời gian sử dụng và nhắc khi vượt giới hạn. Ứng dụng KHÔNG đọc
+        nội dung màn hình hay thu thập dữ liệu cá nhân.
+    </string>
 </resources>

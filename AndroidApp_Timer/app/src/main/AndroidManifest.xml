@@ -22,9 +22,9 @@
             </intent-filter>
         </activity>
 
+        <receiver android:name=".service.UsageSessionReceiver"
+            android:exported="true" />
     </application>
-
-
 
     <queries>
         <intent>
@@ -34,4 +34,5 @@
     </queries>
 
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 </manifest>

@@ -14,7 +14,7 @@ import androidx.room.PrimaryKey
     )])
 data class DailyUsage (
     @PrimaryKey val idHistory: Int,
-    val packageName: String,
+    val dateKey: String,
     val userSEC: Int
 
 )

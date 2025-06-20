@@ -8,4 +8,7 @@ class DailyUsageRepository(private val dailyUsageDAO: DailyUsageDAO) {
 
     suspend fun updateDailyUsage(dailyUsage: DailyUsage) = dailyUsageDAO.update(dailyUsage)
 
+    suspend fun getDailyUsageByIdHistory(idHistory: String): DailyUsage = dailyUsageDAO.getDailyUsageByIdHistory(idHistory)
+
+    suspend fun resetNewDailyUsage(idHistory: Int, dateKey: String) = dailyUsageDAO.resetNewDailyUsage(idHistory, dateKey)
 }

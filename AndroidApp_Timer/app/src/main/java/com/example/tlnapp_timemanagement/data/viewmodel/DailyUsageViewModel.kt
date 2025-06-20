@@ -12,7 +12,7 @@ class DailyUsageViewModel(application: Application) : AndroidViewModel(applicati
     private val repository : DailyUsageRepository
 
     init {
-        val dailyUsageDAO = AppDatabase.getDatabase(application).DailyUsageDao()
+        val dailyUsageDAO = AppDatabase.getDatabase(application).dailyUsageDao()
         repository = DailyUsageRepository(dailyUsageDAO)
 
     }
@@ -25,5 +25,11 @@ class DailyUsageViewModel(application: Application) : AndroidViewModel(applicati
         repository.updateDailyUsage(dailyUsage)
     }
 
-    
+    fun getDailyUsageByIdHistory(idHistory: String, onResult: (DailyUsage?) -> Unit) {
+        viewModelScope.launch {
+            val result = repository.getDailyUsageByIdHistory(idHistory)
+            onResult(result)
+        }
+
+    }
 }
