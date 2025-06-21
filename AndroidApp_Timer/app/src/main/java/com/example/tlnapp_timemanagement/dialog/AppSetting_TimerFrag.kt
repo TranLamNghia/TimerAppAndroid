@@ -128,13 +128,6 @@ class AppSetting_TimerFrag : DialogFragment() {
     }
 
     @SuppressLint("QueryPermissionsNeeded")
-    private fun getAppsByName2(input: String): List<ApplicationInfo> {
-        val pm = requireContext().packageManager
-        return pm.getInstalledApplications(PackageManager.GET_META_DATA)
-            .filter { (it.flags and ApplicationInfo.FLAG_SYSTEM) == 0 }
-            .filter { pm.getApplicationLabel(it).toString().contains(input, ignoreCase = true) }
-    }
-    @SuppressLint("QueryPermissionsNeeded")
     private fun getAppsByName(input: String): List<ApplicationInfo> {
         val pm = requireContext().packageManager
         val intent = Intent(Intent.ACTION_MAIN, null).apply {

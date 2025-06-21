@@ -63,8 +63,10 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Cấp quyền usageAccess
-        ensureUsageAccess()
+        // Cấp quyền AccessibilityService
+        if (!checkAccessibilityEnabled(requireContext())) {
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        }
 
         // Khởi tạo ViewModel
         historyAppViewModel = ViewModelProvider(this).get(HistoryAppViewModel::class.java)
@@ -92,18 +94,12 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         btnSetup.setOnClickListener { showSetupDialog() }
 
     }
-    private fun ensureUsageAccess() {
-        val pm = requireContext().packageManager
-        val granted = try {
-            (requireContext().getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager)
-                .queryAndAggregateUsageStats(0, 0).isNotEmpty()
-        } catch (e: SecurityException) {
-            false
-        }
-        if (!granted) {
-            startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        }
+    fun checkAccessibilityEnabled(context: Context): Boolean {
+        val enabled = Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        ) ?: return false
+        return enabled.contains("${context.packageName}/.service.FocusDetectService")
     }
 
 
@@ -213,7 +209,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             historyAppViewModel.insertHistory(app)
         }
         else if (currentapp.status.equals("PENDING")) {
-            historyAppViewModel.updatePendingApp(currentapp.idHistory, app.timeLimit)
+            historyAppViewModel.updateApp(app.idHistory, app.packageName, app.timeLimit)
         }
         else {
             historyAppViewModel.insertHistory(app)

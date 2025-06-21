@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.example.tlnapp_timemanagement.data.DAO.*
 import com.example.tlnapp_timemanagement.data.model.*
 
-@Database(entities = [HistoryApp :: class, DailyUsage :: class], version = 2)
+@Database(entities = [HistoryApp :: class, DailyUsage :: class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun historyAppDao(): HistoryAppDAO
     abstract fun dailyUsageDao(): DailyUsageDAO
