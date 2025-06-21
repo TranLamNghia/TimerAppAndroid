@@ -1,38 +1,35 @@
 package com.example.tlnapp_timemanagement.service
 
+import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.example.tlnapp_timemanagement.data.AppDatabase
-import com.example.tlnapp_timemanagement.data.repository.HistoryAppRepository
-
 
 class UsageSessionReceiver : BroadcastReceiver() {
 
-    override fun onReceive(ctx: Context, intent: Intent) {
-        val pkg      = intent.getStringExtra(UsageStatsManager.EXTRA_PACKAGE_NAME)
-        val event    = intent.getIntExtra(
-            UsageStatsManager.EXTRA_USAGE_SESSION_EVENT_TYPE, -1)
-        val timestamp = intent.getLongExtra(
-            UsageStatsManager.EXTRA_USAGE_SESSION_EVENT_TIME_MS, System.currentTimeMillis()
-        )
-        if (pkg == null) return
+    override fun onReceive(context: Context, intent: Intent) {
+        val pkg = intent.getStringExtra(Companion.EXTRA_OBSERVER_PACKAGE_NAME)
+        val eventType = intent.getIntExtra(
+            Companion.EXTRA_OBSERVER_EVENT_TYPE, -1)
+        when (eventType) {
+            USAGE_OBSERVER_EVENT_STARTED -> {
 
-        val db   = AppDatabase.getDatabase(ctx)
-        val repo = HistoryAppRepository(db.historyAppDao(), db.dailyUsageDao())
+            }
+            USAGE_OBSERVER_EVENT_STOPPED -> {
 
-        CoroutineScope(Dispatchers.IO).launch {
-            when (event) {
-                UsageStatsManager.USAGE_SESSION_EVENT_CONTINUED -> {
-                    // phiên mới bắt đầu
-                    repo.onAppSessionStart(pkg, timestamp)
-                }
-                UsageStatsManager.USAGE_SESSION_EVENT_STOPPED  -> {
-                    // phiên kết thúc
-                    repo.onAppSessionEnd(pkg, timestamp)
-                }
+            }
+            USAGE_OBSERVER_EVENT_TIME_LIMIT_REACHED -> {
+
             }
         }
+    }
+
+    companion object {
+        const val EXTRA_OBSERVER_PACKAGE_NAME = "android.app.usage.extra.OBSERVER_PACKAGE_NAME"
+        const val EXTRA_OBSERVER_EVENT_TYPE = "android.app.usage.extra.OBSERVER_EVENT_TYPE"
+        const val USAGE_OBSERVER_EVENT_STARTED = 1
+        const val USAGE_OBSERVER_EVENT_STOPPED = 2
+        const val USAGE_OBSERVER_EVENT_TIME_LIMIT_REACHED = 3
     }
 }

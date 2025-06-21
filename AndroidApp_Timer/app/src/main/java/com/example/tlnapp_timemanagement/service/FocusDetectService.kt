@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import com.example.tlnapp_timemanagement.data.AppDatabase
+import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.repository.HistoryAppRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,6 +15,7 @@ import java.time.Instant
 class FocusDetectService : AccessibilityService() {
 
     lateinit var repo: HistoryAppRepository
+
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -28,12 +30,23 @@ class FocusDetectService : AccessibilityService() {
         if (ev?.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return
         val pkg = ev.packageName?.toString() ?: return
         val now = Instant.now()
-        if (pkg == "com.google.android.youtube") {
-            Log.d("TLN_Testcase", "Youtube is foreground")
+        val timestamp = System.currentTimeMillis()
+        Log.d("FDService", "App chuyển foreground: $pkg at $timestamp")
+
+        CoroutineScope(Dispatchers.IO).launch {
+            val currentApp = getCurrentApp()
+            if (currentApp == null) return@launch
+            if (pkg == currentApp.packageName) {
+                repo.onAppForeground(currentApp, now)
+                repo.onAppSessionEnd(currentApp, System.currentTimeMillis())
+            }
         }
-//        CoroutineScope(Dispatchers.IO).launch {
-//            repo.onAppForeground(pkg, now)
-//        }
     }
     override fun onInterrupt() = Unit
+
+    suspend fun getCurrentApp() : HistoryApp? {
+        val pending = repo.getAppByStatus("PENDING")
+        val active  = if (pending == null) repo.getAppByStatus("ACTIVE") else null
+        return pending ?: active
+    }
 }

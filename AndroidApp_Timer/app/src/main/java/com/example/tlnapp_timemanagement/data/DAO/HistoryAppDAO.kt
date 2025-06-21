@@ -31,8 +31,8 @@ interface HistoryAppDAO {
     @Query("UPDATE HistoryApp SET status = :newStatus WHERE idHistory = :idHistory")
     suspend fun updateNewStatusByIdHistory(idHistory: Int, newStatus: String)
 
-    @Query("UPDATE HistoryApp SET idHistory = :idHistory, timeLimit = :timeLimit WHERE status = 'PENDING'")
-    suspend fun updatePendingApp(idHistory: Int, timeLimit: Int)
+    @Query("UPDATE HistoryApp SET packageName = :packageName, timeLimit = :timeLimit WHERE idHistory = :idHistory")
+    suspend fun updateApp(idHistory: Int, packageName: String, timeLimit: Int)
 
     @Query("DELETE FROM HistoryApp WHERE status = :status")
     suspend fun deleteHistoryApp(status: String)

@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 
 @Entity(
     tableName = "DailyUsage",
+    primaryKeys = ["idHistory","dateKey"],
     foreignKeys = [ForeignKey(
         entity         = HistoryApp::class,
         parentColumns  = ["idHistory"],
@@ -13,7 +14,7 @@ import androidx.room.PrimaryKey
         onDelete       = ForeignKey.NO_ACTION
     )])
 data class DailyUsage (
-    @PrimaryKey val idHistory: Int,
+    val idHistory: Int,
     val dateKey: String,
     val userSEC: Int
 

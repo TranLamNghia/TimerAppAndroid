@@ -26,8 +26,8 @@ class HistoryAppViewModel(application: Application): AndroidViewModel(applicatio
         repository.updateHistory(historyApp)
     }
 
-    fun updatePendingApp(idHistory: Int, timeLimit: Int) = viewModelScope.launch {
-        repository.updatePendingApp(idHistory, timeLimit)
+    fun updateApp(idHistory: Int, packageName: String, timeLimit: Int) = viewModelScope.launch {
+        repository.updateApp(idHistory, packageName, timeLimit)
     }
 
     fun updateNewStatusByIdHistory(idHistory:Int, newStatus: String) = viewModelScope.launch {
