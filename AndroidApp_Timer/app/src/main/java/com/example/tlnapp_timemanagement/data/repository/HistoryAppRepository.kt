@@ -37,21 +37,6 @@ class HistoryAppRepository(private val historyAppDao: HistoryAppDAO, private val
         } else {
             dailyUsageDao.resetNewDailyUsage(currentApp.idHistory, now.toString())
         }
-//        if (currentApp.status == "PENDING") {
-//            historyAppDao.updateNewStatusByIdHistory(currentApp.idHistory, "ACTIVE")
-//            return
-//        }
-//
-//        // 2. Nếu session đang ACTIVE mà user X / đổi app
-//        if (currentApp.status == "ACTIVE") {
-//            // tính delta
-//            val deltaSec = ((now.toEpochMilli() - (currentApp.beginTime ?: now.toEpochMilli())) / 1000).toInt()
-//            val dayKey   = DateTimeFormatter.ofPattern("yyyyMMdd")
-//                .withZone(ZoneId.systemDefault())
-//                .format(now)
-//            dailyUsageDao.upsertUsage(currentApp.idHistory, dayKey, deltaSec)
-//            historyAppDao.updateNewStatusByIdHistory(currentApp.idHistory, "INACTIVE")
-//        }
     }
 
     suspend fun onAppSessionEnd(currentApp: HistoryApp, currentTimeMillis: Long) {
