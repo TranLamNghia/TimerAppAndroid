@@ -1,7 +1,7 @@
 package com.example.tlnapp_timemanagement.main
 
-import android.accessibilityservice.AccessibilityServiceInfo
-import android.app.usage.UsageStatsManager
+import android.accessibilityservice.AccessibilityService
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
@@ -10,11 +10,9 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.provider.Settings
 import android.view.*
-import android.view.accessibility.AccessibilityManager
 import android.widget.*
 import java.util.*
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
@@ -64,7 +62,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Cấp quyền AccessibilityService
-        if (!checkAccessibilityEnabled(requireContext())) {
+        if (!isAccessibilityServiceEnabled(requireContext(), FocusDetectService::class.java)) {
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
 
@@ -94,14 +92,16 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         btnSetup.setOnClickListener { showSetupDialog() }
 
     }
-    fun checkAccessibilityEnabled(context: Context): Boolean {
-        val enabled = Settings.Secure.getString(
+
+    private fun isAccessibilityServiceEnabled(context: Context, service: Class<out AccessibilityService>): Boolean {
+        val expectedComponent = ComponentName(context, service)
+        val enabledServicesSetting = Settings.Secure.getString(
             context.contentResolver,
             Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
         ) ?: return false
-        return enabled.contains("${context.packageName}/.service.FocusDetectService")
+        val colonSplitter = enabledServicesSetting.split(':')
+        return colonSplitter.any { it.equals(expectedComponent.flattenToString(), ignoreCase = true) }
     }
-
 
     private fun setDefaultApp() {
         val pm = requireContext().packageManager
@@ -209,7 +209,11 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             historyAppViewModel.insertHistory(app)
         }
         else if (currentapp.status.equals("PENDING")) {
-            historyAppViewModel.updateApp(app.idHistory, app.packageName, app.timeLimit)
+            historyAppViewModel.getPendingApp { pendingApp ->
+                if (pendingApp != null) {
+                    historyAppViewModel.updateApp(pendingApp.idHistory, app.packageName, app.timeLimit)
+                }
+            }
         }
         else {
             historyAppViewModel.insertHistory(app)
