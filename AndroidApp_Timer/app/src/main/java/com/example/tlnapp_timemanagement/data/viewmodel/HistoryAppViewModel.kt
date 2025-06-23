@@ -2,6 +2,7 @@ package com.example.tlnapp_timemanagement.data.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.tlnapp_timemanagement.data.AppDatabase
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
@@ -41,13 +42,24 @@ class HistoryAppViewModel(application: Application): AndroidViewModel(applicatio
         repository.deleteHistoryApp(status)
     }
 
+    fun getAppByMaxIdLive(): LiveData<HistoryApp> = repository.getAppByMaxIdLive()
+
+    suspend fun getPendingApp2(): HistoryApp? {
+        return repository.getAppByStatus("PENDING")
+    }
+
+    suspend fun getActiveApp2(): HistoryApp? {
+        return repository.getAppByStatus("ACTIVE")
+    }
+
+    // Bất đồng bộ
     fun getPendingApp(onResult: (HistoryApp?) -> Unit) {
         viewModelScope.launch {
             val result = repository.getAppByStatus("PENDING")
             onResult(result)
         }
     }
-
+    // Bất đồng bộ
     fun getActiveApp(onResult: (HistoryApp?) -> Unit) {
         viewModelScope.launch {
             val result = repository.getAppByStatus("ACTIVE")

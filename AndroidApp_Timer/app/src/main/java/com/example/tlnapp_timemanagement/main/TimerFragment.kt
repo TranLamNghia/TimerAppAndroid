@@ -9,12 +9,14 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.provider.Settings
+import android.util.Log
 import android.view.*
 import android.widget.*
 import java.util.*
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
 import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
@@ -22,8 +24,10 @@ import com.example.tlnapp_timemanagement.data.viewmodel.DailyUsageViewModel
 import com.example.tlnapp_timemanagement.data.viewmodel.HistoryAppViewModel
 import com.example.tlnapp_timemanagement.service.FocusDetectService
 
+
+
 class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
-    private var currentapp = HistoryApp(
+    public var currentapp = HistoryApp(
         idHistory = 0,
         packageName = "Chọn ứng dụng",
         beginTime = null,
@@ -83,14 +87,25 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         historyAppViewModel.getPendingApp{ beforeApp ->
             if (beforeApp != null) {
                 currentapp = beforeApp
+                updateAppInfo(currentapp)
+            } else {
+                historyAppViewModel.getActiveApp { beforeApp ->
+                    if (beforeApp != null) {
+                        currentapp = beforeApp
+                    }
+                    updateAppInfo(currentapp)
+                }
             }
-
-            updateAppInfo(currentapp)
+        }
+        historyAppViewModel.getAppByMaxIdLive().observe(viewLifecycleOwner) { updatedApp ->
+            if (updatedApp != null) {
+                currentapp = updatedApp
+                updateAppInfo(currentapp)
+            }
         }
 
         btnDelete.setOnClickListener { resetTimer() }
         btnSetup.setOnClickListener { showSetupDialog() }
-
     }
 
     private fun isAccessibilityServiceEnabled(context: Context, service: Class<out AccessibilityService>): Boolean {
@@ -102,6 +117,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         val colonSplitter = enabledServicesSetting.split(':')
         return colonSplitter.any { it.equals(expectedComponent.flattenToString(), ignoreCase = true) }
     }
+
 
     private fun setDefaultApp() {
         val pm = requireContext().packageManager
@@ -209,16 +225,12 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             historyAppViewModel.insertHistory(app)
         }
         else if (currentapp.status.equals("PENDING")) {
-            historyAppViewModel.getPendingApp { pendingApp ->
-                if (pendingApp != null) {
-                    historyAppViewModel.updateApp(pendingApp.idHistory, app.packageName, app.timeLimit)
-                }
-            }
+            historyAppViewModel.updateApp(currentapp.idHistory, app.packageName, app.timeLimit)
         }
         else {
             historyAppViewModel.insertHistory(app)
         }
-        currentapp = app
+//        currentapp = app
         updateAppInfo(currentapp)
     }
 
