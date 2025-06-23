@@ -1,5 +1,6 @@
 package com.example.tlnapp_timemanagement.data.repository
 
+import androidx.lifecycle.LiveData
 import com.example.tlnapp_timemanagement.data.DAO.DailyUsageDAO
 import com.example.tlnapp_timemanagement.data.DAO.HistoryAppDAO
 import com.example.tlnapp_timemanagement.data.model.DailyUsage
@@ -17,6 +18,8 @@ class HistoryAppRepository(private val historyAppDao: HistoryAppDAO, private val
     suspend fun updateNewStatusByIdHistory(idHistory:Int, newStatus : String) = historyAppDao.updateNewStatusByIdHistory(idHistory,newStatus)
 
     suspend fun getAppByStatus(status: String) : HistoryApp? = historyAppDao.getAppByStatus(status)
+    fun getAppByMaxIdLive(): LiveData<HistoryApp> = historyAppDao.getAppByMaxIdLive()
+
     suspend fun deleteHistoryApp(status: String) = historyAppDao.deleteHistoryApp(status)
 
     fun getAllHistory() = historyAppDao.getAllHistory()

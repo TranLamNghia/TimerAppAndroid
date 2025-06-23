@@ -25,6 +25,9 @@ interface HistoryAppDAO {
     @Query("SELECT * FROM HistoryApp WHERE status = :status")
     suspend fun getAppByStatus(status: String): HistoryApp?
 
+    @Query("SELECT * FROM HistoryApp WHERE idHistory = (SELECT MAX(idHistory) FROM HistoryApp)")
+    fun getAppByMaxIdLive(): LiveData<HistoryApp>
+
     @Query("SELECT * FROM HistoryApp WHERE packageName = :packageName")
     fun getHistoryByPackageName(packageName: String): List<HistoryApp>
 
@@ -36,5 +39,6 @@ interface HistoryAppDAO {
 
     @Query("DELETE FROM HistoryApp WHERE status = :status")
     suspend fun deleteHistoryApp(status: String)
+
 
 }
