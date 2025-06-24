@@ -97,12 +97,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
                 }
             }
         }
-        historyAppViewModel.getAppByMaxIdLive().observe(viewLifecycleOwner) { updatedApp ->
-            if (updatedApp != null) {
-                currentapp = updatedApp
-                updateAppInfo(currentapp)
-            }
-        }
+
 
         btnDelete.setOnClickListener { resetTimer() }
         btnSetup.setOnClickListener { showSetupDialog() }
@@ -231,7 +226,13 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             historyAppViewModel.insertHistory(app)
         }
 //        currentapp = app
-        updateAppInfo(currentapp)
+        historyAppViewModel.getAppByMaxIdLive().observe(viewLifecycleOwner) { updatedApp ->
+            if (updatedApp != null) {
+                currentapp = updatedApp
+                updateAppInfo(currentapp)
+            }
+        }
+        // bất đồng bộ
     }
 
     override fun onDestroy() {

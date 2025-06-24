@@ -4,6 +4,9 @@ import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
 import android.app.usage.UsageEvents
 import android.app.usage.UsageStatsManager
+import android.content.Intent
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
@@ -20,12 +23,24 @@ class FocusDetectService : AccessibilityService() {
 
     lateinit var repo: HistoryAppRepository
     private var currentTrackedPackage: String? = null
+    private var homePackage: String? = null
+    private lateinit var userApps: Set<String>
 
     override fun onServiceConnected() {
         super.onServiceConnected()
         val db = AppDatabase.getDatabase(applicationContext)
         repo = HistoryAppRepository(db.historyAppDao(), db.dailyUsageDao())
         Log.d("FocusDetectService","AccessibilityService connected")
+
+        val pm = packageManager
+        userApps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
+            .filter{(it.flags and ApplicationInfo.FLAG_SYSTEM) == 0}
+            .map{ it.packageName}
+            .toSet()
+
+        homePackage = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_HOME)
+        }.let { pm.resolveActivity(it, 0)?.activityInfo?.packageName }
     }
 
 
@@ -36,21 +51,6 @@ class FocusDetectService : AccessibilityService() {
         val now = Instant.now()
         val timestamp = System.currentTimeMillis()
 
-        val window = ev.source ?: run {
-            Log.d("FDService", "Source is null for package: $pkg")
-            return
-        }
-        val isTopLevel = isTopLevelWindow(window)
-        val isSystem = isSystemPackage(pkg)
-
-        // Debug log để kiểm tra điều kiện
-        Log.d("FDService", "Package: $pkg, isTopLevel: $isTopLevel, isSystem: $isSystem")
-
-        // Chỉ xử lý nếu là cửa sổ cấp cao nhất và không phải ứng dụng hệ thống
-        if (!isTopLevel || isSystem) {
-            Log.d("FDService", "Event ignored for package: $pkg (not top-level or system)")
-            return
-        }
 
         CoroutineScope(Dispatchers.IO).launch {
             Log.d("FDService", "App chuyển foreground: $pkg at $timestamp")
@@ -62,7 +62,7 @@ class FocusDetectService : AccessibilityService() {
                 Log.d("FDService", "App current : " + currentApp.packageName + " OPEN")
                 repo.onAppForeground(currentApp, now)
             } else {
-                if (currentTrackedPackage == currentApp.packageName) {
+                if (currentTrackedPackage == currentApp.packageName && (pkg == homePackage || pkg in userApps)) {
                     Log.d("FDService", "App current : " + currentApp.packageName + " CLOSE")
                     repo.onAppSessionEnd(currentApp, System.currentTimeMillis())
                     currentTrackedPackage = null

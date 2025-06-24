@@ -8,6 +8,8 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
@@ -15,6 +17,10 @@ import android.view.*
 import android.widget.*
 import androidx.fragment.app.DialogFragment
 import com.example.tlnapp_timemanagement.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AppSetting_TimerFrag : DialogFragment() {
 
@@ -26,6 +32,8 @@ class AppSetting_TimerFrag : DialogFragment() {
 
     private val timeOptions = listOf(15, 30, 45, 60, 90, 120, 180)
     private var filteredApps: List<ApplicationInfo> = emptyList()
+
+    private var allApps: List<ApplicationInfo> = emptyList()
 
     // Interface để callback về TimerFragment
     interface OnAppSettingListener {
@@ -62,6 +70,7 @@ class AppSetting_TimerFrag : DialogFragment() {
         btnClose = view.findViewById(R.id.btn_cancel)
 
         initTimeLimits()
+        loadAllApps()
         setupAppNameWatcher()
         setupButtons()
     }
@@ -80,17 +89,50 @@ class AppSetting_TimerFrag : DialogFragment() {
         }
     }
 
+    private fun loadAllApps() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val pm = requireContext().packageManager
+            val intent = Intent(Intent.ACTION_MAIN, null).apply {
+                addCategory(Intent.CATEGORY_LAUNCHER)
+            }
+            val resolveInfoList = pm.queryIntentActivities(intent, 0)
+            allApps = resolveInfoList
+                .map { it.activityInfo.applicationInfo }
+                .distinctBy { it.packageName }
+                .sortedBy { pm.getApplicationLabel(it).toString() }
+            withContext(Dispatchers.Main) {
+                // Cập nhật spinner với danh sách đầy đủ ban đầu
+                updateAppSpinner(allApps)
+            }
+        }
+    }
+
     private fun setupAppNameWatcher() {
+        var searchHandler = Handler(Looper.getMainLooper())
+        var searchRunnable: Runnable? = null
         editTextAppName.addTextChangedListener(
             object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     val input = s.toString().trim()
-                    if (input.equals("")) {
-                        spinnerApps.adapter = null
-                    } else {
-                        getAppsByName(input)
-                        updateAppSpinner(getAppsByName(input))
+                    searchRunnable?.let { searchHandler.removeCallbacks(it) }
+                    searchRunnable = Runnable {
+                        if (input.isEmpty()) {
+                            updateAppSpinner(allApps)
+                        } else {
+                            val filtered = allApps.filter {
+                                requireContext().packageManager.getApplicationLabel(it).toString().contains(input, ignoreCase = true)
+                            }
+                            updateAppSpinner(filtered)
+                        }
                     }
+                    searchHandler.postDelayed(searchRunnable!!, 300)
+//                    if (input.equals("")) {
+//                        spinnerApps.adapter = null
+//                    } else {
+//
+//                        getAppsByName(input)
+//                        updateAppSpinner(getAppsByName(input))
+//                    }
                 }
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
