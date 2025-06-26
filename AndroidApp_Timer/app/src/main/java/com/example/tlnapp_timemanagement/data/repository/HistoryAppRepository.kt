@@ -6,6 +6,7 @@ import com.example.tlnapp_timemanagement.data.DAO.HistoryAppDAO
 import com.example.tlnapp_timemanagement.data.model.DailyUsage
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 
@@ -24,11 +25,12 @@ class HistoryAppRepository(private val historyAppDao: HistoryAppDAO, private val
 
     fun getAllHistory() = historyAppDao.getAllHistory()
 
-    suspend fun onAppForeground(currentApp: HistoryApp, now: Instant?) {
+    suspend fun onAppForeground(currentApp: HistoryApp) {
+        val now = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE)
         if (currentApp.status.equals("PENDING")) {
             val daily = DailyUsage(
                 idHistory = currentApp.idHistory,
-                dateKey = now.toString(),
+                dateKey = now,
                 userSEC = 0
             )
             dailyUsageDao.insert(daily)
@@ -42,17 +44,17 @@ class HistoryAppRepository(private val historyAppDao: HistoryAppDAO, private val
         }
     }
 
-    suspend fun onAppSessionEnd(currentApp: HistoryApp, currentTimeMillis: Long) {
-        val begin = currentApp.beginTime ?: currentTimeMillis
-        val deltaSec = ((currentTimeMillis - begin) / 1000).toInt()
-
-        val dayKey = DateTimeFormatter.ofPattern("yyyyMMdd")
-            .withZone(ZoneId.systemDefault())
-            .format(Instant.ofEpochMilli(currentTimeMillis))
-        val dailyUsage = DailyUsage(
-            currentApp.idHistory, dayKey, deltaSec
-        )
-        dailyUsageDao.update(dailyUsage)
-    }
+//    suspend fun onAppSessionEnd(currentApp: HistoryApp, currentTimeMillis: Long) {
+//        val begin = currentApp.beginTime ?: currentTimeMillis
+//        val deltaSec = ((currentTimeMillis - begin) / 1000).toInt()
+//
+//        val dayKey = DateTimeFormatter.ofPattern("yyyyMMdd")
+//            .withZone(ZoneId.systemDefault())
+//            .format(Instant.ofEpochMilli(currentTimeMillis))
+//        val dailyUsage = DailyUsage(
+//            currentApp.idHistory, dayKey, deltaSec
+//        )
+//        dailyUsageDao.update(dailyUsage)
+//    }
 
 }

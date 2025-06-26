@@ -9,15 +9,22 @@ import com.example.tlnapp_timemanagement.data.model.DailyUsage
 @Dao
 interface DailyUsageDAO {
     @Insert
-    suspend fun insert(dailyUsage: DailyUsage)
+    suspend fun insert(dailyUsage: DailyUsage) : Int
 
     @Update
     suspend fun update(dailyUsage: DailyUsage)
 
     @Query("SELECT * FROM DAILYUSAGE WHERE idHistory = :idHistory")
-    suspend fun getDailyUsageByIdHistory(idHistory: String): DailyUsage
+    suspend fun getDailyUsageByIdHistory(idHistory: Int): DailyUsage
+
+    @Query("SELECT DAILYUSAGE.idHistory, dateKey, userSEC FROM DAILYUSAGE, HISTORYAPP WHERE DAILYUSAGE.idHistory = HISTORYAPP.idHistory AND HISTORYAPP.packageName = :packageName")
+    suspend fun getDailyUsageByPackageName(packageName: String): DailyUsage
 
     @Query("UPDATE DAILYUSAGE SET dateKey = :dateKey, userSEC = 0 WHERE idHistory = :idHistory")
     suspend fun resetNewDailyUsage(idHistory: Int, dateKey: String)
+
+    @Query("UPDATE DAILYUSAGE SET userSEC = userSEC + :deltaSec WHERE idHistory = :idHistory")
+    suspend fun updateTimeInDailyUsage(idHistory: Int, deltaSec: Long)
+
 
 }

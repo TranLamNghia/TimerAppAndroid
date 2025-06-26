@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.time.Instant
 
+//Accessibility trigger
 class FocusDetectService : AccessibilityService() {
 
     lateinit var repo: HistoryAppRepository
@@ -48,7 +49,6 @@ class FocusDetectService : AccessibilityService() {
     override fun onAccessibilityEvent(ev: AccessibilityEvent?) {
         if (ev?.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return
         val pkg = ev.packageName?.toString() ?: return
-        val now = Instant.now()
         val timestamp = System.currentTimeMillis()
 
 
@@ -60,11 +60,14 @@ class FocusDetectService : AccessibilityService() {
             if (pkg == currentApp.packageName) {
                 currentTrackedPackage = pkg
                 Log.d("FDService", "App current : " + currentApp.packageName + " OPEN")
-                repo.onAppForeground(currentApp, now)
+                repo.onAppForeground(currentApp)
+                startService(Intent(applicationContext, UsageCountTimeService::class.java).apply {
+                    action = "START"
+                }
             } else {
                 if (currentTrackedPackage == currentApp.packageName && (pkg == homePackage || pkg in userApps)) {
                     Log.d("FDService", "App current : " + currentApp.packageName + " CLOSE")
-                    repo.onAppSessionEnd(currentApp, System.currentTimeMillis())
+//                    repo.onAppSessionEnd(currentApp, System.currentTimeMillis())
                     currentTrackedPackage = null
                 }
             }
