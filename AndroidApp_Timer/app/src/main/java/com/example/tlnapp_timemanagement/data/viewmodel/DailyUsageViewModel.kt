@@ -25,7 +25,7 @@ class DailyUsageViewModel(application: Application) : AndroidViewModel(applicati
         repository.updateDailyUsage(dailyUsage)
     }
 
-    fun getDailyUsageByIdHistory(idHistory: String, onResult: (DailyUsage?) -> Unit) {
+    fun getDailyUsageByIdHistory(idHistory: Int, onResult: (DailyUsage?) -> Unit) {
         viewModelScope.launch {
             val result = repository.getDailyUsageByIdHistory(idHistory)
             onResult(result)

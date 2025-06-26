@@ -9,14 +9,12 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.provider.Settings
-import android.util.Log
 import android.view.*
 import android.widget.*
 import java.util.*
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
 import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
@@ -27,7 +25,7 @@ import com.example.tlnapp_timemanagement.service.FocusDetectService
 
 
 class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
-    public var currentapp = HistoryApp(
+    private var currentapp = HistoryApp(
         idHistory = 0,
         packageName = "Chọn ứng dụng",
         beginTime = null,
