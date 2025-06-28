@@ -126,13 +126,6 @@ class AppSetting_TimerFrag : DialogFragment() {
                         }
                     }
                     searchHandler.postDelayed(searchRunnable!!, 300)
-//                    if (input.equals("")) {
-//                        spinnerApps.adapter = null
-//                    } else {
-//
-//                        getAppsByName(input)
-//                        updateAppSpinner(getAppsByName(input))
-//                    }
                 }
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {

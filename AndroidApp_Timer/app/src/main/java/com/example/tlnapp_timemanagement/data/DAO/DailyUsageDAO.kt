@@ -3,13 +3,14 @@ package com.example.tlnapp_timemanagement.data.DAO
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.example.tlnapp_timemanagement.data.model.DailyUsage
 
 @Dao
 interface DailyUsageDAO {
     @Insert
-    suspend fun insert(dailyUsage: DailyUsage) : Int
+    suspend fun insert(dailyUsage: DailyUsage)
 
     @Update
     suspend fun update(dailyUsage: DailyUsage)
@@ -26,5 +27,13 @@ interface DailyUsageDAO {
     @Query("UPDATE DAILYUSAGE SET userSEC = userSEC + :deltaSec WHERE idHistory = :idHistory")
     suspend fun updateTimeInDailyUsage(idHistory: Int, deltaSec: Long)
 
+    @Transaction
+    suspend fun insertAndReturnId(dailyUsage: DailyUsage): Int {
+        insert(dailyUsage)
+        return dailyUsage.idHistory
+    }
+
+    @Query("SELECT userSEC FROM DAILYUSAGE WHERE idHistory = :idHistory")
+    suspend fun getDailyUsageTime(idHistory: Int): Long
 
 }

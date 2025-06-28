@@ -16,6 +16,8 @@ import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.repository.HistoryAppRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.Instant
 
@@ -24,8 +26,11 @@ class FocusDetectService : AccessibilityService() {
 
     lateinit var repo: HistoryAppRepository
     private var currentTrackedPackage: String? = null
+    private var stopJob: Job? = null
     private var homePackage: String? = null
     private lateinit var userApps: Set<String>
+    private var isOpen = false
+    private val STOP_DEBOUNCE_MS = 300L
 
     override fun onServiceConnected() {
         super.onServiceConnected()
@@ -41,7 +46,8 @@ class FocusDetectService : AccessibilityService() {
 
         homePackage = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_HOME)
-        }.let { pm.resolveActivity(it, 0)?.activityInfo?.packageName }
+        }.let { pm.resolveActivity(it, PackageManager.MATCH_DEFAULT_ONLY)?.activityInfo?.packageName }
+
     }
 
 
@@ -57,18 +63,32 @@ class FocusDetectService : AccessibilityService() {
             val currentApp = getCurrentApp()
             if (currentApp == null) return@launch
 
-            if (pkg == currentApp.packageName) {
+            if (pkg == currentApp.packageName && isOpen == false) {
+                stopJob?.cancel()
+                isOpen = true
                 currentTrackedPackage = pkg
-                Log.d("FDService", "App current : " + currentApp.packageName + " OPEN")
+                Log.d("FDService", "App current : " + currentApp.packageName + " OPEN____" + homePackage)
                 repo.onAppForeground(currentApp)
                 startService(Intent(applicationContext, UsageCountTimeService::class.java).apply {
                     action = "START"
-                }
+                    putExtra("EXTRA_ID_PACKAGE", currentApp.idHistory)
+                })
+
             } else {
-                if (currentTrackedPackage == currentApp.packageName && (pkg == homePackage || pkg in userApps)) {
-                    Log.d("FDService", "App current : " + currentApp.packageName + " CLOSE")
-//                    repo.onAppSessionEnd(currentApp, System.currentTimeMillis())
-                    currentTrackedPackage = null
+                stopJob?.cancel()
+                stopJob = launch {
+                    delay(STOP_DEBOUNCE_MS)
+//                    if (currentTrackedPackage == currentApp.packageName && pkg == "com.google.android.apps.nexuslauncher" && isOpen == true) {
+                    if (currentTrackedPackage == currentApp.packageName && pkg == homePackage && isOpen == true) {
+                        isOpen = false
+                        Log.d("FDService", "App current : " + currentApp.packageName + " CLOSE")
+                        repo.onAppSessionEnd(currentApp)
+                        startService(Intent(applicationContext, UsageCountTimeService::class.java).apply {
+                            action = "END"
+                            putExtra("EXTRA_ID_PACKAGE", currentApp.idHistory)
+                        })
+                        currentTrackedPackage = null
+                    }
                 }
             }
         }
