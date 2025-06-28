@@ -113,7 +113,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
 
 
     private fun setDefaultApp() {
-        val pm = requireContext().packageManager
         selectedAppName.text = "Chọn ứng dụng"
         selectedAppTimeLimit.text = "Thời gian giới hạn: -- phút"
         selectedAppIcon.setImageResource(R.drawable.ic_smartphone)
@@ -187,7 +186,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         }
 
         timerText.text = timeLeftFormatted
-        var progress: Int = 0
+        var progress : Int = 0
         if (startTimeInMillis.toInt() == 0) {
             progress = (100 - ((timeLeftInMillis * 100) / 1)).toInt()
         }
