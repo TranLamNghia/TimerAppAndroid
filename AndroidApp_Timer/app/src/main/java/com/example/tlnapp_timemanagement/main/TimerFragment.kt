@@ -8,6 +8,8 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.provider.Settings
 import android.view.*
 import android.widget.*
@@ -15,12 +17,16 @@ import java.util.*
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.airbnb.lottie.LottieAnimationView
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
 import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.viewmodel.DailyUsageViewModel
 import com.example.tlnapp_timemanagement.data.viewmodel.HistoryAppViewModel
+import com.example.tlnapp_timemanagement.dialog.LoadingFrag
 import com.example.tlnapp_timemanagement.service.FocusDetectService
+import kotlinx.coroutines.*
 
 
 
@@ -53,6 +59,9 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     private lateinit var historyAppViewModel: HistoryAppViewModel
     private lateinit var dailyUsageViewModel: DailyUsageViewModel
 
+    private lateinit var loadingView: LottieAnimationView
+    private lateinit var timerContent: View
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,14 +71,19 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            showLoadingAndNavigate()
+        }
+
         super.onViewCreated(view, savedInstanceState)
         // Cấp quyền AccessibilityService
         if (!isAccessibilityServiceEnabled(requireContext(), FocusDetectService::class.java)) {
             startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
 
-        // Khởi tạo ViewModel
+        // Initialize ViewModel
         historyAppViewModel = ViewModelProvider(this).get(HistoryAppViewModel::class.java)
+
 
         // Initialize views
         timerText = view.findViewById(R.id.timer_text)
@@ -101,6 +115,15 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         btnSetup.setOnClickListener { showSetupDialog() }
     }
 
+    suspend fun showLoadingAndNavigate() {
+        val loadingDialog = LoadingFrag()
+        loadingDialog.show(parentFragmentManager, "loading")
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            loadingDialog.dismiss()
+        }, 2000)
+    }
+
     private fun isAccessibilityServiceEnabled(context: Context, service: Class<out AccessibilityService>): Boolean {
         val expectedComponent = ComponentName(context, service)
         val enabledServicesSetting = Settings.Secure.getString(
@@ -110,7 +133,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         val colonSplitter = enabledServicesSetting.split(':')
         return colonSplitter.any { it.equals(expectedComponent.flattenToString(), ignoreCase = true) }
     }
-
 
     private fun setDefaultApp() {
         selectedAppName.text = "Chọn ứng dụng"
