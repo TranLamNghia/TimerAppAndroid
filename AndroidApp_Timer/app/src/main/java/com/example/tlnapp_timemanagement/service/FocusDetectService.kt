@@ -30,20 +30,19 @@ class FocusDetectService : AccessibilityService() {
     private var homePackage: String? = null
     private lateinit var userApps: Set<String>
     private var isOpen = false
-    private val STOP_DEBOUNCE_MS = 300L
+    private val STOP_DEBOUNCE_MS = 1000L
 
     override fun onServiceConnected() {
         super.onServiceConnected()
         val db = AppDatabase.getDatabase(applicationContext)
         repo = HistoryAppRepository(db.historyAppDao(), db.dailyUsageDao())
-        Log.d("FocusDetectService","AccessibilityService connected")
 
         val pm = packageManager
         userApps = pm.getInstalledApplications(PackageManager.GET_META_DATA)
             .filter{(it.flags and ApplicationInfo.FLAG_SYSTEM) == 0}
             .map{ it.packageName}
             .toSet()
-
+        Log.d("FDService", "Installed apps: ${userApps.size}")
         homePackage = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_HOME)
         }.let { pm.resolveActivity(it, PackageManager.MATCH_DEFAULT_ONLY)?.activityInfo?.packageName }
@@ -62,18 +61,17 @@ class FocusDetectService : AccessibilityService() {
             Log.d("FDService", "App chuyển foreground: $pkg at $timestamp")
             val currentApp = getCurrentApp()
             if (currentApp == null) return@launch
-
+            Log.d("FDService", "App current : " + currentApp.packageName + "________" + isOpen)
             if (pkg == currentApp.packageName && isOpen == false) {
                 stopJob?.cancel()
                 isOpen = true
                 currentTrackedPackage = pkg
-                Log.d("FDService", "App current : " + currentApp.packageName + " OPEN____" + homePackage)
+                Log.d("FDService", "App current : " + currentApp.packageName + " OPEN")
                 repo.onAppForeground(currentApp)
                 startService(Intent(applicationContext, UsageCountTimeService::class.java).apply {
                     action = "START"
                     putExtra("EXTRA_ID_PACKAGE", currentApp.idHistory)
                 })
-
             } else {
                 stopJob?.cancel()
                 stopJob = launch {
@@ -93,30 +91,12 @@ class FocusDetectService : AccessibilityService() {
             }
         }
     }
+
     override fun onInterrupt() = Unit
 
     suspend fun getCurrentApp() : HistoryApp? {
         val pending = repo.getAppByStatus("PENDING")
         val active  = if (pending == null) repo.getAppByStatus("ACTIVE") else null
         return pending ?: active
-    }
-
-    /**
-     * Kiểm tra xem cửa sổ có phải là cửa sổ cấp cao nhất (top-level) không
-     */
-    private fun isTopLevelWindow(node: AccessibilityNodeInfo): Boolean {
-        return node.isAccessibilityFocused || node.isFocused
-    }
-
-    /**
-     * Kiểm tra xem gói có phải là ứng dụng hệ thống không
-     */
-    private fun isSystemPackage(packageName: String): Boolean {
-        try {
-            val ai = packageManager.getApplicationInfo(packageName, 0)
-            return (ai.flags and android.content.pm.ApplicationInfo.FLAG_SYSTEM) != 0
-        } catch (e: android.content.pm.PackageManager.NameNotFoundException) {
-            return true
-        }
     }
 }

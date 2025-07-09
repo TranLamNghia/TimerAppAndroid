@@ -1,5 +1,6 @@
 package com.example.tlnapp_timemanagement.data.DAO
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
@@ -34,6 +35,6 @@ interface DailyUsageDAO {
     }
 
     @Query("SELECT userSEC FROM DAILYUSAGE WHERE idHistory = :idHistory")
-    suspend fun getDailyUsageTime(idHistory: Int): Long
+    fun getDailyUsageTime(idHistory: Int): LiveData<Long>
 
 }

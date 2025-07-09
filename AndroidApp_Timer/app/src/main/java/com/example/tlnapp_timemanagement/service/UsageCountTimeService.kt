@@ -27,7 +27,7 @@ class UsageCountTimeService() : LifecycleService(){
     private var elapsed : StateFlow<Long> = _elapsed
 
     private var currentPackage : DailyUsage = DailyUsage(idHistory = 0, dateKey = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE), userSEC = 0)
-//    private val currentPackage = currentPackage
+//    private lateinit var timeShareViewModel : TimeShareViewModel
     private var currentIdAppPackage : Int = 0
     lateinit var repo : DailyUsageRepository
 
@@ -35,6 +35,8 @@ class UsageCountTimeService() : LifecycleService(){
         super.onCreate()
         val db = AppDatabase.getDatabase(applicationContext)
         repo = DailyUsageRepository(db.dailyUsageDao())
+
+//        val timeShareViewModel = ViewModelProvider(this).get(TimeShareViewModel::class.java)
     }
 
     private fun onStart() {
@@ -43,6 +45,7 @@ class UsageCountTimeService() : LifecycleService(){
             while(isActive) {
                 val now = System.currentTimeMillis()
                 _elapsed.value = (now - startTime) / 1000
+//                timeShareViewModel.setElapsedTime(_elapsed.value)
                 Log.d("UsageCountTimeService", "Time: ${_elapsed.value}")
                 delay(1000L)
             }

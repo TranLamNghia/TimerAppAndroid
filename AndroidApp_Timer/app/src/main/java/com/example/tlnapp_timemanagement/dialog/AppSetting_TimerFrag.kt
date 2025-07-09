@@ -51,7 +51,6 @@ class AppSetting_TimerFrag : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate layout dialog vừa tạo
         return inflater.inflate(R.layout.dialog_app_settings, container, false)
     }
 
@@ -99,9 +98,9 @@ class AppSetting_TimerFrag : DialogFragment() {
             allApps = resolveInfoList
                 .map { it.activityInfo.applicationInfo }
                 .distinctBy { it.packageName }
+                .filter{pm.getApplicationLabel(it).toString() != "App Timer"}
                 .sortedBy { pm.getApplicationLabel(it).toString() }
             withContext(Dispatchers.Main) {
-                // Cập nhật spinner với danh sách đầy đủ ban đầu
                 updateAppSpinner(allApps)
             }
         }

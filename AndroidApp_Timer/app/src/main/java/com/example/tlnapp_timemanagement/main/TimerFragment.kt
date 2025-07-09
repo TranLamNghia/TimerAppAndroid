@@ -1,9 +1,11 @@
 package com.example.tlnapp_timemanagement.main
 
 import android.accessibilityservice.AccessibilityService
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -11,6 +13,7 @@ import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
 import android.provider.Settings
+import android.util.Log
 import android.view.*
 import android.widget.*
 import java.util.*
@@ -59,21 +62,19 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     private lateinit var historyAppViewModel: HistoryAppViewModel
     private lateinit var dailyUsageViewModel: DailyUsageViewModel
 
-    private lateinit var loadingView: LottieAnimationView
-    private lateinit var timerContent: View
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewLifecycleOwner.lifecycleScope.launch {
+            showLoadingAndNavigate()
+        }
         return inflater.inflate(R.layout.fragment_timer, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewLifecycleOwner.lifecycleScope.launch {
-            showLoadingAndNavigate()
-        }
+
 
         super.onViewCreated(view, savedInstanceState)
         // Cấp quyền AccessibilityService
@@ -83,6 +84,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
 
         // Initialize ViewModel
         historyAppViewModel = ViewModelProvider(this).get(HistoryAppViewModel::class.java)
+        dailyUsageViewModel = ViewModelProvider(this).get(DailyUsageViewModel::class.java)
 
 
         // Initialize views
@@ -121,7 +123,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
 
         Handler(Looper.getMainLooper()).postDelayed({
             loadingDialog.dismiss()
-        }, 2000)
+        }, 1000)
     }
 
     private fun isAccessibilityServiceEnabled(context: Context, service: Class<out AccessibilityService>): Boolean {
@@ -154,21 +156,32 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
                 selectedAppName.text = appInfo.loadLabel(pm)
                 selectedAppIcon.setImageDrawable(pm.getApplicationIcon(appInfo))
                 selectedAppTimeLimit.text = "Thời gian giới hạn: ${currentapp.timeLimit} phút"
+
             } catch (e: PackageManager.NameNotFoundException) {
                 selectedAppName.text = currentapp.packageName
                 selectedAppIcon.setImageResource(R.drawable.ic_smartphone)
                 selectedAppTimeLimit.text = "Thời gian giới hạn: ${currentapp.timeLimit} phút"
             }
         }
-        startTimeInMillis = currentapp.timeLimit * 60 * 1000L
-        timeLeftInMillis = startTimeInMillis
-        updateTimerDisplay()
+//        startTimeInMillis = currentapp.timeLimit * 60 * 1000L
+        startTimeInMillis = currentapp.timeLimit * 1000L
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            dailyUsageViewModel.getDailyUsageTime(currentapp.idHistory).observe(viewLifecycleOwner) { result ->
+//                timeLeftInMillis = if (result != null) startTimeInMillis - (result * 1000) else startTimeInMillis
+//                updateTimerDisplay()
+//            }
+//        }
+        dailyUsageViewModel.getDailyUsageTime(currentapp.idHistory).observe(viewLifecycleOwner) { result ->
+            timeLeftInMillis = if (result != null) startTimeInMillis - (result * 1000) else startTimeInMillis
+            updateTimerDisplay()
+        }
     }
 
     private fun startTimer() {
         countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 timeLeftInMillis = millisUntilFinished
+                Log.d("UsageCountTimeService", "Time: 1")
                 updateTimerDisplay()
             }
 
@@ -178,6 +191,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
                 timeLeftInMillis = 0
                 updateTimerDisplay()
             }
+
         }.start()
 
         timerRunning = true
@@ -199,8 +213,8 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     private fun updateTimerDisplay() {
         val hours = (timeLeftInMillis / 1000) / 3600
         val minutes = ((timeLeftInMillis / 1000) % 3600) / 60
-        val seconds = (timeLeftInMillis / 1000) % 60
-
+        val seconds = ((timeLeftInMillis / 1000) % 3600) % 60
+        Log.d("TestValue", "${hours} _____ ${minutes} ________ ${seconds}")
         val timeLeftFormatted = if (hours > 0) {
             String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds)
         } else {
@@ -244,14 +258,12 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         else {
             historyAppViewModel.insertHistory(app)
         }
-//        currentapp = app
         historyAppViewModel.getAppByMaxIdLive().observe(viewLifecycleOwner) { updatedApp ->
             if (updatedApp != null) {
                 currentapp = updatedApp
                 updateAppInfo(currentapp)
             }
         }
-        // bất đồng bộ
     }
 
     override fun onDestroy() {

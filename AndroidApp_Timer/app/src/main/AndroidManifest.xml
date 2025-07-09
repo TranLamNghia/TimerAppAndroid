@@ -34,6 +34,8 @@
                 android:resource="@xml/focus_service_config" />
         </service>
         <service android:name=".service.UsageCountTimeService"/>
+
+
     </application>
 
     <queries>
