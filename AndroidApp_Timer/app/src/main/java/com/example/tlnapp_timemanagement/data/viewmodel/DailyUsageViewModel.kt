@@ -1,7 +1,9 @@
 package com.example.tlnapp_timemanagement.data.viewmodel
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.example.tlnapp_timemanagement.data.AppDatabase
 import com.example.tlnapp_timemanagement.data.model.DailyUsage
@@ -25,18 +27,8 @@ class DailyUsageViewModel(application: Application) : AndroidViewModel(applicati
         repository.updateDailyUsage(dailyUsage)
     }
 
-    fun getDailyUsageTime(idHistory: Int, onResult: (Long?) -> Unit) {
-        viewModelScope.launch {
-            val result = repository.getDailyUsageTime(idHistory)
-            onResult(result)
-        }
+    fun getDailyUsageTime(idHistory: Int): LiveData<Long> {
+        return repository.getDailyUsageTime(idHistory)
     }
 
-    fun getDailyUsageByIdHistory(idHistory: Int, onResult: (DailyUsage?) -> Unit) {
-        viewModelScope.launch {
-            val result = repository.getDailyUsageByIdHistory(idHistory)
-            onResult(result)
-        }
-
-    }
 }

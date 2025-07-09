@@ -27,7 +27,7 @@
                 android:id="@+id/app_icon_container"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:cardBackgroundColor="@color/colorPrimary"
+                app:cardBackgroundColor="@color/colorPrimaryDark"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -95,7 +95,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:fontFamily="sans-serif-medium"
-            android:text="@string/instagram"
             android:textColor="@color/textPrimary"
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/selected_app_icon_container"
@@ -152,9 +151,9 @@
                     android:background="@drawable/circle_shape_bg"
                     android:indeterminate="false"
                     android:max="100"
-                    android:progress="75"
+                    android:progress="100"
                     android:progressDrawable="@drawable/circular_progress_bar"
-                    android:rotation="270" />
+                    android:rotation="0" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -168,7 +167,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
-                        android:text="45:00"
+                        android:text="0"
                         android:textColor="@color/textPrimary"
                         android:textSize="40sp" />
 

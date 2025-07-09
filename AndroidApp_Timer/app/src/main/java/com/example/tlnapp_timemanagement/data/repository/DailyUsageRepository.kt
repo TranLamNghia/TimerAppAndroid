@@ -1,5 +1,6 @@
 package com.example.tlnapp_timemanagement.data.repository
 
+import androidx.lifecycle.LiveData
 import com.example.tlnapp_timemanagement.data.DAO.DailyUsageDAO
 import com.example.tlnapp_timemanagement.data.model.DailyUsage
 
@@ -14,6 +15,6 @@ class DailyUsageRepository(private val dailyUsageDAO: DailyUsageDAO) {
 
     suspend fun updateTimeInDailyUsage(idHistory : Int, deltaSec : Long) = dailyUsageDAO.updateTimeInDailyUsage(idHistory, deltaSec)
 
-    suspend fun getDailyUsageTime(idHistory: Int): Long = dailyUsageDAO.getDailyUsageTime(idHistory)
+    fun getDailyUsageTime(idHistory: Int): LiveData<Long> = dailyUsageDAO.getDailyUsageTime(idHistory)
 
 }
