@@ -74,13 +74,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-
         super.onViewCreated(view, savedInstanceState)
-        // Cấp quyền AccessibilityService
-        if (!isAccessibilityServiceEnabled(requireContext(), FocusDetectService::class.java)) {
-            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        }
 
         // Initialize ViewModel
         historyAppViewModel = ViewModelProvider(this).get(HistoryAppViewModel::class.java)
@@ -117,23 +111,13 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         btnSetup.setOnClickListener { showSetupDialog() }
     }
 
-    suspend fun showLoadingAndNavigate() {
+    fun showLoadingAndNavigate() {
         val loadingDialog = LoadingFrag()
         loadingDialog.show(parentFragmentManager, "loading")
 
         Handler(Looper.getMainLooper()).postDelayed({
             loadingDialog.dismiss()
         }, 1000)
-    }
-
-    private fun isAccessibilityServiceEnabled(context: Context, service: Class<out AccessibilityService>): Boolean {
-        val expectedComponent = ComponentName(context, service)
-        val enabledServicesSetting = Settings.Secure.getString(
-            context.contentResolver,
-            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-        ) ?: return false
-        val colonSplitter = enabledServicesSetting.split(':')
-        return colonSplitter.any { it.equals(expectedComponent.flattenToString(), ignoreCase = true) }
     }
 
     private fun setDefaultApp() {
