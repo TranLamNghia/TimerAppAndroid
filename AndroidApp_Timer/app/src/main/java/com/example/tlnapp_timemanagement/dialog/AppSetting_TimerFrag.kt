@@ -57,10 +57,7 @@ class AppSetting_TimerFrag : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!hasUsageStatsPermission(requireContext())) {
-            val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-            requireContext().startActivity(intent)
-        }
+
 
         editTextAppName = view.findViewById(R.id.app_edittext)
         spinnerApps = view.findViewById(R.id.app_spinner)
@@ -72,20 +69,6 @@ class AppSetting_TimerFrag : DialogFragment() {
         loadAllApps()
         setupAppNameWatcher()
         setupButtons()
-    }
-
-    fun hasUsageStatsPermission(context: Context): Boolean {
-        try {
-            val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as android.app.AppOpsManager
-            val mode = appOps.checkOpNoThrow(
-                "android:get_usage_stats",
-                android.os.Process.myUid(),
-                context.packageName
-            )
-            return mode == android.app.AppOpsManager.MODE_ALLOWED
-        } catch (e: Exception) {
-            return false
-        }
     }
 
     private fun loadAllApps() {

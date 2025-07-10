@@ -75,6 +75,4 @@ dependencies {
     val lottieVersion = "6.4.0"
     implementation ("com.airbnb.android:lottie:$lottieVersion")
 
-    val core_version = "1.16.0"
-    implementation("androidx.core:core-ktx:$core_version")
 }

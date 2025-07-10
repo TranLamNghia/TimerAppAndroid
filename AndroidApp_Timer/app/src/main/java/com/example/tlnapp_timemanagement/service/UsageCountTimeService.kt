@@ -23,8 +23,7 @@ class UsageCountTimeService() : LifecycleService(){
 
     private var job : Job? = null
     private var startTime = 0L
-    private val _elapsed = MutableStateFlow(0L)
-    private var elapsed : StateFlow<Long> = _elapsed
+    var userSEC : Long = 0L
 
     private var currentPackage : DailyUsage = DailyUsage(idHistory = 0, dateKey = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE), userSEC = 0)
 //    private lateinit var timeShareViewModel : TimeShareViewModel
@@ -40,13 +39,14 @@ class UsageCountTimeService() : LifecycleService(){
     }
 
     private fun onStart() {
-        startTime = System.currentTimeMillis()
+        startTime = System.currentTimeMillis() - 1000
         job = lifecycleScope.launch(Dispatchers.IO) {
             while(isActive) {
+
+                userSEC = repo.getDailyUsageTimeOneTime(currentIdAppPackage)
                 val now = System.currentTimeMillis()
-                _elapsed.value = (now - startTime) / 1000
-//                timeShareViewModel.setElapsedTime(_elapsed.value)
-                Log.d("UsageCountTimeService", "Time: ${_elapsed.value}")
+                userSEC += (now - startTime) / 1000
+                Log.d("UsageCountTimeService", "Time: ${userSEC}")
                 delay(1000L)
             }
         }
@@ -55,11 +55,8 @@ class UsageCountTimeService() : LifecycleService(){
 
     private fun onEnd() {
         job?.cancel()
-        val endTs = System.currentTimeMillis()
-        val userTime = (endTs - startTime) / 1000
-
         lifecycleScope.launch(Dispatchers.IO) {
-            repo.updateTimeInDailyUsage(currentIdAppPackage, userTime)
+            repo.updateTimeInDailyUsage(currentIdAppPackage, userSEC)
         }
     }
 

@@ -13,8 +13,9 @@ class DailyUsageRepository(private val dailyUsageDAO: DailyUsageDAO) {
 
     suspend fun resetNewDailyUsage(idHistory: Int, dateKey: String) = dailyUsageDAO.resetNewDailyUsage(idHistory, dateKey)
 
-    suspend fun updateTimeInDailyUsage(idHistory : Int, deltaSec : Long) = dailyUsageDAO.updateTimeInDailyUsage(idHistory, deltaSec)
+    suspend fun updateTimeInDailyUsage(idHistory: Int, userSEC : Long) = dailyUsageDAO.updateTimeInDailyUsage(idHistory, userSEC)
 
     fun getDailyUsageTime(idHistory: Int): LiveData<Long> = dailyUsageDAO.getDailyUsageTime(idHistory)
 
+    suspend fun getDailyUsageTimeOneTime(idHistory: Int) : Long = dailyUsageDAO.getDailyUsageTimeOneTime(idHistory)
 }

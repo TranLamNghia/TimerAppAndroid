@@ -66,7 +66,7 @@ class FocusDetectService : AccessibilityService() {
                 stopJob?.cancel()
                 isOpen = true
                 currentTrackedPackage = pkg
-                Log.d("FDService", "App current : " + currentApp.packageName + " OPEN")
+                Log.d("FDService", "OPEN")
                 repo.onAppForeground(currentApp)
                 startService(Intent(applicationContext, UsageCountTimeService::class.java).apply {
                     action = "START"
@@ -79,7 +79,7 @@ class FocusDetectService : AccessibilityService() {
 //                    if (currentTrackedPackage == currentApp.packageName && pkg == "com.google.android.apps.nexuslauncher" && isOpen == true) {
                     if (currentTrackedPackage == currentApp.packageName && pkg == homePackage && isOpen == true) {
                         isOpen = false
-                        Log.d("FDService", "App current : " + currentApp.packageName + " CLOSE")
+                        Log.d("FDService", "CLOSE")
                         repo.onAppSessionEnd(currentApp)
                         startService(Intent(applicationContext, UsageCountTimeService::class.java).apply {
                             action = "END"

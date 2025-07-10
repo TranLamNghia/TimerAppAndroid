@@ -25,8 +25,8 @@ interface DailyUsageDAO {
     @Query("UPDATE DAILYUSAGE SET dateKey = :dateKey, userSEC = 0 WHERE idHistory = :idHistory")
     suspend fun resetNewDailyUsage(idHistory: Int, dateKey: String)
 
-    @Query("UPDATE DAILYUSAGE SET userSEC = userSEC + :deltaSec WHERE idHistory = :idHistory")
-    suspend fun updateTimeInDailyUsage(idHistory: Int, deltaSec: Long)
+    @Query("UPDATE DAILYUSAGE SET userSEC = :userSEC WHERE idHistory = :idHistory")
+    suspend fun updateTimeInDailyUsage(idHistory: Int, userSEC: Long)
 
     @Transaction
     suspend fun insertAndReturnId(dailyUsage: DailyUsage): Int {
@@ -37,4 +37,6 @@ interface DailyUsageDAO {
     @Query("SELECT userSEC FROM DAILYUSAGE WHERE idHistory = :idHistory")
     fun getDailyUsageTime(idHistory: Int): LiveData<Long>
 
+    @Query("SELECT userSEC FROM DAILYUSAGE WHERE idHistory = :idHistory")
+    suspend fun getDailyUsageTimeOneTime(idHistory: Int): Long
 }
