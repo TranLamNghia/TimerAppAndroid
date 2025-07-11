@@ -30,7 +30,7 @@ class FocusDetectService : AccessibilityService() {
     private var homePackage: String? = null
     private lateinit var userApps: Set<String>
     private var isOpen = false
-    private val STOP_DEBOUNCE_MS = 1000L
+    private val STOP_DEBOUNCE_MS = 500L
 
     override fun onServiceConnected() {
         super.onServiceConnected()

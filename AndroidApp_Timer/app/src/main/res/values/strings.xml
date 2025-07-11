@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">App Timer</string>
+    <string name="app_name">TimeManagement</string>
     <string name="app_timer">App Timer</string>
     <string name="timer">Hẹn giờ</string>
     <string name="practice">Luyện tập</string>

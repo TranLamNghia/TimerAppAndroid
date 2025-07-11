@@ -52,4 +52,6 @@ class HistoryAppRepository(private val historyAppDao: HistoryAppDAO, private val
 //        dailyUsageDao.update(dailyUsage)
     }
 
+    suspend fun getTimeLimit(idHistory: Int) = historyAppDao.getTimeLimit(idHistory)
+
 }
