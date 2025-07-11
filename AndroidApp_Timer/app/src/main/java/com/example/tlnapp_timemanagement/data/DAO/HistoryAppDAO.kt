@@ -31,6 +31,9 @@ interface HistoryAppDAO {
     @Query("SELECT * FROM HistoryApp WHERE packageName = :packageName")
     fun getHistoryByPackageName(packageName: String): List<HistoryApp>
 
+    @Query("SELECT timeLimit FROM HistoryApp WHERE idHistory = :idHistory")
+    suspend fun getTimeLimit(idHistory: Int): Int
+
     @Query("UPDATE HistoryApp SET status = :newStatus WHERE idHistory = :idHistory")
     suspend fun updateNewStatusByIdHistory(idHistory: Int, newStatus: String)
 

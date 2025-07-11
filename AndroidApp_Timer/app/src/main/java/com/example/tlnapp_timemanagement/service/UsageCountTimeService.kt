@@ -6,17 +6,14 @@ import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import com.example.tlnapp_timemanagement.data.AppDatabase
-import com.example.tlnapp_timemanagement.data.model.DailyUsage
 import com.example.tlnapp_timemanagement.data.repository.DailyUsageRepository
+import com.example.tlnapp_timemanagement.data.repository.HistoryAppRepository
+import com.example.tlnapp_timemanagement.dialog.Notification
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 class UsageCountTimeService() : LifecycleService(){
@@ -24,29 +21,51 @@ class UsageCountTimeService() : LifecycleService(){
     private var job : Job? = null
     private var startTime = 0L
     var userSEC : Long = 0L
+    var timeLimit : Int = 0
 
-    private var currentPackage : DailyUsage = DailyUsage(idHistory = 0, dateKey = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE), userSEC = 0)
-//    private lateinit var timeShareViewModel : TimeShareViewModel
     private var currentIdAppPackage : Int = 0
-    lateinit var repo : DailyUsageRepository
+    private var inputIdAppPackage : Int = 0
+
+    lateinit var dailyUsageRepository : DailyUsageRepository
+    lateinit var historyAppRepository: HistoryAppRepository
+
+    var notificationProgress : Boolean = false
+    val valueProgress = 0.5
 
     override fun onCreate() {
         super.onCreate()
         val db = AppDatabase.getDatabase(applicationContext)
-        repo = DailyUsageRepository(db.dailyUsageDao())
+        dailyUsageRepository = DailyUsageRepository(db.dailyUsageDao())
+        historyAppRepository = HistoryAppRepository(db.historyAppDao(), db.dailyUsageDao())
 
-//        val timeShareViewModel = ViewModelProvider(this).get(TimeShareViewModel::class.java)
+        notificationProgress = false
     }
 
     private fun onStart() {
+        Log.d("UsageCountTimeService", "TimeLimit: ${timeLimit}")
         startTime = System.currentTimeMillis() - 1000
         job = lifecycleScope.launch(Dispatchers.IO) {
             while(isActive) {
-
-                userSEC = repo.getDailyUsageTimeOneTime(currentIdAppPackage)
+                userSEC = dailyUsageRepository.getDailyUsageTimeOneTime(currentIdAppPackage)
                 val now = System.currentTimeMillis()
                 userSEC += (now - startTime) / 1000
                 Log.d("UsageCountTimeService", "Time: ${userSEC}")
+
+                if (userSEC >= timeLimit.toLong() * valueProgress && notificationProgress == false) {
+                    launch {
+                        notificationProgress = true
+                        Notification.showProgressNotification(applicationContext, "App Timer", "Bạn đã sử dụng 50% thời gian", 50)
+                    }
+                }
+                if (userSEC == timeLimit.toLong()) {
+                    if (MyAccessibilityService.instance == null) {
+                        Log.d("FDService", "AccessibilityService instance is NULL")
+                    } else {
+                        Log.d("FDService", "AccessibilityService instance is NOT NULL")
+                        MyAccessibilityService.instance?.redirectToHome()
+                    }
+                    Notification.showSimpleNotification(applicationContext, "App Timer", "Bạn đã sử dụng hết thời gian")
+                }
                 delay(1000L)
             }
         }
@@ -56,7 +75,7 @@ class UsageCountTimeService() : LifecycleService(){
     private fun onEnd() {
         job?.cancel()
         lifecycleScope.launch(Dispatchers.IO) {
-            repo.updateTimeInDailyUsage(currentIdAppPackage, userSEC)
+            dailyUsageRepository.updateTimeInDailyUsage(currentIdAppPackage, userSEC)
         }
     }
 
@@ -65,8 +84,15 @@ class UsageCountTimeService() : LifecycleService(){
         intent ?: return START_NOT_STICKY
 
         val id = intent.getIntExtra("EXTRA_ID_PACKAGE", -1)
-        if (id != -1) currentIdAppPackage = id
-
+        if (id != -1) inputIdAppPackage = id
+        if (inputIdAppPackage != currentIdAppPackage) {
+            notificationProgress = false
+            currentIdAppPackage = inputIdAppPackage
+            lifecycleScope.launch(Dispatchers.IO) {
+                timeLimit = historyAppRepository.getTimeLimit(currentIdAppPackage)
+                Log.d("UsageCountTimeService", "timeLimit = " + timeLimit)
+            }
+        }
         when(intent.action) {
             "START" -> {
                 onStart()
