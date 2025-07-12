@@ -21,10 +21,9 @@ class HistoryAppRepository(private val historyAppDao: HistoryAppDAO, private val
 
     suspend fun getAppByStatus(status: String) : HistoryApp? = historyAppDao.getAppByStatus(status)
     fun getAppByMaxIdLive(): LiveData<HistoryApp> = historyAppDao.getAppByMaxIdLive()
+    suspend fun getHistoryById(idHistory: Int) : HistoryApp = historyAppDao.getHistoryById(idHistory)
 
     suspend fun deleteHistoryApp(status: String) = historyAppDao.deleteHistoryApp(status)
-
-    fun getAllHistory() = historyAppDao.getAllHistory()
 
     suspend fun onAppForeground(currentApp: HistoryApp) {
         val now = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE)
@@ -35,9 +34,8 @@ class HistoryAppRepository(private val historyAppDao: HistoryAppDAO, private val
             dateKey = now,
             userSEC = 0
         )
-        dailyUsageDao.insert(daily)
-
         if (currentApp.status.equals("PENDING")) {
+            dailyUsageDao.insert(daily)
             if (activeApp!= null) {
                 historyAppDao.updateNewStatusByIdHistory(activeApp.idHistory , "INACTIVE")
             }

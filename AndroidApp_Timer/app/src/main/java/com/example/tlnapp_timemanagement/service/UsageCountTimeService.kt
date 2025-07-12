@@ -42,8 +42,13 @@ class UsageCountTimeService() : LifecycleService(){
     }
 
     private fun onStart() {
+        if (inputIdAppPackage != currentIdAppPackage) {
+            notificationProgress = false
+            currentIdAppPackage = inputIdAppPackage
+        }
         startTime = System.currentTimeMillis() - 1000
         job = lifecycleScope.launch(Dispatchers.IO) {
+            timeLimit = historyAppRepository.getTimeLimit(currentIdAppPackage)
             while(isActive) {
                 userSEC = dailyUsageRepository.getDailyUsageTimeOneTime(currentIdAppPackage)
                 val now = System.currentTimeMillis()
@@ -82,14 +87,7 @@ class UsageCountTimeService() : LifecycleService(){
 
         val id = intent.getIntExtra("EXTRA_ID_PACKAGE", -1)
         if (id != -1) inputIdAppPackage = id
-        if (inputIdAppPackage != currentIdAppPackage) {
-            notificationProgress = false
-            currentIdAppPackage = inputIdAppPackage
-            lifecycleScope.launch(Dispatchers.IO) {
-                timeLimit = historyAppRepository.getTimeLimit(currentIdAppPackage)
-                Log.d("UsageCountTimeService", "timeLimit = " + timeLimit)
-            }
-        }
+
         when(intent.action) {
             "START" -> {
                 onStart()

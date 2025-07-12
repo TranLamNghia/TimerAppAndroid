@@ -19,6 +19,7 @@ import android.widget.*
 import java.util.*
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
@@ -26,9 +27,10 @@ import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.viewmodel.DailyUsageViewModel
 import com.example.tlnapp_timemanagement.data.viewmodel.HistoryAppViewModel
+import com.example.tlnapp_timemanagement.data.viewmodel.MapDailyShareViewModel
 import com.example.tlnapp_timemanagement.dialog.LoadingFrag
 import kotlinx.coroutines.*
-
+import kotlinx.coroutines.flow.collectLatest
 
 
 class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
@@ -56,7 +58,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     private var timerRunning = false
     private var timeLeftInMillis: Long = 0
     private var startTimeInMillis: Long = 1
-    private val mapDailyUsage = mutableMapOf<Int, String>()
 
     private lateinit var historyAppViewModel: HistoryAppViewModel
     private lateinit var dailyUsageViewModel: DailyUsageViewModel
@@ -230,19 +231,27 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             endTime = null,
             status = "PENDING"
         )
-        if (currentapp.packageName.equals("Chọn ứng dụng")) {
-            historyAppViewModel.insertHistory(app)
-        }
-        else if (currentapp.status.equals("PENDING")) {
-            historyAppViewModel.updateApp(currentapp.idHistory, app.packageName, app.timeLimit)
-        }
-        else {
-            historyAppViewModel.insertHistory(app)
-        }
-        dailyUsageViewModel.getDailyUsageTime(currentapp.idHistory).observe(viewLifecycleOwner) { result ->
-            if (result != null) {
-
+        viewLifecycleOwner.lifecycleScope.launch {
+            val beforeIdAppDaily = dailyUsageViewModel.getIdHistoryEXISTS(app.packageName)
+            if (beforeIdAppDaily != null) {
+                if (currentapp.status.equals("ACTIVE")) {
+                    historyAppViewModel.updateNewStatusByIdHistory(currentapp.idHistory, "INACTIVE")
+                } else if (currentapp.status.equals("PENDING")) {
+                    historyAppViewModel.deleteHistoryApp("PENDING")
+                }
+                historyAppViewModel.updateNewStatusByIdHistory(beforeIdAppDaily, "ACTIVE")
+                currentapp = historyAppViewModel.getHistoryById(beforeIdAppDaily)
+                updateAppInfo(currentapp)
             } else {
+                if (currentapp.packageName.equals("Chọn ứng dụng")) {
+                    historyAppViewModel.insertHistory(app)
+                }
+                else if (currentapp.status.equals("PENDING")) {
+                    historyAppViewModel.updateApp(currentapp.idHistory, app.packageName, app.timeLimit)
+                }
+                else {
+                    historyAppViewModel.insertHistory(app)
+                }
                 historyAppViewModel.getAppByMaxIdLive().observe(viewLifecycleOwner) { updatedApp ->
                     if (updatedApp != null) {
                         currentapp = updatedApp
@@ -251,8 +260,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
                 }
             }
         }
-
-
     }
 
     override fun onDestroy() {

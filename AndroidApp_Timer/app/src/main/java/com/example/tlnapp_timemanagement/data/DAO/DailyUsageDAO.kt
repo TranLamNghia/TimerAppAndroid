@@ -34,6 +34,9 @@ interface DailyUsageDAO {
         return dailyUsage.idHistory
     }
 
+    @Query("SELECT DAILYUSAGE.idHistory FROM DAILYUSAGE, HISTORYAPP WHERE DAILYUSAGE.idHistory = HISTORYAPP.idHistory AND HISTORYAPP.packageName = :packageName")
+    suspend fun getIdHistoryEXISTS(packageName: String): Int?
+
     @Query("SELECT userSEC FROM DAILYUSAGE WHERE idHistory = :idHistory")
     fun getDailyUsageTime(idHistory: Int): LiveData<Long>
 

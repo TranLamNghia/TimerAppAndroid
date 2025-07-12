@@ -44,6 +44,8 @@ class HistoryAppViewModel(application: Application): AndroidViewModel(applicatio
 
     fun getAppByMaxIdLive(): LiveData<HistoryApp> = repository.getAppByMaxIdLive()
 
+    suspend fun getHistoryById(idHistory: Int) : HistoryApp = repository.getHistoryById(idHistory)
+
     suspend fun getPendingApp2(): HistoryApp? {
         return repository.getAppByStatus("PENDING")
     }
