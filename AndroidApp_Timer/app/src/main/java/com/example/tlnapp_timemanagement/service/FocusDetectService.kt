@@ -32,8 +32,14 @@ class FocusDetectService : AccessibilityService() {
     private var isOpen = false
     private val STOP_DEBOUNCE_MS = 500L
 
+    companion object {
+        var instance: FocusDetectService? = null
+    }
+
     override fun onServiceConnected() {
         super.onServiceConnected()
+        instance = this
+
         val db = AppDatabase.getDatabase(applicationContext)
         repo = HistoryAppRepository(db.historyAppDao(), db.dailyUsageDao())
 
@@ -47,6 +53,15 @@ class FocusDetectService : AccessibilityService() {
             addCategory(Intent.CATEGORY_HOME)
         }.let { pm.resolveActivity(it, PackageManager.MATCH_DEFAULT_ONLY)?.activityInfo?.packageName }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        instance = null
+    }
+
+    fun redirectToHome() {
+        performGlobalAction(GLOBAL_ACTION_HOME)
     }
 
 

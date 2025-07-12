@@ -42,7 +42,6 @@ class UsageCountTimeService() : LifecycleService(){
     }
 
     private fun onStart() {
-        Log.d("UsageCountTimeService", "TimeLimit: ${timeLimit}")
         startTime = System.currentTimeMillis() - 1000
         job = lifecycleScope.launch(Dispatchers.IO) {
             while(isActive) {
@@ -57,13 +56,8 @@ class UsageCountTimeService() : LifecycleService(){
                         Notification.showProgressNotification(applicationContext, "App Timer", "Bạn đã sử dụng 50% thời gian", 50)
                     }
                 }
-                if (userSEC == timeLimit.toLong()) {
-                    if (MyAccessibilityService.instance == null) {
-                        Log.d("FDService", "AccessibilityService instance is NULL")
-                    } else {
-                        Log.d("FDService", "AccessibilityService instance is NOT NULL")
-                        MyAccessibilityService.instance?.redirectToHome()
-                    }
+                if (userSEC >= timeLimit.toLong()) {
+                    FocusDetectService.instance?.redirectToHome()
                     Notification.showSimpleNotification(applicationContext, "App Timer", "Bạn đã sử dụng hết thời gian")
                 }
                 delay(1000L)
@@ -75,7 +69,10 @@ class UsageCountTimeService() : LifecycleService(){
     private fun onEnd() {
         job?.cancel()
         lifecycleScope.launch(Dispatchers.IO) {
-            dailyUsageRepository.updateTimeInDailyUsage(currentIdAppPackage, userSEC)
+            if (userSEC >= timeLimit.toLong()) {
+                dailyUsageRepository.updateTimeInDailyUsage(currentIdAppPackage, timeLimit.toLong())
+            }
+            else dailyUsageRepository.updateTimeInDailyUsage(currentIdAppPackage, userSEC)
         }
     }
 

@@ -21,14 +21,12 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import com.airbnb.lottie.LottieAnimationView
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
 import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.viewmodel.DailyUsageViewModel
 import com.example.tlnapp_timemanagement.data.viewmodel.HistoryAppViewModel
 import com.example.tlnapp_timemanagement.dialog.LoadingFrag
-import com.example.tlnapp_timemanagement.service.FocusDetectService
 import kotlinx.coroutines.*
 
 
@@ -58,6 +56,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     private var timerRunning = false
     private var timeLeftInMillis: Long = 0
     private var startTimeInMillis: Long = 1
+    private val mapDailyUsage = mutableMapOf<Int, String>()
 
     private lateinit var historyAppViewModel: HistoryAppViewModel
     private lateinit var dailyUsageViewModel: DailyUsageViewModel
@@ -92,6 +91,13 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         btnDelete = view.findViewById(R.id.btn_delete)
         btnSetup = view.findViewById(R.id.btn_setup)
 
+        getCurrentApp()
+
+        btnDelete.setOnClickListener { resetTimer() }
+        btnSetup.setOnClickListener { showSetupDialog() }
+    }
+
+    fun getCurrentApp() {
         historyAppViewModel.getPendingApp{ beforeApp ->
             if (beforeApp != null) {
                 currentapp = beforeApp
@@ -105,10 +111,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
                 }
             }
         }
-
-
-        btnDelete.setOnClickListener { resetTimer() }
-        btnSetup.setOnClickListener { showSetupDialog() }
     }
 
     fun showLoadingAndNavigate() {
@@ -149,12 +151,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         }
 //        startTimeInMillis = currentapp.timeLimit * 60 * 1000L
         startTimeInMillis = currentapp.timeLimit * 1000L
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            dailyUsageViewModel.getDailyUsageTime(currentapp.idHistory).observe(viewLifecycleOwner) { result ->
-//                timeLeftInMillis = if (result != null) startTimeInMillis - (result * 1000) else startTimeInMillis
-//                updateTimerDisplay()
-//            }
-//        }
         dailyUsageViewModel.getDailyUsageTime(currentapp.idHistory).observe(viewLifecycleOwner) { result ->
             timeLeftInMillis = if (result != null) startTimeInMillis - (result * 1000) else startTimeInMillis
             updateTimerDisplay()
@@ -182,6 +178,8 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     }
 
     private fun resetTimer() {
+        if (currentapp.status.equals("PENDING")) historyAppViewModel.deleteHistoryApp("PENDING")
+        else if (currentapp.status.equals("ACTIVE")) historyAppViewModel.updateNewStatusByIdHistory(currentapp.idHistory, "INACTIVE")
         currentapp = HistoryApp(
             idHistory = 0,
             packageName = "Chọn ứng dụng",
@@ -191,7 +189,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             status = "PENDING"
         )
         setDefaultApp()
-        if (currentapp.status.equals("PENDING")) historyAppViewModel.deleteHistoryApp("PENDING")
     }
 
     private fun updateTimerDisplay() {
@@ -242,12 +239,20 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         else {
             historyAppViewModel.insertHistory(app)
         }
-        historyAppViewModel.getAppByMaxIdLive().observe(viewLifecycleOwner) { updatedApp ->
-            if (updatedApp != null) {
-                currentapp = updatedApp
-                updateAppInfo(currentapp)
+        dailyUsageViewModel.getDailyUsageTime(currentapp.idHistory).observe(viewLifecycleOwner) { result ->
+            if (result != null) {
+
+            } else {
+                historyAppViewModel.getAppByMaxIdLive().observe(viewLifecycleOwner) { updatedApp ->
+                    if (updatedApp != null) {
+                        currentapp = updatedApp
+                        updateAppInfo(currentapp)
+                    }
+                }
             }
         }
+
+
     }
 
     override fun onDestroy() {
