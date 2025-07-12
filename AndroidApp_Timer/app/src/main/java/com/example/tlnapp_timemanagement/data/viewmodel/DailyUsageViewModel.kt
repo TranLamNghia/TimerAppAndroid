@@ -31,4 +31,5 @@ class DailyUsageViewModel(application: Application) : AndroidViewModel(applicati
         return repository.getDailyUsageTime(idHistory)
     }
 
+
 }
