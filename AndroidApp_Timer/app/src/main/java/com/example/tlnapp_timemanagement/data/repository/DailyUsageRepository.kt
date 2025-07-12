@@ -18,4 +18,7 @@ class DailyUsageRepository(private val dailyUsageDAO: DailyUsageDAO) {
     fun getDailyUsageTime(idHistory: Int): LiveData<Long> = dailyUsageDAO.getDailyUsageTime(idHistory)
 
     suspend fun getDailyUsageTimeOneTime(idHistory: Int) : Long = dailyUsageDAO.getDailyUsageTimeOneTime(idHistory)
+
+    suspend fun getIdHistoryEXISTS(packageName: String): Int? = dailyUsageDAO.getIdHistoryEXISTS(packageName)
+
 }

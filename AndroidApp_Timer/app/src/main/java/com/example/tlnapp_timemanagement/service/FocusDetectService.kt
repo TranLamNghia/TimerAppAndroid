@@ -11,9 +11,12 @@ import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import androidx.lifecycle.ViewModelStore
+import com.example.tlnapp_timemanagement.MyApplication
 import com.example.tlnapp_timemanagement.data.AppDatabase
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.repository.HistoryAppRepository
+import com.example.tlnapp_timemanagement.data.viewmodel.MapDailyShareViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -31,6 +34,7 @@ class FocusDetectService : AccessibilityService() {
     private lateinit var userApps: Set<String>
     private var isOpen = false
     private val STOP_DEBOUNCE_MS = 500L
+
 
     companion object {
         var instance: FocusDetectService? = null
@@ -52,6 +56,7 @@ class FocusDetectService : AccessibilityService() {
         homePackage = Intent(Intent.ACTION_MAIN).apply {
             addCategory(Intent.CATEGORY_HOME)
         }.let { pm.resolveActivity(it, PackageManager.MATCH_DEFAULT_ONLY)?.activityInfo?.packageName }
+
 
     }
 

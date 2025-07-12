@@ -31,5 +31,7 @@ class DailyUsageViewModel(application: Application) : AndroidViewModel(applicati
         return repository.getDailyUsageTime(idHistory)
     }
 
-
+    suspend fun getIdHistoryEXISTS(packageName: String): Int? {
+        return repository.getIdHistoryEXISTS(packageName)
+    }
 }

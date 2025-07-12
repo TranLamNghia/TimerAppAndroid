@@ -19,9 +19,6 @@ interface HistoryAppDAO {
     @Delete
     suspend fun delete(historyApp: HistoryApp)
 
-    @Query("SELECT * FROM HistoryApp")
-    fun getAllHistory(): HistoryApp
-
     @Query("SELECT * FROM HistoryApp WHERE status = :status")
     suspend fun getAppByStatus(status: String): HistoryApp?
 
@@ -30,6 +27,9 @@ interface HistoryAppDAO {
 
     @Query("SELECT * FROM HistoryApp WHERE packageName = :packageName")
     fun getHistoryByPackageName(packageName: String): List<HistoryApp>
+
+    @Query("SELECT * FROM HistoryApp WHERE idHistory = :idHistory")
+    suspend fun getHistoryById(idHistory: Int): HistoryApp
 
     @Query("SELECT timeLimit FROM HistoryApp WHERE idHistory = :idHistory")
     suspend fun getTimeLimit(idHistory: Int): Int
