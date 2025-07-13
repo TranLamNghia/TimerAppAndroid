@@ -2,6 +2,7 @@ package com.example.tlnapp_timemanagement.data.DAO
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
@@ -15,6 +16,9 @@ interface DailyUsageDAO {
 
     @Update
     suspend fun update(dailyUsage: DailyUsage)
+
+    @Query("DELETE FROM DAILYUSAGE")
+    suspend fun deleteAll()
 
     @Query("SELECT * FROM DAILYUSAGE WHERE idHistory = :idHistory")
     suspend fun getDailyUsageByIdHistory(idHistory: Int): DailyUsage

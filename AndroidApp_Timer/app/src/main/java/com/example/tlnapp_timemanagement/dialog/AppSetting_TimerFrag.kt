@@ -1,16 +1,12 @@
 package com.example.tlnapp_timemanagement.dialog
 
 import android.annotation.SuppressLint
-import android.app.usage.UsageEvents
-import android.app.usage.UsageStatsManager
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
@@ -35,7 +31,7 @@ class AppSetting_TimerFrag : DialogFragment() {
 
     private var allApps: List<ApplicationInfo> = emptyList()
 
-    // Interface để callback về TimerFragment
+    // Interface to callback about TimerFragment
     interface OnAppSettingListener {
         fun onAppSettingSaved(appInfo: ApplicationInfo, timeLimit: Int)
     }

@@ -39,6 +39,10 @@ android {
         compose = true
     }
 
+    lint {
+        disable += "NullSafeMutableLiveData"
+    }
+
 }
 
 dependencies {
@@ -55,6 +59,7 @@ dependencies {
     implementation(libs.androidx.coordinatorlayout)
     implementation(libs.material)
     implementation(libs.androidx.lifecycle.service)
+    implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
