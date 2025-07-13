@@ -21,7 +21,7 @@ class UsageCountTimeService() : LifecycleService(){
     private var job : Job? = null
     private var startTime = 0L
     var userSEC : Long = 0L
-    var timeLimit : Int = 0
+    var timeLimit : Long = 0L
 
     private var currentIdAppPackage : Int = 0
     private var inputIdAppPackage : Int = 0
@@ -48,23 +48,23 @@ class UsageCountTimeService() : LifecycleService(){
         }
         startTime = System.currentTimeMillis() - 1000
         job = lifecycleScope.launch(Dispatchers.IO) {
-            timeLimit = historyAppRepository.getTimeLimit(currentIdAppPackage)
+            timeLimit = historyAppRepository.getTimeLimit(currentIdAppPackage) * 60 * 1000L
             while(isActive) {
                 userSEC = dailyUsageRepository.getDailyUsageTimeOneTime(currentIdAppPackage)
                 val now = System.currentTimeMillis()
                 userSEC += (now - startTime) / 1000
                 Log.d("UsageCountTimeService", "Time: ${userSEC}")
 
-                if (userSEC >= timeLimit.toLong() * valueProgress && notificationProgress == false) {
+                if (userSEC >= timeLimit * valueProgress && notificationProgress == false) {
                     launch {
                         notificationProgress = true
                         Notification.showProgressNotification(applicationContext, "App Timer", "Bạn đã sử dụng 50% thời gian", 50)
                     }
                 }
-                if(userSEC == timeLimit.toLong() - 60) {
+                if(userSEC == timeLimit - 60000) {
                     Notification.showSimpleNotification_HighPriority(applicationContext, "App Timer", "Bạn còn 1 phút sử dụng")
                 }
-                if (userSEC >= timeLimit.toLong()) {
+                if (userSEC >= timeLimit) {
                     FocusDetectService.instance?.redirectToHome()
                     Notification.showSimpleNotification(applicationContext, "App Timer", "Bạn đã sử dụng hết thời gian")
                     break
