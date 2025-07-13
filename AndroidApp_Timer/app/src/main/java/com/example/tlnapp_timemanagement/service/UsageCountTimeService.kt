@@ -61,9 +61,13 @@ class UsageCountTimeService() : LifecycleService(){
                         Notification.showProgressNotification(applicationContext, "App Timer", "Bạn đã sử dụng 50% thời gian", 50)
                     }
                 }
+                if(userSEC == timeLimit.toLong() - 60) {
+                    Notification.showSimpleNotification_HighPriority(applicationContext, "App Timer", "Bạn còn 1 phút sử dụng")
+                }
                 if (userSEC >= timeLimit.toLong()) {
                     FocusDetectService.instance?.redirectToHome()
                     Notification.showSimpleNotification(applicationContext, "App Timer", "Bạn đã sử dụng hết thời gian")
+                    break
                 }
                 delay(1000L)
             }

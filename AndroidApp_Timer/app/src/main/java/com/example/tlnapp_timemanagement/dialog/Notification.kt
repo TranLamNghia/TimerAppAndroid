@@ -39,6 +39,20 @@ object Notification {
     }
 
     @SuppressLint("MissingPermission")
+    fun showSimpleNotification_HighPriority(context: Context, title: String, content: String, notificationId: Int = NOTIF_ID)  {
+        createNotificationChannel(context) // <-- Đảm bảo gọi trước!
+        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_smartphone)
+            .setContentTitle(title)
+            .setContentText(content)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)   // <--- Đổi ở đây!
+            .setDefaults(NotificationCompat.DEFAULT_ALL)      // <--- Có âm thanh, rung...
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE) // <--- Gợi ý cho Android rằng đây là thông báo cần chú ý
+
+        NotificationManagerCompat.from(context).notify(notificationId, builder.build())
+    }
+
+    @SuppressLint("MissingPermission")
     fun showProgressNotification(context: Context, title: String, content: String, progress: Int, notificationId: Int = NOTIF_ID) {
         val builder = NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_smartphone)

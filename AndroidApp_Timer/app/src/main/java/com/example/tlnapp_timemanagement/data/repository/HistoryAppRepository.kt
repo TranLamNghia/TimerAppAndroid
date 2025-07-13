@@ -34,8 +34,10 @@ class HistoryAppRepository(private val historyAppDao: HistoryAppDAO, private val
             dateKey = now,
             userSEC = 0
         )
-        if (currentApp.status.equals("PENDING")) {
+        if (dailyUsageDao.getIdHistoryEXISTS(historyAppDao.getHistoryById(daily.idHistory).packageName) == null) {
             dailyUsageDao.insert(daily)
+        }
+        if (currentApp.status.equals("PENDING")) {
             if (activeApp!= null) {
                 historyAppDao.updateNewStatusByIdHistory(activeApp.idHistory , "INACTIVE")
             }

@@ -1,25 +1,17 @@
 package com.example.tlnapp_timemanagement.main
 
-import android.accessibilityservice.AccessibilityService
-import android.content.BroadcastReceiver
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.util.Log
 import android.view.*
 import android.widget.*
 import java.util.*
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
@@ -27,10 +19,8 @@ import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.viewmodel.DailyUsageViewModel
 import com.example.tlnapp_timemanagement.data.viewmodel.HistoryAppViewModel
-import com.example.tlnapp_timemanagement.data.viewmodel.MapDailyShareViewModel
 import com.example.tlnapp_timemanagement.dialog.LoadingFrag
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collectLatest
 
 
 class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
@@ -55,7 +45,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     private lateinit var btnSetup: Button
 
     private var countDownTimer: CountDownTimer? = null
-    private var timerRunning = false
     private var timeLeftInMillis: Long = 0
     private var startTimeInMillis: Long = 1
 
@@ -150,37 +139,18 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
                 selectedAppTimeLimit.text = "Thời gian giới hạn: ${currentapp.timeLimit} phút"
             }
         }
-//        startTimeInMillis = currentapp.timeLimit * 60 * 1000L
-        startTimeInMillis = currentapp.timeLimit * 1000L
+        startTimeInMillis = currentapp.timeLimit * 60 * 1000L
         dailyUsageViewModel.getDailyUsageTime(currentapp.idHistory).observe(viewLifecycleOwner) { result ->
             timeLeftInMillis = if (result != null) startTimeInMillis - (result * 1000) else startTimeInMillis
             updateTimerDisplay()
         }
     }
 
-    private fun startTimer() {
-        countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                timeLeftInMillis = millisUntilFinished
-                Log.d("UsageCountTimeService", "Time: 1")
-                updateTimerDisplay()
-            }
-
-            override fun onFinish() {
-                timerRunning = false
-                timerStatus.text = "Hết thời gian!"
-                timeLeftInMillis = 0
-                updateTimerDisplay()
-            }
-
-        }.start()
-
-        timerRunning = true
-    }
-
     private fun resetTimer() {
-        if (currentapp.status.equals("PENDING")) historyAppViewModel.deleteHistoryApp("PENDING")
-        else if (currentapp.status.equals("ACTIVE")) historyAppViewModel.updateNewStatusByIdHistory(currentapp.idHistory, "INACTIVE")
+        viewLifecycleOwner.lifecycleScope.launch {
+            if (currentapp.status.equals("PENDING")) historyAppViewModel.deleteHistoryApp("PENDING")
+            else if (currentapp.status.equals("ACTIVE")) historyAppViewModel.updateNewStatusByIdHistory(currentapp.idHistory, "INACTIVE")
+        }
         currentapp = HistoryApp(
             idHistory = 0,
             packageName = "Chọn ứng dụng",
@@ -196,7 +166,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         val hours = (timeLeftInMillis / 1000) / 3600
         val minutes = ((timeLeftInMillis / 1000) % 3600) / 60
         val seconds = ((timeLeftInMillis / 1000) % 3600) % 60
-        Log.d("TestValue", "${hours} _____ ${minutes} ________ ${seconds}")
         val timeLeftFormatted = if (hours > 0) {
             String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds)
         } else {
@@ -222,7 +191,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     }
 
     override fun onAppSettingSaved(appInfo: ApplicationInfo, timeLimit: Int) {
-        val pm = requireContext().packageManager
         val app = HistoryApp(
             idHistory = 0,
             packageName = appInfo.packageName,
@@ -234,13 +202,16 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         viewLifecycleOwner.lifecycleScope.launch {
             val beforeIdAppDaily = dailyUsageViewModel.getIdHistoryEXISTS(app.packageName)
             if (beforeIdAppDaily != null) {
+                Log.d("FDService", "Lan 1 : " + currentapp.idHistory + "_____" + currentapp.status)
                 if (currentapp.status.equals("ACTIVE")) {
                     historyAppViewModel.updateNewStatusByIdHistory(currentapp.idHistory, "INACTIVE")
                 } else if (currentapp.status.equals("PENDING")) {
                     historyAppViewModel.deleteHistoryApp("PENDING")
                 }
                 historyAppViewModel.updateNewStatusByIdHistory(beforeIdAppDaily, "ACTIVE")
+                Log.d("FDService", "Lan 2 : " + beforeIdAppDaily)
                 currentapp = historyAppViewModel.getHistoryById(beforeIdAppDaily)
+                Log.d("FDService", "Lan 3 : " + currentapp.idHistory + "_____" + currentapp.status)
                 updateAppInfo(currentapp)
             } else {
                 if (currentapp.packageName.equals("Chọn ứng dụng")) {
