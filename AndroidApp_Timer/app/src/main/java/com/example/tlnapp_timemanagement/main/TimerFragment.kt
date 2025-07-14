@@ -140,6 +140,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             }
         }
         startTimeInMillis = currentapp.timeLimit * 60 * 1000L
+        startTimeInMillis = currentapp.timeLimit * 1000L
         dailyUsageViewModel.getDailyUsageTime(currentapp.idHistory).observe(viewLifecycleOwner) { result ->
             timeLeftInMillis = if (result != null) startTimeInMillis - (result * 1000) else startTimeInMillis
             updateTimerDisplay()

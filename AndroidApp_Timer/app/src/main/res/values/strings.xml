@@ -9,11 +9,6 @@
     <string name="app_icon">App Icon</string>
     <string name="selected_app_icon">Selected App Icon</string>
 
-    <string name="instagram">Instagram</string>
-    <string name="youtube">YouTube</string>
-    <string name="facebook">Facebook</string>
-    <string name="twitter">Twitter</string>
-    <string name="chrome">Chrome</string>
 
     <string name="time_limit_60_minutes">Thời gian giới hạn: %d phút</string>
     <string name="time_remaining">Thời gian còn lại</string>
@@ -31,9 +26,62 @@
     <string name="save">Lưu</string>
 
 
+    <!-- Profile Settings __________________________________________-->
+    <string name="profile_settings">Cài đặt</string>
+    <string name="settings">Cài đặt</string>
+    <string name="accessibility_settings">Đi đến trợ năng</string>
+    <string name="accessibility_description">Cấp quyền truy cập để ứng dụng hoạt động</string>
+    <string name="premium">Premium</string>
+    <string name="premium_description">Nâng cấp để mở khóa tất cả tính năng</string>
+    <string name="upgrade">NÂNG CẤP</string>
+
+    <!-- Settings Options -->
+    <string name="notifications">Thông báo</string>
+    <string name="dark_mode">Chế độ tối</string>
+    <string name="auto_start">Tự động khởi động</string>
+
+    <!-- Premium Dialog -->
+    <string name="premium_upgrade">Nâng cấp Premium</string>
+    <string name="premium_features_description">Mở khóa tất cả tính năng cao cấp và trải nghiệm không quảng cáo</string>
+    <string name="feature_unlimited_apps">Không giới hạn số lượng ứng dụng</string>
+    <string name="feature_advanced_stats">Thống kê chi tiết và báo cáo</string>
+    <string name="feature_no_ads">Không có quảng cáo</string>
+    <string name="upgrade_now">NÂNG CẤP NGAY</string>
+
+    <!-- App Info -->
+    <string name="app_version">Phiên bản 1.0.0</string>
+    <string name="developed_by">Phát triển bởi Your Name</string>
+
+    <!-- Profile New Strings -->
+    <string name="welcome_user">Chào mừng bạn!</string>
+    <string name="manage_your_time">Quản lý thời gian hiệu quả</string>
+
+    <!-- FAQ Strings -->
+    <string name="faq">Câu hỏi thường gặp</string>
+    <string name="faq_description">Tìm hiểu cách sử dụng ứng dụng</string>
+    <string name="faq_welcome">Câu hỏi thường gặp</string>
+    <string name="faq_subtitle">Tìm câu trả lời cho những thắc mắc phổ biến về ứng dụng</string>
+
+    <!-- Feedback Strings -->
+    <string name="feedback">Góp ý</string>
+    <string name="feedback_description">Chia sẻ ý kiến của bạn với chúng tôi</string>
+    <string name="feedback_welcome">Góp ý &amp; Đánh giá</string>
+    <string name="feedback_subtitle">Chia sẻ trải nghiệm và giúp chúng tôi cải thiện ứng dụng</string>
+    <string name="feedback_type">Loại góp ý</string>
+    <string name="subject">Tiêu đề</string>
+    <string name="subject_hint">Nhập tiêu đề góp ý</string>
+    <string name="message">Nội dung</string>
+    <string name="message_hint">Mô tả chi tiết góp ý của bạn...</string>
+    <string name="email">Email liên hệ</string>
+    <string name="email_hint">your.email@example.com</string>
+    <string name="submit_feedback">Gửi góp ý</string>
+    <string name="rate_app">Đánh giá ứng dụng</string>
+
+
     <string name="ac_service_desc">
         App Timer cần quyền Trợ năng để nhận biết khi bạn mở ứng dụng,
         ghi thời gian sử dụng và nhắc khi vượt giới hạn. Ứng dụng KHÔNG đọc
         nội dung màn hình hay thu thập dữ liệu cá nhân.
     </string>
+
 </resources>
