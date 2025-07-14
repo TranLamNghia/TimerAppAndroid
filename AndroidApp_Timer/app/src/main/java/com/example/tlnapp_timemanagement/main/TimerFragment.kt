@@ -1,14 +1,11 @@
 package com.example.tlnapp_timemanagement.main
 
-import android.accessibilityservice.AccessibilityService
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.CountDownTimer
-import android.provider.Settings
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -16,18 +13,18 @@ import java.util.*
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.lifecycleScope
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
 import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.viewmodel.DailyUsageViewModel
 import com.example.tlnapp_timemanagement.data.viewmodel.HistoryAppViewModel
-import com.example.tlnapp_timemanagement.service.FocusDetectService
-
+import com.example.tlnapp_timemanagement.dialog.LoadingFrag
+import kotlinx.coroutines.*
 
 
 class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
-    public var currentapp = HistoryApp(
+    private var currentapp = HistoryApp(
         idHistory = 0,
         packageName = "Chọn ứng dụng",
         beginTime = null,
@@ -48,7 +45,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     private lateinit var btnSetup: Button
 
     private var countDownTimer: CountDownTimer? = null
-    private var timerRunning = false
     private var timeLeftInMillis: Long = 0
     private var startTimeInMillis: Long = 1
 
@@ -60,18 +56,19 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        viewLifecycleOwner.lifecycleScope.launch {
+            showLoadingAndNavigate()
+        }
         return inflater.inflate(R.layout.fragment_timer, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Cấp quyền AccessibilityService
-        if (!isAccessibilityServiceEnabled(requireContext(), FocusDetectService::class.java)) {
-            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        }
 
-        // Khởi tạo ViewModel
+        // Initialize ViewModel
         historyAppViewModel = ViewModelProvider(this).get(HistoryAppViewModel::class.java)
+        dailyUsageViewModel = ViewModelProvider(this).get(DailyUsageViewModel::class.java)
+
 
         // Initialize views
         timerText = view.findViewById(R.id.timer_text)
@@ -84,6 +81,13 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         btnDelete = view.findViewById(R.id.btn_delete)
         btnSetup = view.findViewById(R.id.btn_setup)
 
+        getCurrentApp()
+
+        btnDelete.setOnClickListener { resetTimer() }
+        btnSetup.setOnClickListener { showSetupDialog() }
+    }
+
+    fun getCurrentApp() {
         historyAppViewModel.getPendingApp{ beforeApp ->
             if (beforeApp != null) {
                 currentapp = beforeApp
@@ -97,25 +101,18 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
                 }
             }
         }
-
-
-        btnDelete.setOnClickListener { resetTimer() }
-        btnSetup.setOnClickListener { showSetupDialog() }
     }
 
-    private fun isAccessibilityServiceEnabled(context: Context, service: Class<out AccessibilityService>): Boolean {
-        val expectedComponent = ComponentName(context, service)
-        val enabledServicesSetting = Settings.Secure.getString(
-            context.contentResolver,
-            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
-        ) ?: return false
-        val colonSplitter = enabledServicesSetting.split(':')
-        return colonSplitter.any { it.equals(expectedComponent.flattenToString(), ignoreCase = true) }
-    }
+    fun showLoadingAndNavigate() {
+        val loadingDialog = LoadingFrag()
+        loadingDialog.show(parentFragmentManager, "loading")
 
+        Handler(Looper.getMainLooper()).postDelayed({
+            loadingDialog.dismiss()
+        }, 1000)
+    }
 
     private fun setDefaultApp() {
-        val pm = requireContext().packageManager
         selectedAppName.text = "Chọn ứng dụng"
         selectedAppTimeLimit.text = "Thời gian giới hạn: -- phút"
         selectedAppIcon.setImageResource(R.drawable.ic_smartphone)
@@ -135,6 +132,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
                 selectedAppName.text = appInfo.loadLabel(pm)
                 selectedAppIcon.setImageDrawable(pm.getApplicationIcon(appInfo))
                 selectedAppTimeLimit.text = "Thời gian giới hạn: ${currentapp.timeLimit} phút"
+
             } catch (e: PackageManager.NameNotFoundException) {
                 selectedAppName.text = currentapp.packageName
                 selectedAppIcon.setImageResource(R.drawable.ic_smartphone)
@@ -142,29 +140,17 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             }
         }
         startTimeInMillis = currentapp.timeLimit * 60 * 1000L
-        timeLeftInMillis = startTimeInMillis
-        updateTimerDisplay()
-    }
-
-    private fun startTimer() {
-        countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                timeLeftInMillis = millisUntilFinished
-                updateTimerDisplay()
-            }
-
-            override fun onFinish() {
-                timerRunning = false
-                timerStatus.text = "Hết thời gian!"
-                timeLeftInMillis = 0
-                updateTimerDisplay()
-            }
-        }.start()
-
-        timerRunning = true
+        dailyUsageViewModel.getDailyUsageTime(currentapp.idHistory).observe(viewLifecycleOwner) { result ->
+            timeLeftInMillis = if (result != null) startTimeInMillis - (result * 1000) else startTimeInMillis
+            updateTimerDisplay()
+        }
     }
 
     private fun resetTimer() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            if (currentapp.status.equals("PENDING")) historyAppViewModel.deleteHistoryApp("PENDING")
+            else if (currentapp.status.equals("ACTIVE")) historyAppViewModel.updateNewStatusByIdHistory(currentapp.idHistory, "INACTIVE")
+        }
         currentapp = HistoryApp(
             idHistory = 0,
             packageName = "Chọn ứng dụng",
@@ -174,14 +160,12 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             status = "PENDING"
         )
         setDefaultApp()
-        if (currentapp.status.equals("PENDING")) historyAppViewModel.deleteHistoryApp("PENDING")
     }
 
     private fun updateTimerDisplay() {
         val hours = (timeLeftInMillis / 1000) / 3600
         val minutes = ((timeLeftInMillis / 1000) % 3600) / 60
-        val seconds = (timeLeftInMillis / 1000) % 60
-
+        val seconds = ((timeLeftInMillis / 1000) % 3600) % 60
         val timeLeftFormatted = if (hours > 0) {
             String.format(Locale.getDefault(), "%d:%02d:%02d", hours, minutes, seconds)
         } else {
@@ -189,7 +173,7 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         }
 
         timerText.text = timeLeftFormatted
-        var progress: Int = 0
+        var progress : Int = 0
         if (startTimeInMillis.toInt() == 0) {
             progress = (100 - ((timeLeftInMillis * 100) / 1)).toInt()
         }
@@ -207,7 +191,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     }
 
     override fun onAppSettingSaved(appInfo: ApplicationInfo, timeLimit: Int) {
-        val pm = requireContext().packageManager
         val app = HistoryApp(
             idHistory = 0,
             packageName = appInfo.packageName,
@@ -216,23 +199,38 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             endTime = null,
             status = "PENDING"
         )
-        if (currentapp.packageName.equals("Chọn ứng dụng")) {
-            historyAppViewModel.insertHistory(app)
-        }
-        else if (currentapp.status.equals("PENDING")) {
-            historyAppViewModel.updateApp(currentapp.idHistory, app.packageName, app.timeLimit)
-        }
-        else {
-            historyAppViewModel.insertHistory(app)
-        }
-//        currentapp = app
-        historyAppViewModel.getAppByMaxIdLive().observe(viewLifecycleOwner) { updatedApp ->
-            if (updatedApp != null) {
-                currentapp = updatedApp
+        viewLifecycleOwner.lifecycleScope.launch {
+            val beforeIdAppDaily = dailyUsageViewModel.getIdHistoryEXISTS(app.packageName)
+            if (beforeIdAppDaily != null) {
+                Log.d("FDService", "Lan 1 : " + currentapp.idHistory + "_____" + currentapp.status)
+                if (currentapp.status.equals("ACTIVE")) {
+                    historyAppViewModel.updateNewStatusByIdHistory(currentapp.idHistory, "INACTIVE")
+                } else if (currentapp.status.equals("PENDING")) {
+                    historyAppViewModel.deleteHistoryApp("PENDING")
+                }
+                historyAppViewModel.updateNewStatusByIdHistory(beforeIdAppDaily, "ACTIVE")
+                Log.d("FDService", "Lan 2 : " + beforeIdAppDaily)
+                currentapp = historyAppViewModel.getHistoryById(beforeIdAppDaily)
+                Log.d("FDService", "Lan 3 : " + currentapp.idHistory + "_____" + currentapp.status)
                 updateAppInfo(currentapp)
+            } else {
+                if (currentapp.packageName.equals("Chọn ứng dụng")) {
+                    historyAppViewModel.insertHistory(app)
+                }
+                else if (currentapp.status.equals("PENDING")) {
+                    historyAppViewModel.updateApp(currentapp.idHistory, app.packageName, app.timeLimit)
+                }
+                else {
+                    historyAppViewModel.insertHistory(app)
+                }
+                historyAppViewModel.getAppByMaxIdLive().observe(viewLifecycleOwner) { updatedApp ->
+                    if (updatedApp != null) {
+                        currentapp = updatedApp
+                        updateAppInfo(currentapp)
+                    }
+                }
             }
         }
-        // bất đồng bộ
     }
 
     override fun onDestroy() {

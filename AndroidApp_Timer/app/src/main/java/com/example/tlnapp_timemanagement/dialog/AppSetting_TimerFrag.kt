@@ -1,16 +1,12 @@
 package com.example.tlnapp_timemanagement.dialog
 
 import android.annotation.SuppressLint
-import android.app.usage.UsageEvents
-import android.app.usage.UsageStatsManager
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
@@ -35,7 +31,7 @@ class AppSetting_TimerFrag : DialogFragment() {
 
     private var allApps: List<ApplicationInfo> = emptyList()
 
-    // Interface để callback về TimerFragment
+    // Interface to callback about TimerFragment
     interface OnAppSettingListener {
         fun onAppSettingSaved(appInfo: ApplicationInfo, timeLimit: Int)
     }
@@ -51,17 +47,13 @@ class AppSetting_TimerFrag : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate layout dialog vừa tạo
         return inflater.inflate(R.layout.dialog_app_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if (!hasUsageStatsPermission(requireContext())) {
-            val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-            requireContext().startActivity(intent)
-        }
+
 
         editTextAppName = view.findViewById(R.id.app_edittext)
         spinnerApps = view.findViewById(R.id.app_spinner)
@@ -75,20 +67,6 @@ class AppSetting_TimerFrag : DialogFragment() {
         setupButtons()
     }
 
-    fun hasUsageStatsPermission(context: Context): Boolean {
-        try {
-            val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as android.app.AppOpsManager
-            val mode = appOps.checkOpNoThrow(
-                "android:get_usage_stats",
-                android.os.Process.myUid(),
-                context.packageName
-            )
-            return mode == android.app.AppOpsManager.MODE_ALLOWED
-        } catch (e: Exception) {
-            return false
-        }
-    }
-
     private fun loadAllApps() {
         CoroutineScope(Dispatchers.IO).launch {
             val pm = requireContext().packageManager
@@ -99,9 +77,9 @@ class AppSetting_TimerFrag : DialogFragment() {
             allApps = resolveInfoList
                 .map { it.activityInfo.applicationInfo }
                 .distinctBy { it.packageName }
+                .filter{pm.getApplicationLabel(it).toString() != "App Timer"}
                 .sortedBy { pm.getApplicationLabel(it).toString() }
             withContext(Dispatchers.Main) {
-                // Cập nhật spinner với danh sách đầy đủ ban đầu
                 updateAppSpinner(allApps)
             }
         }
@@ -126,13 +104,6 @@ class AppSetting_TimerFrag : DialogFragment() {
                         }
                     }
                     searchHandler.postDelayed(searchRunnable!!, 300)
-//                    if (input.equals("")) {
-//                        spinnerApps.adapter = null
-//                    } else {
-//
-//                        getAppsByName(input)
-//                        updateAppSpinner(getAppsByName(input))
-//                    }
                 }
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
