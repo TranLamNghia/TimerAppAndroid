@@ -3,12 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_icon_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_icon_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
@@ -31,8 +32,11 @@
             </intent-filter>
             <meta-data
                 android:name="android.accessibilityservice"
-                android:resource="@xml/focus_service_config" />
+                android:resource="@xml/accessibility_service_config" />
         </service>
+        <service android:name=".service.UsageCountTimeService"/>
+
+
     </application>
 
     <queries>

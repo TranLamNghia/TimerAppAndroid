@@ -39,6 +39,10 @@ android {
         compose = true
     }
 
+    lint {
+        disable += "NullSafeMutableLiveData"
+    }
+
 }
 
 dependencies {
@@ -54,6 +58,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.coordinatorlayout)
     implementation(libs.material)
+    implementation(libs.androidx.lifecycle.service)
+    implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,5 +76,8 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+
+    val lottieVersion = "6.4.0"
+    implementation ("com.airbnb.android:lottie:$lottieVersion")
 
 }

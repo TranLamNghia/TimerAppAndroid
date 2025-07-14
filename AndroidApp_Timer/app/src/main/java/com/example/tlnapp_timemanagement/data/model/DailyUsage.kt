@@ -16,6 +16,6 @@ import androidx.room.PrimaryKey
 data class DailyUsage (
     val idHistory: Int,
     val dateKey: String,
-    val userSEC: Int
+    val userSEC: Long
 
 )
