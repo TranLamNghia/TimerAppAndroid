@@ -14,4 +14,21 @@
 
     <color name="bottom_nav_selected">#4F46E5</color>
     <color name="bottom_nav_unselected">#9CA3AF</color>
+
+    <!-- Premium Colors -->
+    <color name="premium_gold">#F59E0B</color>
+
+    <!-- New Profile Colors -->
+    <color name="settings_icon_bg">#EEF2FF</color>
+    <color name="accessibility_icon_bg">#F3E8FF</color>
+    <color name="faq_icon_bg">#EFF6FF</color>
+    <color name="feedback_icon_bg">#F0FDF4</color>
+    <color name="premium_icon_bg">#FEF3C7</color>
+
+    <color name="notification_color">#10B981</color>
+    <color name="dark_mode_color">#6366F1</color>
+    <color name="auto_start_color">#F59E0B</color>
+
+    <color name="faq_color">#3B82F6</color>
+    <color name="feedback_color">#10B981</color>
 </resources>

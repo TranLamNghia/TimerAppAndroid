@@ -60,7 +60,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- App Selection Section -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/app_selection_section"
         android:layout_width="wrap_content"
