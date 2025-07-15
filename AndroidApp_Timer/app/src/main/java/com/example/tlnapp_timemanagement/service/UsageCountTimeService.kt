@@ -55,16 +55,16 @@ class UsageCountTimeService() : LifecycleService(){
                 userSEC += (now - startTime) / 1000
                 Log.d("UsageCountTimeService", "Time: ${userSEC}")
 
-                if (userSEC >= timeLimit * valueProgress && notificationProgress == false) {
+                if (userSEC * 1000 >= timeLimit * valueProgress && notificationProgress == false) {
                     launch {
                         notificationProgress = true
                         Notification.showProgressNotification(applicationContext, "App Timer", "Bạn đã sử dụng 50% thời gian", 50)
                     }
                 }
-                if(userSEC == timeLimit - 60000) {
+                if(userSEC * 1000 + 60000 == timeLimit) {
                     Notification.showSimpleNotification_HighPriority(applicationContext, "App Timer", "Bạn còn 1 phút sử dụng")
                 }
-                if (userSEC >= timeLimit) {
+                if (userSEC * 1000 >= timeLimit) {
                     FocusDetectService.instance?.redirectToHome()
                     Notification.showSimpleNotification(applicationContext, "App Timer", "Bạn đã sử dụng hết thời gian")
                     break
@@ -78,10 +78,11 @@ class UsageCountTimeService() : LifecycleService(){
     private fun onEnd() {
         job?.cancel()
         lifecycleScope.launch(Dispatchers.IO) {
-            if (userSEC >= timeLimit.toLong()) {
-                dailyUsageRepository.updateTimeInDailyUsage(currentIdAppPackage, timeLimit.toLong())
-            }
-            else dailyUsageRepository.updateTimeInDailyUsage(currentIdAppPackage, userSEC)
+            val secToSave = if (userSEC * 1000 >= timeLimit)
+                timeLimit / 1000
+            else
+                userSEC
+            dailyUsageRepository.updateTimeInDailyUsage(currentIdAppPackage, secToSave)
         }
     }
 

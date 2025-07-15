@@ -140,7 +140,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
             }
         }
         startTimeInMillis = currentapp.timeLimit * 60 * 1000L
-        startTimeInMillis = currentapp.timeLimit * 1000L
         dailyUsageViewModel.getDailyUsageTime(currentapp.idHistory).observe(viewLifecycleOwner) { result ->
             timeLeftInMillis = if (result != null) startTimeInMillis - (result * 1000) else startTimeInMillis
             updateTimerDisplay()
@@ -172,7 +171,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         } else {
             String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
         }
-
         timerText.text = timeLeftFormatted
         var progress : Int = 0
         if (startTimeInMillis.toInt() == 0) {
@@ -203,16 +201,13 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         viewLifecycleOwner.lifecycleScope.launch {
             val beforeIdAppDaily = dailyUsageViewModel.getIdHistoryEXISTS(app.packageName)
             if (beforeIdAppDaily != null) {
-                Log.d("FDService", "Lan 1 : " + currentapp.idHistory + "_____" + currentapp.status)
                 if (currentapp.status.equals("ACTIVE")) {
                     historyAppViewModel.updateNewStatusByIdHistory(currentapp.idHistory, "INACTIVE")
                 } else if (currentapp.status.equals("PENDING")) {
                     historyAppViewModel.deleteHistoryApp("PENDING")
                 }
                 historyAppViewModel.updateNewStatusByIdHistory(beforeIdAppDaily, "ACTIVE")
-                Log.d("FDService", "Lan 2 : " + beforeIdAppDaily)
                 currentapp = historyAppViewModel.getHistoryById(beforeIdAppDaily)
-                Log.d("FDService", "Lan 3 : " + currentapp.idHistory + "_____" + currentapp.status)
                 updateAppInfo(currentapp)
             } else {
                 if (currentapp.packageName.equals("Chọn ứng dụng")) {
