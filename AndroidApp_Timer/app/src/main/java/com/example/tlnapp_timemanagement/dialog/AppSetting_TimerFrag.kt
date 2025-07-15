@@ -26,7 +26,7 @@ class AppSetting_TimerFrag : DialogFragment() {
     private lateinit var btnSave: Button
     private lateinit var btnClose: Button
 
-    private val timeOptions = listOf(15, 30, 45, 60, 90, 120, 180)
+    private val timeOptions = listOf(2, 15, 30, 45, 60, 90, 120, 180)
     private var filteredApps: List<ApplicationInfo> = emptyList()
 
     private var allApps: List<ApplicationInfo> = emptyList()
