@@ -36,9 +36,8 @@
     <string name="upgrade">NÂNG CẤP</string>
 
     <!-- Settings Options -->
-    <string name="notifications">Thông báo</string>
     <string name="dark_mode">Chế độ tối</string>
-    <string name="auto_start">Tự động khởi động</string>
+    <string name="language">Ngôn ngữ</string>
 
     <!-- Premium Dialog -->
     <string name="premium_upgrade">Nâng cấp Premium</string>
@@ -50,7 +49,7 @@
 
     <!-- App Info -->
     <string name="app_version">Phiên bản 1.0.0</string>
-    <string name="developed_by">Phát triển bởi Your Name</string>
+    <string name="developed_by">Phát triển bởi TLN</string>
 
     <!-- Profile New Strings -->
     <string name="welcome_user">Chào mừng bạn!</string>

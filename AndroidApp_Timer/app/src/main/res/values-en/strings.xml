@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Time Management</string>
+    <string name="app_timer">Time Management</string>
+    <string name="timer">Timer</string>
+    <string name="practice">Practice</string>
+    <string name="profile">Profile</string>
+
+    <string name="app_icon">App Icon</string>
+    <string name="selected_app_icon">Selected App Icon</string>
+
+    <string name="time_limit_60_minutes">Time limit: %d minutes</string>
+    <string name="time_remaining">Time remaining</string>
+    <string name="time_up">Time\'s up!</string>
+
+    <string name="delete">Delete</string>
+    <string name="setup">Setup</string>
+
+    <string name="setup_time">Setup Time</string>
+    <string name="select_app_name">App Name</string>
+    <string name="select_app">Select App</string>
+    <string name="time_limit_minutes">Time limit (minutes)</string>
+
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+
+    <!-- Profile Settings __________________________________________-->
+    <string name="profile_settings">Settings</string>
+    <string name="settings">Settings</string>
+    <string name="accessibility_settings">Go to Accessibility</string>
+    <string name="accessibility_description">Grant access permission for the app to work</string>
+    <string name="premium">Premium</string>
+    <string name="premium_description">Upgrade to unlock all features</string>
+    <string name="upgrade">UPGRADE</string>
+
+    <!-- Settings Options -->
+    <string name="dark_mode">Dark mode</string>
+    <string name="language">Language</string>
+
+    <!-- Premium Dialog -->
+    <string name="premium_upgrade">Upgrade to Premium</string>
+    <string name="premium_features_description">Unlock all premium features and enjoy ad-free experience</string>
+    <string name="feature_unlimited_apps">Unlimited number of apps</string>
+    <string name="feature_advanced_stats">Detailed statistics and reports</string>
+    <string name="feature_no_ads">No ads</string>
+    <string name="upgrade_now">UPGRADE NOW</string>
+
+    <!-- App Info -->
+    <string name="app_version">Version 1.0.0</string>
+    <string name="developed_by">Developed by Your Name</string>
+
+    <!-- Profile New Strings -->
+    <string name="welcome_user">Welcome!</string>
+    <string name="manage_your_time">Manage your time effectively</string>
+
+    <!-- FAQ Strings -->
+    <string name="faq">FAQ</string>
+    <string name="faq_description">Learn how to use the app</string>
+    <string name="faq_welcome">Frequently Asked Questions</string>
+    <string name="faq_subtitle">Find answers to common questions about the app</string>
+
+    <!-- Feedback Strings -->
+    <string name="feedback">Feedback</string>
+    <string name="feedback_description">Share your feedback with us</string>
+    <string name="feedback_welcome">Feedback &amp; Review</string>
+    <string name="feedback_subtitle">Share your experience and help us improve the app</string>
+    <string name="feedback_type">Feedback Type</string>
+    <string name="subject">Subject</string>
+    <string name="subject_hint">Enter feedback subject</string>
+    <string name="message">Message</string>
+    <string name="message_hint">Describe your feedback in detail...</string>
+    <string name="email">Contact email</string>
+    <string name="email_hint">your.email@example.com</string>
+    <string name="submit_feedback">Submit feedback</string>
+    <string name="rate_app">Rate app</string>
+
+    <string name="ac_service_desc">
+        App Timer requires Accessibility permission to detect when you open apps,
+        track usage time, and notify you when you reach your limit. The app DOES NOT
+        read screen content or collect personal data.
+    </string>
+
+</resources>

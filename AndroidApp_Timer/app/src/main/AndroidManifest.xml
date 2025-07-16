@@ -34,7 +34,8 @@
                 android:name="android.accessibilityservice"
                 android:resource="@xml/accessibility_service_config" />
         </service>
-        <service android:name=".service.UsageCountTimeService"/>
+        <service android:name=".service.UsageCountTimeService"
+            tools:ignore="MissingClass" />
 
 
     </application>

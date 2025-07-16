@@ -56,9 +56,9 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        viewLifecycleOwner.lifecycleScope.launch {
-            showLoadingAndNavigate()
-        }
+//        viewLifecycleOwner.lifecycleScope.launch {
+//            showLoadingAndNavigate()
+//        }
         return inflater.inflate(R.layout.fragment_timer, container, false)
     }
 
