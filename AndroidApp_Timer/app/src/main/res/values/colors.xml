@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4F46E5</color>
-    <color name="colorPrimaryDark">#4338CA</color>
-    <color name="colorAccent">#8B5CF6</color>
-    <color name="colorDanger">#EF4444</color>
-    <color name="colorDangerLight">#FEE2E2</color>
-
-    <color name="textPrimary">#1F2937</color>
-    <color name="textSecondary">#6B7280</color>
 
     <color name="colorProgressStart">#71EF1D</color>
     <color name="colorProgressEnd">#F65414</color>
@@ -15,15 +7,15 @@
     <color name="bottom_nav_selected">#4F46E5</color>
     <color name="bottom_nav_unselected">#9CA3AF</color>
 
-    <!-- Premium Colors -->
-    <color name="premium_gold">#F59E0B</color>
+    <color name="strokeNavColor_Light">#D1D1D0</color>
+    <color name="strokeNavColor_Dark">#D1D1D0</color>
 
-    <!-- Profile Colors -->
-    <color name="settings_icon_bg">#EEF2FF</color>
-    <color name="accessibility_icon_bg">#F3E8FF</color>
-    <color name="faq_icon_bg">#EFF6FF</color>
-    <color name="feedback_icon_bg">#F0FDF4</color>
-    <color name="premium_icon_bg">#FEF3C7</color>
+    <!-- Dark Profile Colors -->
+    <color name="settings_icon_bg_dark">#312E81</color>
+    <color name="accessibility_icon_bg_dark">#581C87</color>
+    <color name="faq_icon_bg_dark">#1E3A8A</color>
+    <color name="feedback_icon_bg_dark">#14532D</color>
+    <color name="premium_icon_bg_dark">#92400E</color>
 
     <color name="notification_color">#10B981</color>
     <color name="dark_mode_color">#6366F1</color>
@@ -32,4 +24,42 @@
 
     <color name="faq_color">#3B82F6</color>
     <color name="feedback_color">#10B981</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+
+    <!-- Primary & Accent Colors (often consistent across themes) -->
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <!-- Text Colors - Light Theme -->
+    <color name="textPrimary">#212121</color>
+    <color name="textSecondary">#757575</color>
+
+    <!-- Background & Surface Colors - Light Theme -->
+    <color name="background_light">#F5F5F5</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="container_light">#E0E0E0</color>
+
+    <!-- Text Colors - Dark Theme -->
+    <color name="textPrimary_dark">#FFFFFF</color>
+    <color name="textSecondary_dark">#BDBDBD</color>
+
+    <!-- Background & Surface Colors - Dark Theme -->
+    <color name="dark_background">#252525</color>
+    <color name="dark_surface">#4b4b4b</color>
+    <color name="dark_surface_variant">#747474</color>
+
+    <!-- Specific Feature Colors (often consistent across themes) -->
+    <color name="colorDanger">#D32F2F</color>
+    <color name="colorDangerLight">#EF9A9A</color>
+    <color name="settings_icon_bg">#E3F2FD</color>
+    <color name="accessibility_icon_bg">#FFF3E0</color>
+    <color name="faq_icon_bg">#E8F5E9</color>
+    <color name="feedback_icon_bg">#FBE9E7</color>
+    <color name="premium_icon_bg">#FFFDE7</color>
+
+    <color name="premium_gold">#FFD700</color>
 </resources>

@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="?attr/colorSurface"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -25,7 +25,8 @@
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@color/textPrimary" />
+            app:tint="?attr/android:textColorPrimary"
+            android:contentDescription="@string/back_button_description" />
 
         <TextView
             android:layout_width="0dp"
@@ -34,14 +35,15 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-medium"
             android:text="@string/faq"
-            android:textColor="@color/textPrimary"
+            android:textColor="?attr/android:textColorPrimary"
             android:textSize="20sp" />
 
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/ic_help"
-            app:tint="@color/faq_color" />
+            app:tint="@color/faq_color"
+            android:contentDescription="@string/faq_icon_description" />
     </LinearLayout>
 
     <!-- Content -->
@@ -63,7 +65,7 @@
                 android:layout_marginBottom="24dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="6dp"
-                android:backgroundTint="@android:color/white">
+                app:cardBackgroundColor="?attr/colorSurface">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -77,14 +79,15 @@
                         android:layout_height="64dp"
                         android:layout_marginBottom="16dp"
                         android:src="@drawable/ic_help"
-                        app:tint="@color/faq_color" />
+                        app:tint="@color/faq_color"
+                        android:contentDescription="@string/faq_icon_description" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/faq_welcome"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="18sp" />
 
                     <TextView
@@ -94,7 +97,7 @@
                         android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:text="@string/faq_subtitle"
-                        android:textColor="@color/textSecondary"
+                        android:textColor="?attr/android:textColorSecondary"
                         android:textSize="14sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

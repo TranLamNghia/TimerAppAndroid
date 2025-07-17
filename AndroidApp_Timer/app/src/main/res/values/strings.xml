@@ -83,4 +83,24 @@
         nội dung màn hình hay thu thập dữ liệu cá nhân.
     </string>
 
+    <string name="practice_icon_description">Biểu tượng luyện tập</string>
+    <string name="feature_in_development">Tính năng đang phát triển</string>
+    <string name="back_button_description">Nút quay lại</string>
+    <string name="feedback_icon_description">Biểu tượng góp ý</string>
+    <string name="check_icon_description">Biểu tượng kiểm tra</string>
+    <string name="user_avatar_description">Ảnh đại diện người dùng</string>
+    <string name="settings_icon_description">Biểu tượng cài đặt</string>
+    <string name="expand_settings_description">Mở rộng cài đặt</string>
+    <string name="dark_mode_icon_description">Biểu tượng chế độ tối</string>
+    <string name="language_icon_description">Biểu tượng ngôn ngữ</string>
+    <string name="accessibility_icon_description">Biểu tượng trợ năng</string>
+    <string name="go_to_accessibility_description">Đi đến cài đặt trợ năng</string>
+    <string name="faq_icon_description">Biểu tượng câu hỏi thường gặp</string>
+    <string name="go_to_faq_description">Đi đến câu hỏi thường gặp</string>
+    <string name="go_to_feedback_description">Đi đến góp ý</string>
+    <string name="premium_icon_description">Biểu tượng Premium</string>
+    <string name="app_icon_description">Biểu tượng ứng dụng</string>
+    <string name="enter_app_name_hint">Nhập tên ứng dụng</string>
+
+
 </resources>

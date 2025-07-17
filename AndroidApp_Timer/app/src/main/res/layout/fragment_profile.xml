@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/profile_background">
+    android:background="?attr/colorBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:layout_marginBottom="24dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="8dp"
-            android:backgroundTint="@android:color/white">
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,7 +45,8 @@
                             android:layout_width="40dp"
                             android:layout_height="40dp"
                             android:src="@drawable/ic_user"
-                            app:tint="@android:color/white" />
+                            app:tint="@android:color/white"
+                            android:contentDescription="@string/user_avatar_description" />
                     </LinearLayout>
                 </androidx.cardview.widget.CardView>
 
@@ -54,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/welcome_user"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="?attr/android:textColorPrimary"
                     android:textSize="22sp" />
 
                 <TextView
@@ -63,7 +64,7 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif"
                     android:text="@string/manage_your_time"
-                    android:textColor="@color/textSecondary"
+                    android:textColor="?attr/android:textColorSecondary"
                     android:textSize="14sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
@@ -79,7 +80,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="16dp"
             app:cardElevation="6dp"
-            android:backgroundTint="@android:color/white">
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -98,14 +99,15 @@
                         android:layout_height="48dp"
                         app:cardCornerRadius="12dp"
                         app:cardElevation="4dp"
-                        android:backgroundTint="@color/settings_icon_bg">
+                        android:backgroundTint="?attr/colorContainer">
 
                         <ImageView
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_settings"
-                            app:tint="@color/colorPrimary" />
+                            app:tint="@color/colorPrimary"
+                            android:contentDescription="@string/settings_icon_description" />
                     </androidx.cardview.widget.CardView>
 
                     <TextView
@@ -115,7 +117,7 @@
                         android:layout_marginStart="16dp"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/settings"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="18sp" />
 
                     <ImageView
@@ -123,7 +125,8 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/ic_arrow_down"
-                        app:tint="@color/textSecondary" />
+                        app:tint="?attr/android:textColorSecondary"
+                        android:contentDescription="@string/expand_settings_description" />
                 </LinearLayout>
 
                 <!-- Settings Options with smooth animation -->
@@ -140,7 +143,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        android:background="@drawable/setting_item_background"
+                        android:background="?attr/colorContainer"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="16dp">
@@ -150,7 +153,8 @@
                             android:layout_height="20dp"
                             android:layout_marginEnd="12dp"
                             android:src="@drawable/ic_dark_mode"
-                            app:tint="@color/dark_mode_color" />
+                            app:tint="@color/dark_mode_color"
+                            android:contentDescription="@string/dark_mode_icon_description" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -158,10 +162,10 @@
                             android:layout_weight="1"
                             android:fontFamily="sans-serif"
                             android:text="@string/dark_mode"
-                            android:textColor="@color/textPrimary"
+                            android:textColor="?attr/android:textColorPrimary"
                             android:textSize="16sp" />
 
-                        <Switch
+                        <androidx.appcompat.widget.SwitchCompat
                             android:id="@+id/dark_mode_switch"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -172,7 +176,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/setting_item_background"
+                        android:background="?attr/colorContainer"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="16dp">
@@ -182,7 +186,8 @@
                             android:layout_height="20dp"
                             android:layout_marginEnd="12dp"
                             android:src="@drawable/ic_language"
-                            app:tint="@color/language_color" />
+                            app:tint="@color/language_color"
+                            android:contentDescription="@string/language_icon_description" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -190,7 +195,7 @@
                             android:layout_weight="1"
                             android:fontFamily="sans-serif"
                             android:text="@string/language"
-                            android:textColor="@color/textPrimary"
+                            android:textColor="?attr/android:textColorPrimary"
                             android:textSize="16sp" />
 
                         <Spinner
@@ -216,7 +221,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="16dp"
             app:cardElevation="6dp"
-            android:backgroundTint="@android:color/white">
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -230,14 +235,15 @@
                     android:layout_height="48dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp"
-                    android:backgroundTint="@color/accessibility_icon_bg">
+                    android:backgroundTint="?attr/colorContainer">
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_accessibility"
-                        app:tint="@color/colorAccent" />
+                        app:tint="@color/colorAccent"
+                        android:contentDescription="@string/accessibility_icon_description" />
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
@@ -252,7 +258,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/accessibility_settings"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="18sp" />
 
                     <TextView
@@ -261,7 +267,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="sans-serif"
                         android:text="@string/accessibility_description"
-                        android:textColor="@color/textSecondary"
+                        android:textColor="?attr/android:textColorSecondary"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -269,7 +275,8 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_arrow_right"
-                    app:tint="@color/textSecondary" />
+                    app:tint="?attr/android:textColorSecondary"
+                    android:contentDescription="@string/go_to_accessibility_description" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -284,7 +291,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="16dp"
             app:cardElevation="6dp"
-            android:backgroundTint="@android:color/white">
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -298,14 +305,15 @@
                     android:layout_height="48dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp"
-                    android:backgroundTint="@color/faq_icon_bg">
+                    android:backgroundTint="?attr/colorContainer">
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_help"
-                        app:tint="@color/faq_color" />
+                        app:tint="@color/faq_color"
+                        android:contentDescription="@string/faq_icon_description" />
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
@@ -320,7 +328,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/faq"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="18sp" />
 
                     <TextView
@@ -329,7 +337,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="sans-serif"
                         android:text="@string/faq_description"
-                        android:textColor="@color/textSecondary"
+                        android:textColor="?attr/android:textColorSecondary"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -337,7 +345,8 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_arrow_right"
-                    app:tint="@color/textSecondary" />
+                    app:tint="?attr/android:textColorSecondary"
+                    android:contentDescription="@string/go_to_faq_description" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -352,7 +361,7 @@
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="16dp"
             app:cardElevation="6dp"
-            android:backgroundTint="@android:color/white">
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -366,14 +375,15 @@
                     android:layout_height="48dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp"
-                    android:backgroundTint="@color/feedback_icon_bg">
+                    android:backgroundTint="?attr/colorContainer">
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_feedback"
-                        app:tint="@color/feedback_color" />
+                        app:tint="@color/feedback_color"
+                        android:contentDescription="@string/feedback_icon_description" />
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
@@ -388,7 +398,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/feedback"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="18sp" />
 
                     <TextView
@@ -397,7 +407,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="sans-serif"
                         android:text="@string/feedback_description"
-                        android:textColor="@color/textSecondary"
+                        android:textColor="?attr/android:textColorSecondary"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -405,7 +415,8 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_arrow_right"
-                    app:tint="@color/textSecondary" />
+                    app:tint="?attr/android:textColorSecondary"
+                    android:contentDescription="@string/go_to_feedback_description" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -434,14 +445,15 @@
                     android:layout_height="48dp"
                     app:cardCornerRadius="12dp"
                     app:cardElevation="4dp"
-                    android:backgroundTint="@color/premium_icon_bg">
+                    android:backgroundTint="?attr/colorContainer">
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_premium"
-                        app:tint="@color/premium_gold" />
+                        app:tint="@color/premium_gold"
+                        android:contentDescription="@string/premium_icon_description" />
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
@@ -456,7 +468,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/premium"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="@android:color/white"
                         android:textSize="18sp" />
 
                     <TextView
@@ -465,7 +477,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="sans-serif"
                         android:text="@string/premium_description"
-                        android:textColor="@color/textSecondary"
+                        android:textColor="@android:color/white"
                         android:textSize="14sp" />
                 </LinearLayout>
 
@@ -496,7 +508,7 @@
             android:layout_marginTop="8dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="4dp"
-            android:backgroundTint="@android:color/white">
+            app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -510,7 +522,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="sans-serif-medium"
                     android:text="@string/app_version"
-                    android:textColor="@color/textPrimary"
+                    android:textColor="?attr/android:textColorPrimary"
                     android:textSize="16sp" />
 
                 <TextView
@@ -519,7 +531,7 @@
                     android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif"
                     android:text="@string/developed_by"
-                    android:textColor="@color/textSecondary"
+                    android:textColor="?attr/android:textColorSecondary"
                     android:textSize="14sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>

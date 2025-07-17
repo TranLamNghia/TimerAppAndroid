@@ -1,32 +1,32 @@
-package com.example.tlnapp_timemanagement.main
+package com.example.tlnapp_timemanagement
 
+import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Bundle
 import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Spinner
-import android.widget.Switch
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.cardview.widget.CardView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.fragment.app.Fragment
-import com.example.tlnapp_timemanagement.R
+import androidx.cardview.widget.CardView
 import com.example.tlnapp_timemanagement.dialog.Premium_ProfileFrag
+import com.example.tlnapp_timemanagement.main.FAQFrag_ProfileFragment
+import com.example.tlnapp_timemanagement.main.FeedbackFrag_ProfileFragment
+import java.util.*
 
 class ProfileFragment : Fragment() {
+
     private lateinit var settingsCard: CardView
     private lateinit var accessibilityCard: CardView
     private lateinit var premiumCard: CardView
     private lateinit var faqCard: CardView
     private lateinit var feedbackCard: CardView
 
-    private lateinit var darkModeSwitch: Switch
+    private lateinit var darkModeSwitch: SwitchCompat
     private lateinit var languageSpinner: Spinner
 
     override fun onCreateView(
@@ -44,6 +44,14 @@ class ProfileFragment : Fragment() {
         setupClickListeners()
         setupLanguageSpinner()
         loadSettings()
+
+        darkModeSwitch.setOnCheckedChangeListener { _, isChecked ->
+            val sharedPref = requireContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+            val current = sharedPref.getBoolean("dark_mode_enabled", false)
+            if (isChecked != current) {
+                applyDarkMode(isChecked)
+            }
+        }
     }
 
     private fun initViews(view: View) {
@@ -78,20 +86,29 @@ class ProfileFragment : Fragment() {
             openFeedbackFragment()
         }
 
-        darkModeSwitch.setOnCheckedChangeListener { _, isChecked ->
-            saveDarkModeSetting(isChecked)
-        }
     }
 
     private fun setupLanguageSpinner() {
         val languages = arrayOf("Tiếng Việt", "English")
+        val languageCodes = arrayOf("vi", "en")
+
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, languages)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         languageSpinner.adapter = adapter
 
+        // Set current selection
+        val currentLanguage = loadLanguageSetting()
+        val position = languageCodes.indexOf(currentLanguage)
+        if (position >= 0) {
+            languageSpinner.setSelection(position)
+        }
+
         languageSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                saveLanguageSetting(position)
+                val selectedLanguageCode = languageCodes[position]
+                if (selectedLanguageCode != loadLanguageSetting()) {
+                    applyLanguage(selectedLanguageCode)
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
@@ -116,7 +133,12 @@ class ProfileFragment : Fragment() {
     }
 
     private fun openAccessibilitySettings() {
-        startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        try {
+            val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+            startActivity(intent)
+        } catch (e: Exception) {
+            Toast.makeText(context, "Không thể mở cài đặt trợ năng", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun showPremiumDialog() {
@@ -144,34 +166,56 @@ class ProfileFragment : Fragment() {
         val sharedPref = requireContext().getSharedPreferences("app_settings", 0)
 
         darkModeSwitch.isChecked = sharedPref.getBoolean("dark_mode_enabled", false)
-        languageSpinner.setSelection(sharedPref.getInt("language_selection", 0))
+        val languageCode = sharedPref.getString("language_code", "vi") ?: "vi"
+        val position = when (languageCode) {
+            "vi" -> 0
+            "en" -> 1
+            else -> 0
+        }
+        languageSpinner.setSelection(position)
     }
 
     private fun saveDarkModeSetting(enabled: Boolean) {
-        val sharedPref = requireContext().getSharedPreferences("app_settings", 0)
+        val sharedPref = requireContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
             putBoolean("dark_mode_enabled", enabled)
             apply()
         }
 
-        if (enabled) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-        }
-
         Toast.makeText(context,
-            if (enabled) "Chế độ tối đã được bật" else "Chế độ sáng đã được bật",
+            if (enabled) "Chế độ tối sẽ được bật khi khởi động lại ứng dụng" else "Chế độ sáng sẽ được bật khi khởi động lại ứng dụng",
             Toast.LENGTH_SHORT).show()
     }
 
-    private fun saveLanguageSetting(position: Int) {
-        val sharedPref = requireContext().getSharedPreferences("app_settings", 0)
+    private fun saveLanguageSetting(languageCode: String) {
+        val sharedPref = requireContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
         with(sharedPref.edit()) {
-            putInt("language_selection", position)
+            putString("language_code", languageCode)
             apply()
         }
+    }
 
-        val languageName = if (position == 0) "Tiếng Việt" else "English"
+    private fun loadLanguageSetting(): String {
+        val sharedPref = requireContext().getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        return sharedPref.getString("language_code", "vi") ?: "vi"
+    }
+
+    private fun applyDarkMode(enabled: Boolean) {
+        // Lưu setting
+        saveDarkModeSetting(enabled)
+
+        if (enabled) {
+            requireActivity().setTheme(R.style.AppTheme_Dark)
+        } else {
+            requireActivity().setTheme(R.style.AppTheme)
+        }
+
+        requireActivity().recreate()
+
+    }
+
+    private fun applyLanguage(languageCode: String) {
+        saveLanguageSetting(languageCode)
+        requireActivity().recreate()
     }
 }

@@ -14,7 +14,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/premium_gold" />
+        app:tint="@color/premium_gold"
+        android:contentDescription="@string/premium_icon_description" />
 
     <TextView
         android:id="@+id/premium_title"
@@ -23,7 +24,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-medium"
         android:text="@string/premium_upgrade"
-        android:textColor="@color/textPrimary"
+        android:textColor="?attr/android:textColorPrimary"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,7 +38,7 @@
         android:fontFamily="sans-serif"
         android:gravity="center"
         android:text="@string/premium_features_description"
-        android:textColor="@color/textSecondary"
+        android:textColor="?attr/android:textColorSecondary"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -66,14 +67,15 @@
                 android:layout_height="16dp"
                 android:layout_marginEnd="12dp"
                 android:src="@drawable/ic_check"
-                app:tint="@color/premium_gold" />
+                app:tint="@color/premium_gold"
+                android:contentDescription="@string/check_icon_description" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:text="@string/feature_unlimited_apps"
-                android:textColor="@color/textPrimary"
+                android:textColor="?attr/android:textColorPrimary"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -89,14 +91,15 @@
                 android:layout_height="16dp"
                 android:layout_marginEnd="12dp"
                 android:src="@drawable/ic_check"
-                app:tint="@color/premium_gold" />
+                app:tint="@color/premium_gold"
+                android:contentDescription="@string/check_icon_description" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:text="@string/feature_advanced_stats"
-                android:textColor="@color/textPrimary"
+                android:textColor="?attr/android:textColorPrimary"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -112,14 +115,15 @@
                 android:layout_height="16dp"
                 android:layout_marginEnd="12dp"
                 android:src="@drawable/ic_check"
-                app:tint="@color/premium_gold" />
+                app:tint="@color/premium_gold"
+                android:contentDescription="@string/check_icon_description" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:text="@string/feature_no_ads"
-                android:textColor="@color/textPrimary"
+                android:textColor="?attr/android:textColorPrimary"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
@@ -135,14 +139,14 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cancel"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Themed"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
             android:fontFamily="sans-serif-medium"
             android:text="@string/cancel"
-            android:textColor="@color/textSecondary" />
+            android:textColor="?attr/android:textColorSecondary" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_upgrade"

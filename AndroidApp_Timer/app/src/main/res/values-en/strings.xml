@@ -80,4 +80,23 @@
         read screen content or collect personal data.
     </string>
 
+    <string name="practice_icon_description">Practice icon</string>
+    <string name="feature_in_development">Feature in development</string>
+    <string name="back_button_description">Back button</string>
+    <string name="feedback_icon_description">Feedback icon</string>
+    <string name="check_icon_description">Check icon</string>
+    <string name="user_avatar_description">User avatar</string>
+    <string name="settings_icon_description">Settings icon</string>
+    <string name="expand_settings_description">Expand settings</string>
+    <string name="dark_mode_icon_description">Dark mode icon</string>
+    <string name="language_icon_description">Language icon</string>
+    <string name="accessibility_icon_description">Accessibility icon</string>
+    <string name="go_to_accessibility_description">Go to accessibility settings</string>
+    <string name="faq_icon_description">FAQ icon</string>
+    <string name="go_to_faq_description">Go to FAQ</string>
+    <string name="go_to_feedback_description">Go to feedback</string>
+    <string name="premium_icon_description">Premium icon</string>
+    <string name="app_icon_description">App icon</string>
+    <string name="enter_app_name_hint">Enter app name</string>
+
 </resources>

@@ -10,7 +10,7 @@
         android:id="@+id/app_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:contentDescription="@null" />
+        android:contentDescription="@string/app_icon_description" />
 
     <TextView
         android:id="@+id/app_name"
@@ -19,5 +19,5 @@
         android:layout_marginStart="8dp"
         android:text="App Name"
         android:textSize="16sp"
-        android:textColor="?android:textColorPrimary" />
+        android:textColor="?attr/android:textColorPrimary" />
 </LinearLayout>

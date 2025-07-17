@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="?attr/colorSurface"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -25,7 +25,8 @@
             android:focusable="true"
             android:padding="4dp"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@color/textPrimary" />
+            app:tint="?attr/android:textColorPrimary"
+            android:contentDescription="@string/back_button_description" />
 
         <TextView
             android:layout_width="0dp"
@@ -34,14 +35,15 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-medium"
             android:text="@string/feedback"
-            android:textColor="@color/textPrimary"
+            android:textColor="?attr/android:textColorPrimary"
             android:textSize="20sp" />
 
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:src="@drawable/ic_feedback"
-            app:tint="@color/feedback_color" />
+            app:tint="@color/feedback_color"
+            android:contentDescription="@string/feedback_icon_description" />
     </LinearLayout>
 
     <!-- Content -->
@@ -63,7 +65,7 @@
                 android:layout_marginBottom="24dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="6dp"
-                android:backgroundTint="@android:color/white">
+                app:cardBackgroundColor="?attr/colorSurface">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -77,14 +79,15 @@
                         android:layout_height="64dp"
                         android:layout_marginBottom="16dp"
                         android:src="@drawable/ic_feedback"
-                        app:tint="@color/feedback_color" />
+                        app:tint="@color/feedback_color"
+                        android:contentDescription="@string/feedback_icon_description" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/feedback_welcome"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="18sp" />
 
                     <TextView
@@ -94,7 +97,7 @@
                         android:fontFamily="sans-serif"
                         android:gravity="center"
                         android:text="@string/feedback_subtitle"
-                        android:textColor="@color/textSecondary"
+                        android:textColor="?attr/android:textColorSecondary"
                         android:textSize="14sp" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -106,7 +109,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="6dp"
-                android:backgroundTint="@android:color/white">
+                app:cardBackgroundColor="?attr/colorSurface">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -120,7 +123,7 @@
                         android:layout_marginBottom="12dp"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/rate_app"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="16sp" />
 
                     <RatingBar
@@ -130,7 +133,8 @@
                         android:layout_gravity="center"
                         android:numStars="5"
                         android:rating="0"
-                        android:stepSize="1" />
+                        android:stepSize="1"
+                        android:theme="@style/CustomRatingBar" />
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
@@ -141,7 +145,7 @@
                 android:layout_marginBottom="16dp"
                 app:cardCornerRadius="16dp"
                 app:cardElevation="6dp"
-                android:backgroundTint="@android:color/white">
+                app:cardBackgroundColor="?attr/colorSurface">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -156,7 +160,7 @@
                         android:layout_marginBottom="8dp"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/feedback_type"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="16sp" />
 
                     <Spinner
@@ -175,7 +179,7 @@
                         android:layout_marginBottom="8dp"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/subject"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="16sp" />
 
                     <EditText
@@ -187,7 +191,9 @@
                         android:hint="@string/subject_hint"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textColor="?attr/android:textColorPrimary"
+                        android:textColorHint="?attr/android:textColorSecondary" />
 
                     <!-- Message -->
                     <TextView
@@ -196,7 +202,7 @@
                         android:layout_marginBottom="8dp"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/message"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="16sp" />
 
                     <EditText
@@ -212,7 +218,9 @@
                         android:paddingTop="16dp"
                         android:paddingEnd="16dp"
                         android:paddingBottom="16dp"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textColor="?attr/android:textColorPrimary"
+                        android:textColorHint="?attr/android:textColorSecondary" />
 
                     <!-- Email -->
                     <TextView
@@ -221,7 +229,7 @@
                         android:layout_marginBottom="8dp"
                         android:fontFamily="sans-serif-medium"
                         android:text="@string/email"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="16sp" />
 
                     <EditText
@@ -234,7 +242,9 @@
                         android:inputType="textEmailAddress"
                         android:paddingStart="16dp"
                         android:paddingEnd="16dp"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        android:textColor="?attr/android:textColorPrimary"
+                        android:textColorHint="?attr/android:textColorSecondary" />
 
                     <!-- Submit Button -->
                     <com.google.android.material.button.MaterialButton
