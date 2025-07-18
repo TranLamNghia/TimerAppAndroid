@@ -13,24 +13,6 @@ import com.example.tlnapp_timemanagement.R
 
 class FAQFrag_ProfileFragment : Fragment() {
 
-    private val faqData = listOf(
-        FAQItem("Làm thế nào để thiết lập thời gian cho ứng dụng?",
-            "Bạn có thể thiết lập thời gian bằng cách nhấn nút 'Thiết lập' trong tab Hẹn giờ, sau đó chọn ứng dụng và thời gian mong muốn."),
-        FAQItem("Ứng dụng có hoạt động khi tôi không mở nó không?",
-            "Có, ứng dụng sẽ tiếp tục đếm ngược thời gian ngay cả khi bạn không mở nó. Tuy nhiên, bạn cần cấp quyền truy cập trong cài đặt trợ năng."),
-        FAQItem("Tôi có thể thiết lập nhiều ứng dụng cùng lúc không?",
-            "Hiện tại phiên bản miễn phí chỉ hỗ trợ 1 ứng dụng. Để sử dụng nhiều ứng dụng, bạn cần nâng cấp lên Premium."),
-        FAQItem("Làm thế nào để bật thông báo?",
-            "Vào tab Cá nhân > Cài đặt > bật công tắc Thông báo. Đảm bảo bạn đã cấp quyền thông báo cho ứng dụng trong cài đặt hệ thống."),
-        FAQItem("Tại sao ứng dụng không hoạt động?",
-            "Hãy kiểm tra xem bạn đã cấp quyền truy cập trong Cài đặt > Trợ năng chưa. Đây là quyền bắt buộc để ứng dụng có thể giám sát thời gian sử dụng."),
-        FAQItem("Dữ liệu của tôi có được lưu trữ ở đâu?",
-            "Tất cả dữ liệu được lưu trữ cục bộ trên thiết bị của bạn. Chúng tôi không thu thập hay lưu trữ dữ liệu cá nhân trên server."),
-        FAQItem("Làm thế nào để khôi phục cài đặt mặc định?",
-            "Bạn có thể gỡ cài đặt và cài đặt lại ứng dụng, hoặc liên hệ với chúng tôi qua tab Góp ý để được hỗ trợ."),
-        FAQItem("Premium có những tính năng gì?",
-            "Premium bao gồm: không giới hạn số ứng dụng, thống kê chi tiết, không quảng cáo, và nhiều tính năng cao cấp khác.")
-    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,6 +36,21 @@ class FAQFrag_ProfileFragment : Fragment() {
     }
 
     private fun setupFAQItems(container: LinearLayout) {
+
+        val questions = resources.getStringArray(R.array.faq_questions)
+        val answers = resources.getStringArray(R.array.faq_answers)
+        val imageNames = resources.getStringArray(R.array.faq_images)
+
+        val faqData = questions.indices.map { idx ->
+            val imageResId = if (imageNames[idx].isNullOrBlank()) null
+            else resources.getIdentifier(imageNames[idx], "drawable", requireContext().packageName)
+            FAQItem(
+                question = questions[idx],
+                answer = answers[idx],
+                imageResId = imageResId
+            )
+        }
+
         faqData.forEachIndexed { index, faqItem ->
             val faqView = createFAQItemView(faqItem, index)
             container.addView(faqView)
@@ -69,7 +66,7 @@ class FAQFrag_ProfileFragment : Fragment() {
                 setMargins(0, 0, 0, 32)
             }
             radius = 48f
-            cardElevation = 12f
+            cardElevation = 5f
             setCardBackgroundColor(resources.getColor(android.R.color.white))
         }
 
@@ -125,28 +122,46 @@ class FAQFrag_ProfileFragment : Fragment() {
             setLineSpacing(8f, 1f)
         }
 
+        var answerImage: ImageView? = null
+        faqItem.imageResId?.let { imgResId ->
+            if (imgResId != 0) {
+                answerImage = ImageView(requireContext()).apply {
+                    setImageResource(imgResId)
+                    scaleType = ImageView.ScaleType.CENTER_INSIDE
+                    adjustViewBounds = true
+                    layoutParams = LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, 200
+                    ).apply {
+                        setMargins(0, 24, 0, 0)
+                    }
+                    visibility = View.GONE // Ẩn cùng với answer ban đầu
+                }
+            }
+        }
+
         headerLayout.addView(questionNumber)
         headerLayout.addView(questionText)
         headerLayout.addView(expandIcon)
 
         mainLayout.addView(headerLayout)
         mainLayout.addView(answerText)
+        answerImage?.let { mainLayout.addView(it) }
 
         cardView.addView(mainLayout)
 
-        // Click listener for expand/collapse
         cardView.setOnClickListener {
-            if (answerText.visibility == View.VISIBLE) {
-                answerText.visibility = View.GONE
-                expandIcon.animate().rotation(0f).setDuration(200).start()
-            } else {
-                answerText.visibility = View.VISIBLE
-                expandIcon.animate().rotation(180f).setDuration(200).start()
-            }
+            val show = answerText.visibility != View.VISIBLE
+            answerText.visibility = if (show) View.VISIBLE else View.GONE
+            answerImage?.visibility = if (show) View.VISIBLE else View.GONE
+            expandIcon.animate().rotation(0f).setDuration(200).start()
         }
 
         return cardView
     }
 
-    data class FAQItem(val question: String, val answer: String)
+    data class FAQItem(
+        val question: String,
+        val answer: String,
+        val imageResId: Int?
+    )
 }

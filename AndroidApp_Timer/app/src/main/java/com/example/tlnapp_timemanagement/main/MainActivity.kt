@@ -129,6 +129,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        if (selectedTabId == item.itemId) return false
         selectedTabId = item.itemId
         var fragment: Fragment? = null
 
