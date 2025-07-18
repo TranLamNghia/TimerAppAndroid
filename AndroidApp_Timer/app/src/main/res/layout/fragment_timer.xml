@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:screenOrientation="portrait"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorBackground">
@@ -96,6 +96,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:fontFamily="sans-serif-medium"
+            android:text="@string/selected_app"
             android:textColor="?attr/android:textColorPrimary"
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/selected_app_icon_container"
@@ -107,7 +108,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:fontFamily="sans-serif"
-            android:text="@string/time_limit_60_minutes"
             android:textColor="?attr/android:textColorSecondary"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/selected_app_icon_container"

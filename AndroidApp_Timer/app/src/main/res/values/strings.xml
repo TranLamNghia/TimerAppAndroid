@@ -7,8 +7,8 @@
     <string name="profile">Cá nhân</string>
 
     <string name="app_icon">App Icon</string>
-    <string name="selected_app_icon">Selected App Icon</string>
-
+    <string name="selected_app">Chọn ứng dụng</string>
+    <string name="selected_app_icon">Chọn biểu tượng ứng dụng</string>
 
     <string name="time_limit_60_minutes">Thời gian giới hạn: %d phút</string>
     <string name="time_remaining">Thời gian còn lại</string>

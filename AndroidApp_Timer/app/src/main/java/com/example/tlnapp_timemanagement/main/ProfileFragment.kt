@@ -181,10 +181,6 @@ class ProfileFragment : Fragment() {
             putBoolean("dark_mode_enabled", enabled)
             apply()
         }
-
-        Toast.makeText(context,
-            if (enabled) "Chế độ tối sẽ được bật khi khởi động lại ứng dụng" else "Chế độ sáng sẽ được bật khi khởi động lại ứng dụng",
-            Toast.LENGTH_SHORT).show()
     }
 
     private fun saveLanguageSetting(languageCode: String) {

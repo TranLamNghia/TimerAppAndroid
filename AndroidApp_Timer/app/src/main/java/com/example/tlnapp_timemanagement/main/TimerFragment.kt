@@ -113,9 +113,9 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     }
 
     private fun setDefaultApp() {
-        selectedAppName.text = "Chọn ứng dụng"
-        selectedAppTimeLimit.text = "Thời gian giới hạn: -- phút"
+        selectedAppName.text = getString(R.string.selected_app)
         selectedAppIcon.setImageResource(R.drawable.ic_smartphone)
+        selectedAppTimeLimit.text = ""
         timeLeftInMillis = 0
         updateTimerDisplay()
     }
@@ -123,20 +123,20 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
     private fun updateAppInfo(currentapp : HistoryApp) {
         val pm = requireContext().packageManager
         if (currentapp.packageName == "Chọn ứng dụng" || currentapp.packageName.isBlank()) {
-            selectedAppName.text = "Chọn ứng dụng"
+            selectedAppName.text = getString(R.string.selected_app)
             selectedAppIcon.setImageResource(R.drawable.ic_smartphone)
-            selectedAppTimeLimit.text = "Thời gian giới hạn: -- phút"
+            selectedAppTimeLimit.text = ""
         } else {
             try {
                 val appInfo = pm.getApplicationInfo(currentapp.packageName, 0)
                 selectedAppName.text = appInfo.loadLabel(pm)
                 selectedAppIcon.setImageDrawable(pm.getApplicationIcon(appInfo))
-                selectedAppTimeLimit.text = "Thời gian giới hạn: ${currentapp.timeLimit} phút"
+                selectedAppTimeLimit.text = getString(R.string.time_limit_60_minutes, currentapp.timeLimit)
 
             } catch (e: PackageManager.NameNotFoundException) {
                 selectedAppName.text = currentapp.packageName
                 selectedAppIcon.setImageResource(R.drawable.ic_smartphone)
-                selectedAppTimeLimit.text = "Thời gian giới hạn: ${currentapp.timeLimit} phút"
+                selectedAppTimeLimit.text = getString(R.string.time_limit_60_minutes, currentapp.timeLimit)
             }
         }
         startTimeInMillis = currentapp.timeLimit * 60 * 1000L

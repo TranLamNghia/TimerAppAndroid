@@ -7,6 +7,7 @@
     <string name="profile">Profile</string>
 
     <string name="app_icon">App Icon</string>
+    <string name="selected_app">Select application</string>
     <string name="selected_app_icon">Selected App Icon</string>
 
     <string name="time_limit_60_minutes">Time limit: %d minutes</string>
@@ -47,7 +48,7 @@
 
     <!-- App Info -->
     <string name="app_version">Version 1.0.0</string>
-    <string name="developed_by">Developed by Your Name</string>
+    <string name="developed_by">Developed by TLN</string>
 
     <!-- Profile New Strings -->
     <string name="welcome_user">Welcome!</string>

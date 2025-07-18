@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:screenOrientation="portrait"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorBackground">
@@ -17,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             app:cardCornerRadius="20dp"
-            app:cardElevation="8dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
@@ -32,7 +33,7 @@
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     app:cardCornerRadius="40dp"
-                    app:cardElevation="6dp"
+                    app:cardElevation="2dp"
                     android:layout_marginBottom="16dp">
 
                     <LinearLayout
@@ -79,7 +80,7 @@
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="16dp"
-            app:cardElevation="6dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
@@ -98,8 +99,8 @@
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         app:cardCornerRadius="12dp"
-                        app:cardElevation="4dp"
-                        android:backgroundTint="?attr/colorContainer">
+                        android:backgroundTint="?attr/colorContainer"
+                        app:cardElevation="0dp">
 
                         <ImageView
                             android:layout_width="24dp"
@@ -139,74 +140,89 @@
                     android:visibility="gone">
 
                     <!-- Dark Mode Setting -->
-                    <LinearLayout
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
-                        android:background="?attr/colorContainer"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="16dp">
+                        app:cardCornerRadius="12dp">
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="12dp"
-                            android:src="@drawable/ic_dark_mode"
-                            app:tint="@color/dark_mode_color"
-                            android:contentDescription="@string/dark_mode_icon_description" />
-
-                        <TextView
-                            android:layout_width="0dp"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="sans-serif"
-                            android:text="@string/dark_mode"
-                            android:textColor="?attr/android:textColorPrimary"
-                            android:textSize="16sp" />
 
-                        <androidx.appcompat.widget.SwitchCompat
-                            android:id="@+id/dark_mode_switch"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:theme="@style/CustomSwitchTheme" />
-                    </LinearLayout>
+                            android:background="?attr/colorContainer"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="16dp">
+
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="12dp"
+                                android:contentDescription="@string/dark_mode_icon_description"
+                                android:src="@drawable/ic_dark_mode"
+                                app:tint="@color/dark_mode_color" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif"
+                                android:text="@string/dark_mode"
+                                android:textColor="?attr/android:textColorPrimary"
+                                android:textSize="16sp" />
+
+                            <androidx.appcompat.widget.SwitchCompat
+                                android:id="@+id/dark_mode_switch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:theme="@style/CustomSwitchTheme" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
+
 
                     <!-- Language Setting -->
-                    <LinearLayout
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?attr/colorContainer"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="16dp">
+                        app:cardCornerRadius="12dp">
 
-                        <ImageView
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
-                            android:layout_marginEnd="12dp"
-                            android:src="@drawable/ic_language"
-                            app:tint="@color/language_color"
-                            android:contentDescription="@string/language_icon_description" />
-
-                        <TextView
-                            android:layout_width="0dp"
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:fontFamily="sans-serif"
-                            android:text="@string/language"
-                            android:textColor="?attr/android:textColorPrimary"
-                            android:textSize="16sp" />
+                            android:background="?attr/colorContainer"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:padding="16dp">
 
-                        <Spinner
-                            android:id="@+id/language_spinner"
-                            android:layout_width="120dp"
-                            android:layout_height="40dp"
-                            android:background="@drawable/spinner_background"
-                            android:paddingStart="12dp"
-                            android:paddingEnd="12dp" />
-                    </LinearLayout>
+                            <ImageView
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="12dp"
+                                android:contentDescription="@string/language_icon_description"
+                                android:src="@drawable/ic_language"
+                                app:tint="@color/language_color" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif"
+                                android:text="@string/language"
+                                android:textColor="?attr/android:textColorPrimary"
+                                android:textSize="16sp" />
+
+                            <Spinner
+                                android:id="@+id/language_spinner"
+                                android:layout_width="120dp"
+                                android:layout_height="40dp"
+                                android:background="@drawable/spinner_background"
+                                android:paddingStart="12dp"
+                                android:paddingEnd="12dp" />
+                        </LinearLayout>
+                    </androidx.cardview.widget.CardView>
                 </LinearLayout>
+
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -220,7 +236,7 @@
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="16dp"
-            app:cardElevation="6dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
@@ -234,8 +250,8 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp"
-                    android:backgroundTint="?attr/colorContainer">
+                    android:backgroundTint="?attr/colorContainer"
+                    app:cardElevation="0dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -290,7 +306,7 @@
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="16dp"
-            app:cardElevation="6dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
@@ -304,23 +320,23 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp"
-                    android:backgroundTint="?attr/colorContainer">
+                    android:backgroundTint="?attr/colorContainer"
+                    app:cardElevation="0dp">
 
                     <ImageView
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_gravity="center"
+                        android:contentDescription="@string/faq_icon_description"
                         android:src="@drawable/ic_help"
-                        app:tint="@color/faq_color"
-                        android:contentDescription="@string/faq_icon_description" />
+                        app:tint="@color/faq_color" />
                 </androidx.cardview.widget.CardView>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_marginStart="16dp"
+                    android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
@@ -344,9 +360,9 @@
                 <ImageView
                     android:layout_width="20dp"
                     android:layout_height="20dp"
+                    android:contentDescription="@string/go_to_faq_description"
                     android:src="@drawable/ic_arrow_right"
-                    app:tint="?attr/android:textColorSecondary"
-                    android:contentDescription="@string/go_to_faq_description" />
+                    app:tint="?attr/android:textColorSecondary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
@@ -360,7 +376,7 @@
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="16dp"
-            app:cardElevation="6dp"
+            app:cardElevation="2dp"
             app:cardBackgroundColor="?attr/colorSurface">
 
             <LinearLayout
@@ -374,8 +390,8 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp"
-                    android:backgroundTint="?attr/colorContainer">
+                    android:backgroundTint="?attr/colorContainer"
+                    app:cardElevation="0dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -430,7 +446,7 @@
             android:focusable="true"
             android:foreground="?android:attr/selectableItemBackground"
             app:cardCornerRadius="16dp"
-            app:cardElevation="8dp">
+            app:cardElevation="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -444,8 +460,8 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     app:cardCornerRadius="12dp"
-                    app:cardElevation="4dp"
-                    android:backgroundTint="?attr/colorContainer">
+                    android:backgroundTint="?attr/colorContainer"
+                    app:cardElevation="0dp">
 
                     <ImageView
                         android:layout_width="24dp"
@@ -507,14 +523,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             app:cardCornerRadius="16dp"
-            app:cardElevation="4dp"
-            app:cardBackgroundColor="?attr/colorSurface">
+            app:cardElevation="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
+                app:cardBackgroundColor="?attr/colorSurface"
                 android:padding="20dp">
 
                 <TextView
