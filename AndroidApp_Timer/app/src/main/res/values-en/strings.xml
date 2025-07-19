@@ -62,9 +62,9 @@
 
     <!-- Feedback Strings -->
     <string name="feedback">Feedback</string>
-    <string name="feedback_description">Share your feedback with us</string>
+    <string name="feedback_description">Share your feedback with me</string>
     <string name="feedback_welcome">Feedback &amp; Review</string>
-    <string name="feedback_subtitle">Share your experience and help us improve the app</string>
+    <string name="feedback_subtitle">Share your experience and help me improve the app</string>
     <string name="feedback_type">Feedback Type</string>
     <string name="subject">Subject</string>
     <string name="subject_hint">Enter feedback subject</string>
@@ -72,6 +72,8 @@
     <string name="message_hint">Describe your feedback in detail...</string>
     <string name="email">Contact email</string>
     <string name="email_hint">your.email@example.com</string>
+    <string name="yourname">Your name ()</string>
+    <string name="yourname_hint">You can leave it blank</string>
     <string name="submit_feedback">Submit feedback</string>
     <string name="rate_app">Rate app</string>
 

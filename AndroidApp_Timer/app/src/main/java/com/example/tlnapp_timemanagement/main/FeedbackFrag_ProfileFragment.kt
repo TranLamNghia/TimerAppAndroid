@@ -12,12 +12,15 @@ import android.widget.RatingBar
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.example.tlnapp_timemanagement.network.AirtableClient
 import com.example.tlnapp_timemanagement.R
+import com.google.gson.JsonObject
 
 class FeedbackFrag_ProfileFragment : Fragment(){
 
     private lateinit var backButton: ImageView
     private lateinit var feedbackTypeSpinner: Spinner
+    private lateinit var nameEditText: EditText
     private lateinit var subjectEditText: EditText
     private lateinit var messageEditText: EditText
     private lateinit var emailEditText: EditText
@@ -43,6 +46,7 @@ class FeedbackFrag_ProfileFragment : Fragment(){
     private fun initViews(view: View) {
         backButton = view.findViewById(R.id.back_button)
         feedbackTypeSpinner = view.findViewById(R.id.feedback_type_spinner)
+        nameEditText = view.findViewById(R.id.name_edittext)
         subjectEditText = view.findViewById(R.id.subject_edittext)
         messageEditText = view.findViewById(R.id.message_edittext)
         emailEditText = view.findViewById(R.id.email_edittext)
@@ -77,6 +81,7 @@ class FeedbackFrag_ProfileFragment : Fragment(){
 
     private fun submitFeedback() {
         val feedbackType = feedbackTypeSpinner.selectedItem.toString()
+        val name = nameEditText.text.toString().trim()
         val subject = subjectEditText.text.toString().trim()
         val message = messageEditText.text.toString().trim()
         val email = emailEditText.text.toString().trim()
@@ -109,21 +114,44 @@ class FeedbackFrag_ProfileFragment : Fragment(){
 
         // Simulate network delay
         submitButton.postDelayed({
-            Toast.makeText(context, "Cảm ơn bạn đã gửi góp ý! Chúng tôi sẽ phản hồi sớm nhất.", Toast.LENGTH_LONG).show()
+            // Send data
+            val fields = JsonObject().apply{
+                addProperty("NameUser", name)
+                addProperty("Type", feedbackType)
+                addProperty("Subject", subject)
+                addProperty("Message", message)
+                addProperty("Email", email)
+                addProperty("Rating", rating)
+            }
 
-            // Clear form
-            clearForm()
+            val payload = JsonObject().apply {
+                add("fields", fields)
+            }
 
-            submitButton.isEnabled = true
-            submitButton.text = "Gửi góp ý"
+            val jsonBody = payload.toString()
 
-            // Go back to profile
-            parentFragmentManager.popBackStack()
+            AirtableClient.sendFeedback(jsonBody) { success, errorMsg ->
+                // Callback chạy ngầm background thread của OkHttp, phải về UI thread
+                requireActivity().runOnUiThread {
+                    if (success) {
+                        Toast.makeText(context,
+                            "Cảm ơn bạn đã gửi góp ý!", Toast.LENGTH_LONG).show()
+                        clearForm()
+                        parentFragmentManager.popBackStack()
+                    } else {
+                        Toast.makeText(context,
+                            "Gửi thất bại: $errorMsg", Toast.LENGTH_LONG).show()
+                    }
+                    submitButton.isEnabled = true
+                    submitButton.text = "Gửi góp ý"
+                }
+            }
         }, 2000)
     }
 
     private fun clearForm() {
         feedbackTypeSpinner.setSelection(0)
+        nameEditText.text.clear()
         subjectEditText.text.clear()
         messageEditText.text.clear()
         emailEditText.text.clear()

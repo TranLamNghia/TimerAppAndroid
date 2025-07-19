@@ -19,6 +19,11 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    defaultConfig {
+        buildConfigField ("String", "AIRTABLE_BASE_ID", "\"${property("AIRTABLE_BASE_ID")}\"")
+        buildConfigField ("String", "AIRTABLE_PAT", "\"Bearer ${property("AIRTABLE_PAT")}\"")
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = false
@@ -37,6 +42,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     lint {
@@ -79,5 +85,9 @@ dependencies {
 
     val lottieVersion = "6.4.0"
     implementation ("com.airbnb.android:lottie:$lottieVersion")
+
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation ("com.google.code.gson:gson:2.8.6")
 
 }

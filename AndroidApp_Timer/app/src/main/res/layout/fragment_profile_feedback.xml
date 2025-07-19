@@ -153,6 +153,31 @@
                     android:orientation="vertical"
                     android:padding="20dp">
 
+
+                    <!-- Name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="@string/yourname"
+                        android:textColor="?attr/android:textColorPrimary"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/name_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginBottom="24dp"
+                        android:background="@drawable/edittext_background"
+                        android:hint="@string/yourname_hint"
+                        android:inputType="textEmailAddress"
+                        android:paddingStart="16dp"
+                        android:paddingEnd="16dp"
+                        android:textSize="16sp"
+                        android:textColor="?attr/android:textColorPrimary"
+                        android:textColorHint="?attr/android:textColorSecondary" />
+
                     <!-- Feedback Type -->
                     <TextView
                         android:layout_width="wrap_content"
