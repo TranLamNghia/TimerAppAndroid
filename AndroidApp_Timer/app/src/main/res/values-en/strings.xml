@@ -72,7 +72,7 @@
     <string name="message_hint">Describe your feedback in detail...</string>
     <string name="email">Contact email</string>
     <string name="email_hint">your.email@example.com</string>
-    <string name="yourname">Your name ()</string>
+    <string name="yourname">Your name</string>
     <string name="yourname_hint">You can leave it blank</string>
     <string name="submit_feedback">Submit feedback</string>
     <string name="rate_app">Rate app</string>

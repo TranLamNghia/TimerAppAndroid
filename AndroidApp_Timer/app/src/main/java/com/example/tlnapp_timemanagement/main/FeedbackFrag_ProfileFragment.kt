@@ -55,18 +55,11 @@ class FeedbackFrag_ProfileFragment : Fragment(){
     }
 
     private fun setupSpinner() {
-        val feedbackTypes = arrayOf(
-            "Chọn loại góp ý",
-            "Báo lỗi",
-            "Đề xuất tính năng",
-            "Cải thiện giao diện",
-            "Hiệu suất ứng dụng",
-            "Khác"
-        )
-
+        val feedbackTypes = resources.getStringArray(R.array.feedback_types)
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, feedbackTypes)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         feedbackTypeSpinner.adapter = adapter
+        feedbackTypeSpinner.setSelection(0)
     }
 
     private fun setupClickListeners() {
@@ -80,6 +73,9 @@ class FeedbackFrag_ProfileFragment : Fragment(){
     }
 
     private fun submitFeedback() {
+        val feedback_empty = resources.getStringArray(R.array.feedback_empty)
+        val feedback_success = resources.getStringArray(R.array.feedback_success)
+
         val feedbackType = feedbackTypeSpinner.selectedItem.toString()
         val name = nameEditText.text.toString().trim()
         val subject = subjectEditText.text.toString().trim()
@@ -87,34 +83,35 @@ class FeedbackFrag_ProfileFragment : Fragment(){
         val email = emailEditText.text.toString().trim()
         val rating = ratingBar.rating
 
-        // Validation
-        if (feedbackType == "Chọn loại góp ý") {
-            Toast.makeText(context, "Vui lòng chọn loại góp ý", Toast.LENGTH_SHORT).show()
+        if (feedbackType == resources.getStringArray(R.array.feedback_types)[0]) {
+            Toast.makeText(context, feedback_empty[0], Toast.LENGTH_SHORT).show()
             return
         }
 
         if (subject.isEmpty()) {
-            subjectEditText.error = "Vui lòng nhập tiêu đề"
+            subjectEditText.error = feedback_empty[1]
             return
         }
 
         if (message.isEmpty()) {
-            messageEditText.error = "Vui lòng nhập nội dung góp ý"
+            messageEditText.error = feedback_empty[2]
             return
         }
 
         if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailEditText.error = "Vui lòng nhập email hợp lệ"
+            emailEditText.error = feedback_empty[3]
             return
         }
 
-        // Simulate feedback submission
-        submitButton.isEnabled = false
-        submitButton.text = "Đang gửi..."
+        if (rating <= 0f) {
+            Toast.makeText(context, feedback_empty[4], Toast.LENGTH_SHORT).show()
+            return
+        }
 
-        // Simulate network delay
+        submitButton.isEnabled = false
+        submitButton.text = feedback_success[0]
+
         submitButton.postDelayed({
-            // Send data
             val fields = JsonObject().apply{
                 addProperty("NameUser", name)
                 addProperty("Type", feedbackType)
@@ -131,19 +128,18 @@ class FeedbackFrag_ProfileFragment : Fragment(){
             val jsonBody = payload.toString()
 
             AirtableClient.sendFeedback(jsonBody) { success, errorMsg ->
-                // Callback chạy ngầm background thread của OkHttp, phải về UI thread
                 requireActivity().runOnUiThread {
                     if (success) {
                         Toast.makeText(context,
-                            "Cảm ơn bạn đã gửi góp ý!", Toast.LENGTH_LONG).show()
+                            feedback_success[1], Toast.LENGTH_LONG).show()
                         clearForm()
                         parentFragmentManager.popBackStack()
                     } else {
                         Toast.makeText(context,
-                            "Gửi thất bại: $errorMsg", Toast.LENGTH_LONG).show()
+                            String.format(feedback_success[2], errorMsg ?: ""), Toast.LENGTH_LONG).show()
                     }
                     submitButton.isEnabled = true
-                    submitButton.text = "Gửi góp ý"
+                    submitButton.text = feedback_success[3]
                 }
             }
         }, 2000)
