@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         when (item.itemId) {
             R.id.nav_timer -> fragment = TimerFragment()
-            R.id.nav_practice -> fragment = PracticeFragment()
+            R.id.nav_statistics -> fragment = StatisticsFragment()
             R.id.nav_profile -> fragment = ProfileFragment()
         }
 

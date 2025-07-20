@@ -3,7 +3,7 @@
     <string name="app_name">Time Management</string>
     <string name="app_timer">Time Management</string>
     <string name="timer">Timer</string>
-    <string name="practice">Practice</string>
+    <string name="statistics">Statistics</string>
     <string name="profile">Profile</string>
 
     <string name="app_icon">App Icon</string>
@@ -102,4 +102,12 @@
     <string name="app_icon_description">App icon</string>
     <string name="enter_app_name_hint">Enter app name</string>
 
+    <string name="statistics_description">View app usage time</string>
+    <string name="select_time_period">Select time period</string>
+    <string name="one_day">1 day</string>
+    <string name="three_days">3 days</string>
+    <string name="seven_days">7 days</string>
+    <string name="one_month">1 month</string>
+    <string name="no_usage_data">No usage data</string>
+    <string name="statistics_icon_description">Statistics icon</string>
 </resources>
