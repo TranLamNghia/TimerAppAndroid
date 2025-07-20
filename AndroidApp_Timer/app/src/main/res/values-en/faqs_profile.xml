@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="faq_questions">
+        <item>How to set time limit for an app?</item>
+        <item>Does the app work in background?</item>
+        <item>Can I set time for multiple apps?</item>
+        <item>How to enable notifications?</item>
+        <item>Why isn\'t the app working?</item>
+        <item>Where is my data stored?</item>
+        <item>How to reset to default?</item>
+        <item>What are Premium features?</item>
+    </string-array>
+    <string-array name="faq_answers">
+        <item>You can set a timer by tapping "Setup" in the Timer tab, then select the app and the desired time.</item>
+        <item>Yes, the app continues counting down even if you don\'t open it. You must enable accessibility permission.</item>
+        <item>The free version supports only 1 app. Upgrade to Premium to use multiple apps.</item>
+        <item>Go to Profile &gt; Settings &gt; turn on Notifications. Make sure you allow notification permission in system settings.</item>
+        <item>Please check if you have granted accessibility permission in Settings &gt; Accessibility. This is required for the app to work.</item>
+        <item>All data is stored locally on your device. We do not collect or store your personal data on our server.</item>
+        <item>You can uninstall and reinstall the app, or contact us via the Feedback tab for support.</item>
+        <item>Premium includes: unlimited apps, detailed statistics, no ads, and many more features.</item>
+    </string-array>
+    <string-array name="faq_images">
+        <item>img_test_faq</item>
+        <item>img_test_faq</item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+</resources>

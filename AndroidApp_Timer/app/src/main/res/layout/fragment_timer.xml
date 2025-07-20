@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:screenOrientation="portrait"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorBackground">
 
     <!-- Header -->
     <androidx.cardview.widget.CardView
@@ -11,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        app:cardBackgroundColor="@android:color/white"
+        app:cardBackgroundColor="?attr/colorSurface"
         app:cardElevation="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,7 +28,7 @@
                 android:id="@+id/app_icon_container"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                app:cardBackgroundColor="@color/colorPrimaryDark"
+                app:cardBackgroundColor="?attr/colorPrimaryDark"
                 app:cardCornerRadius="12dp"
                 app:cardElevation="4dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +52,7 @@
                 android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="@string/app_timer"
-                android:textColor="@color/textPrimary"
+                android:textColor="?attr/android:textColorPrimary"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -76,6 +77,7 @@
             android:layout_height="48dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="4dp"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -94,7 +96,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:fontFamily="sans-serif-medium"
-            android:textColor="@color/textPrimary"
+            android:text="@string/selected_app"
+            android:textColor="?attr/android:textColorPrimary"
             android:textSize="18sp"
             app:layout_constraintStart_toEndOf="@+id/selected_app_icon_container"
             app:layout_constraintTop_toTopOf="@+id/selected_app_icon_container" />
@@ -105,8 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:fontFamily="sans-serif"
-            android:text="@string/time_limit_60_minutes"
-            android:textColor="@color/textSecondary"
+            android:textColor="?attr/android:textColorSecondary"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/selected_app_icon_container"
             app:layout_constraintStart_toEndOf="@+id/selected_app_icon_container"
@@ -129,7 +131,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="300dp"
             android:layout_height="300dp"
-            app:cardBackgroundColor="@android:color/white"
+            app:cardBackgroundColor="?attr/colorSurface"
             app:cardCornerRadius="150dp"
             app:cardElevation="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -167,7 +169,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="0"
-                        android:textColor="@color/textPrimary"
+                        android:textColor="?attr/android:textColorPrimary"
                         android:textSize="40sp" />
 
                     <TextView
@@ -177,7 +179,7 @@
                         android:layout_marginTop="4dp"
                         android:fontFamily="sans-serif"
                         android:text="@string/time_remaining"
-                        android:textColor="@color/textSecondary"
+                        android:textColor="?attr/android:textColorSecondary"
                         android:textSize="14sp" />
                 </LinearLayout>
             </RelativeLayout>
@@ -199,7 +201,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_delete"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton.Themed"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginEnd="8dp"
@@ -213,11 +215,12 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_setup"
+            style="@style/Widget.MaterialComponents.Button.Colored.Themed"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_marginStart="8dp"
             android:layout_weight="1"
-            android:backgroundTint="@color/colorPrimary"
+            android:backgroundTint="?attr/colorPrimary"
             android:fontFamily="sans-serif-medium"
             android:text="@string/setup"
             android:textColor="@android:color/white"

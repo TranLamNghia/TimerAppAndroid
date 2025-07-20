@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="faq_questions">
+        <item>Làm thế nào để thiết lập thời gian cho ứng dụng?</item>
+        <item>Ứng dụng có hoạt động khi tôi không mở nó không?</item>
+        <item>Tôi có thể thiết lập nhiều ứng dụng cùng lúc không?</item>
+        <item>Làm thế nào để bật thông báo?</item>
+        <item>Tại sao ứng dụng không hoạt động?</item>
+        <item>Dữ liệu của tôi có được lưu trữ ở đâu?</item>
+        <item>Làm thế nào để khôi phục cài đặt mặc định?</item>
+        <item>Premium có những tính năng gì?</item>
+    </string-array>
+    <string-array name="faq_answers">
+        <item>Bạn có thể thiết lập thời gian bằng cách nhấn nút "Thiết lập" trong tab Hẹn giờ, sau đó chọn ứng dụng và thời gian mong muốn.</item>
+        <item>Có, ứng dụng sẽ tiếp tục đếm ngược thời gian ngay cả khi bạn không mở nó. Tuy nhiên, bạn cần cấp quyền truy cập trong cài đặt trợ năng.</item>
+        <item>Hiện tại phiên bản miễn phí chỉ hỗ trợ 1 ứng dụng. Để sử dụng nhiều ứng dụng, bạn cần nâng cấp lên Premium.</item>
+        <item>Vào tab Cá nhân &gt; Cài đặt &gt; bật công tắc Thông báo. Đảm bảo bạn đã cấp quyền thông báo cho ứng dụng trong cài đặt hệ thống.</item>
+        <item>Hãy kiểm tra xem bạn đã cấp quyền truy cập trong Cài đặt &gt; Trợ năng chưa. Đây là quyền bắt buộc để ứng dụng có thể giám sát thời gian sử dụng.</item>
+        <item>Tất cả dữ liệu được lưu trữ cục bộ trên thiết bị của bạn. Chúng tôi không thu thập hay lưu trữ dữ liệu cá nhân trên server.</item>
+        <item>Bạn có thể gỡ cài đặt và cài đặt lại ứng dụng, hoặc liên hệ với chúng tôi qua tab Góp ý để được hỗ trợ.</item>
+        <item>Premium bao gồm: không giới hạn số ứng dụng, thống kê chi tiết, không quảng cáo, và nhiều tính năng cao cấp khác.</item>
+    </string-array>
+    <string-array name="faq_images">
+        <item>img_test_faq</item>
+        <item>img_test_faq</item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+        <item></item>
+    </string-array>
+</resources>

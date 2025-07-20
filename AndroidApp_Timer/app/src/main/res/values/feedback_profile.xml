@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="feedback_types">
+        <item>Chọn loại góp ý</item>
+        <item>Báo lỗi</item>
+        <item>Đề xuất tính năng</item>
+        <item>Cải thiện giao diện</item>
+        <item>Hiệu suất ứng dụng</item>
+        <item>Khác</item>
+    </string-array>
+    <string-array name="feedback_empty">
+        <item>Vui lòng chọn loại góp ý</item>
+        <item>Vui lòng nhập tiêu đề</item>
+        <item>Vui lòng nhập nội dung góp ý</item>
+        <item>Vui lòng nhập email hợp lệ</item>
+        <item>Vui lòng đánh giá số sao</item>
+    </string-array>
+    <string-array name="feedback_success">
+        <item>Đang gửi...</item>
+        <item>Cảm ơn bạn đã gửi góp ý!</item>
+        <item>Gửi thất bại: %s</item>
+        <item>Gửi góp ý</item>
+    </string-array>
+</resources>
