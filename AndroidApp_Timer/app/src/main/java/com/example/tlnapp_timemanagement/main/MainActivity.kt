@@ -70,13 +70,13 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         // AccessibilityService
         if (!isAccessibilityServiceEnabled(this, FocusDetectService::class.java)) {
-//            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
 
         // UsageStats
         if (!hasUsageStatsPermission(this)) {
             val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-//            this.startActivity(intent)
+            this.startActivity(intent)
         }
 
         // Initialize bottom navigation

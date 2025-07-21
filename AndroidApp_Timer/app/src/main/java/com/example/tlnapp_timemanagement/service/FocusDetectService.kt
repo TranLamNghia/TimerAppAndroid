@@ -10,6 +10,7 @@ import android.view.accessibility.AccessibilityEvent
 import com.example.tlnapp_timemanagement.data.AppDatabase
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.repository.HistoryAppRepository
+import com.example.tlnapp_timemanagement.dialog.Notification
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -62,7 +63,7 @@ class FocusDetectService : AccessibilityService() {
     }
 
 
-    @SuppressLint("NewApi")
+    @SuppressLint("AccessibilityService")
     override fun onAccessibilityEvent(ev: AccessibilityEvent?) {
         if (ev?.eventType != AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) return
         val pkg = ev.packageName?.toString() ?: return
@@ -78,6 +79,7 @@ class FocusDetectService : AccessibilityService() {
                 isOpen = true
                 currentTrackedPackage = pkg
                 Log.d("FDService", "OPEN")
+                Notification.showSimpleNotification(applicationContext, "Thong bao", "App mo")
                 repo.onAppForeground(currentApp)
                 startService(Intent(applicationContext, UsageCountTimeService::class.java).apply {
                     action = "START"
@@ -90,6 +92,7 @@ class FocusDetectService : AccessibilityService() {
                         if (currentTrackedPackage == currentApp.packageName && pkg == homePackage && isOpen == true) {
                         isOpen = false
                         Log.d("FDService", "CLOSE")
+                        Notification.showSimpleNotification(applicationContext, "Thong bao", "App dong")
                         repo.onAppSessionEnd(currentApp)
                         startService(Intent(applicationContext, UsageCountTimeService::class.java).apply {
                             action = "END"

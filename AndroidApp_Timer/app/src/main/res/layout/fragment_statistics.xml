@@ -92,45 +92,45 @@
                         app:selectionRequired="true">
 
                         <Button
-                            android:id="@+id/btn_1_day"
+                            android:id="@+id/btn_today"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/one_day"
+                            android:text="@string/today"
                             android:textColor="?attr/colorOnSurface"
                             app:strokeColor="?attr/colorOnSurface"
                             app:cornerRadius="8dp" />
 
                         <Button
-                            android:id="@+id/btn_3_days"
+                            android:id="@+id/btn_yesterday"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/three_days"
+                            android:text="@string/yesterday"
                             android:textColor="?attr/colorOnSurface"
                             app:strokeColor="?attr/colorOnSurface"
                             app:cornerRadius="8dp" />
 
                         <Button
-                            android:id="@+id/btn_7_days"
+                            android:id="@+id/btn_this_week"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/seven_days"
+                            android:text="@string/this_week"
                             android:textColor="?attr/colorOnSurface"
                             app:strokeColor="?attr/colorOnSurface"
                             app:cornerRadius="8dp" />
 
                         <Button
-                            android:id="@+id/btn_1_month"
+                            android:id="@+id/btn_this_month"
                             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="@string/one_month"
+                            android:text="@string/this_month"
                             android:textColor="?attr/colorOnSurface"
                             app:strokeColor="?attr/colorOnSurface"
                             app:cornerRadius="8dp" />

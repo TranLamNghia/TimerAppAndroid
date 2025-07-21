@@ -104,10 +104,10 @@
 
     <string name="statistics_description">View app usage time</string>
     <string name="select_time_period">Select time period</string>
-    <string name="one_day">1 day</string>
-    <string name="three_days">3 days</string>
-    <string name="seven_days">7 days</string>
-    <string name="one_month">1 month</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="this_week">This week</string>
+    <string name="this_month">This month</string>
     <string name="no_usage_data">No usage data</string>
     <string name="statistics_icon_description">Statistics icon</string>
 </resources>

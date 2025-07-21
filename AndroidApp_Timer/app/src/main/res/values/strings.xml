@@ -107,10 +107,10 @@
     <!-- Statistics Strings -->
     <string name="statistics_description">Xem thời gian sử dụng ứng dụng</string>
     <string name="select_time_period">Chọn khoảng thời gian</string>
-    <string name="one_day">1 ngày</string>
-    <string name="three_days">3 ngày</string>
-    <string name="seven_days">7 ngày</string>
-    <string name="one_month">1 tháng</string>
+    <string name="today">Hôm nay</string>
+    <string name="yesterday">Hôm qua</string>
+    <string name="this_week">Tuần này</string>
+    <string name="this_month">Tháng này</string>
     <string name="no_usage_data">Không có dữ liệu sử dụng</string>
     <string name="statistics_icon_description">Biểu tượng thống kê</string>
 </resources>

@@ -26,12 +26,11 @@ class AppSetting_TimerFrag : DialogFragment() {
     private lateinit var btnSave: Button
     private lateinit var btnClose: Button
 
-    private val timeOptions = listOf(2, 15, 30, 45, 60, 90, 120, 180)
+    private val timeOptions = listOf(15, 30, 45, 60, 90, 120, 180)
     private var filteredApps: List<ApplicationInfo> = emptyList()
 
     private var allApps: List<ApplicationInfo> = emptyList()
 
-    // Interface to callback about TimerFragment
     interface OnAppSettingListener {
         fun onAppSettingSaved(appInfo: ApplicationInfo, timeLimit: Int)
     }
@@ -52,8 +51,6 @@ class AppSetting_TimerFrag : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
 
         editTextAppName = view.findViewById(R.id.app_edittext)
         spinnerApps = view.findViewById(R.id.app_spinner)

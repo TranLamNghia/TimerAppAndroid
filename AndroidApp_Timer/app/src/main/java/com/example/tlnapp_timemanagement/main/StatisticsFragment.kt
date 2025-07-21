@@ -1,5 +1,6 @@
 package com.example.tlnapp_timemanagement.main
 
+import android.app.usage.UsageStats
 import android.app.usage.UsageStatsManager
 import android.content.Context
 import android.content.Intent
@@ -7,6 +8,7 @@ import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +32,7 @@ class StatisticsFragment : Fragment() {
     private lateinit var usageStatsManager: UsageStatsManager
     private lateinit var packageManager: PackageManager
 
-    private var currentFilter = TimeUnit.DAYS.toMillis(1) // Default to 1 day
+    private var currentFilter : String = "TODAY"
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -54,15 +56,15 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun setupToggleGroup() {
-        timePeriodToggleGroup.check(R.id.btn_1_day) // Select 1 day by default
+        timePeriodToggleGroup.check(R.id.btn_today) // Select 1 day by default
 
         timePeriodToggleGroup.addOnButtonCheckedListener { group, checkedId, isChecked ->
             if (isChecked) {
                 when (checkedId) {
-                    R.id.btn_1_day -> currentFilter = TimeUnit.DAYS.toMillis(1)
-                    R.id.btn_3_days -> currentFilter = TimeUnit.DAYS.toMillis(3)
-                    R.id.btn_7_days -> currentFilter = TimeUnit.DAYS.toMillis(7)
-                    R.id.btn_1_month -> currentFilter = TimeUnit.DAYS.toMillis(30) // Approx 1 month
+                    R.id.btn_today -> currentFilter = "TODAY" // Hôm nay
+                    R.id.btn_yesterday -> currentFilter = "YESTERDAY" // Hôm qua
+                    R.id.btn_this_week -> currentFilter = "THIS_WEEK" // Tuần này
+                    R.id.btn_this_month -> currentFilter = "THIS_MONTH" // Approx 1 month
                 }
                 loadUsageStats()
             }
@@ -89,27 +91,71 @@ class StatisticsFragment : Fragment() {
         val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
         startActivity(intent)
         noDataText.visibility = View.VISIBLE
-        noDataText.text = "NO"// Add this string to strings.xml
+        noDataText.text = "NO"
     }
 
     private fun loadUsageStats() {
-        val endTime = System.currentTimeMillis()
-        val startTime = endTime - currentFilter
+//        val endTime = System.currentTimeMillis()
+//        val startTime = endTime - currentFilter
+//
+//        Log.d("loadUsageStats", "EndTime : " + endTime.toString() + "______" + "StartTime : " + startTime.toString() + "_____________" +currentFilter)
+//
+        val calendar = Calendar.getInstance().apply {
+            set(Calendar.HOUR_OF_DAY, 0)
+            set(Calendar.MINUTE, 0)
+            set(Calendar.SECOND, 0)
+            set(Calendar.MILLISECOND, 0)
+        }
+        var endTime = System.currentTimeMillis() // 22:30 ngày 21/7/2025
+        var startTime: Long
+
+        when (currentFilter) {
+            "TODAY" -> { // Hôm nay (00:00:00 ngày 21/7/2025 đến 22:30)
+                startTime = calendar.timeInMillis
+            }
+            "YESTERDAY" -> { // Hôm qua (00:00:00 ngày 20/7/2025 đến 23:59:59)
+                calendar.add(Calendar.DAY_OF_MONTH, -1)
+                startTime = calendar.timeInMillis
+                calendar.add(Calendar.DAY_OF_MONTH, 1) // Đặt lại
+                calendar.add(Calendar.SECOND, -1) // 23:59:59 ngày 20/7/2025
+                endTime = calendar.timeInMillis
+            }
+            "THIS_WEEK" -> { // Tuần này (từ thứ Hai 14/7/2025 đến 22:30 ngày 21/7/2025)
+                calendar.set(Calendar.DAY_OF_WEEK, calendar.firstDayOfWeek)
+                if (calendar.timeInMillis > System.currentTimeMillis()) {
+                    calendar.add(Calendar.WEEK_OF_YEAR, -1)
+                }
+                startTime = calendar.timeInMillis
+            }
+            "THIS_MONTH" -> { // Tháng này (từ 00:00:00 ngày 1/7/2025 đến 22:30 ngày 21/7/2025)
+                calendar.set(Calendar.DAY_OF_MONTH, 1)
+                startTime = calendar.timeInMillis
+            }
+            else -> {
+                startTime = calendar.timeInMillis
+            }
+        }
 
         val usageStatsList = usageStatsManager.queryUsageStats(
-            UsageStatsManager.INTERVAL_DAILY, // Or INTERVAL_WEEKLY, INTERVAL_MONTHLY depending on your needs
+            UsageStatsManager.INTERVAL_DAILY,
             startTime,
             endTime
         )
 
         val appUsageMap = mutableMapOf<String, Long>()
+        Log.d("loadUsageStats", startTime.toString() + "------------------------------------------------------" + endTime.toString())
         for (usageStats in usageStatsList) {
             val packageName = usageStats.packageName
-            val totalTimeInForeground = usageStats.totalTimeInForeground
+            val totalTimeInForeground = usageStats.totalTimeVisible
+            if (totalTimeInForeground > 0) {
+                Log.d("loadUsageStats", "packageName : " + packageName.toString() + "______" + "totalTimeInForeground : " + totalTimeInForeground.toString())
+            }
+            
             if (totalTimeInForeground > 0) {
                 appUsageMap[packageName] = appUsageMap.getOrDefault(packageName, 0L) + totalTimeInForeground
             }
         }
+        Log.d("loadUsageStats", "------------------------------------------------------")
 
         val sortedAppUsage = appUsageMap.entries
             .filter { entry ->
@@ -142,14 +188,18 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun formatDuration(millis: Long): String {
-        val hours = TimeUnit.MILLISECONDS.toHours(millis)
-        val minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60
-        val seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60
+//        val hours = TimeUnit.MILLISECONDS.toHours(millis)
+//        val minutes = TimeUnit.MILLISECONDS.toMinutes(millis) % 60
+//        val seconds = TimeUnit.MILLISECONDS.toSeconds(millis) % 60
+
+        val hours = (millis / 1000) / 3600
+        val minutes = ((millis / 1000) % 3600) / 60
+        val seconds = ((millis / 1000) % 3600) % 60
 
         return when {
-            hours > 0 -> String.format(Locale.getDefault(), "%d giờ %02d phút", hours, minutes)
-            minutes > 0 -> String.format(Locale.getDefault(), "%d phút %02d giây", minutes, seconds)
-            else -> String.format(Locale.getDefault(), "%d giây", seconds)
+            hours > 0 -> String.format(Locale.getDefault(), "%d h %02d m", hours, minutes)
+            minutes > 0 -> String.format(Locale.getDefault(), "%d m %02d s", minutes, seconds)
+            else -> String.format(Locale.getDefault(), "%d s", seconds)
         }
     }
 
