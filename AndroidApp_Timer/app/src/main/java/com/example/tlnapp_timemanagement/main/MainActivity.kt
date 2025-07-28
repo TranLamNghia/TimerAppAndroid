@@ -26,6 +26,7 @@ import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.dialog.Notification
+import com.example.tlnapp_timemanagement.service.BroadcastReceiverService
 import com.example.tlnapp_timemanagement.service.FocusDetectService
 import com.example.tlnapp_timemanagement.worker.DailyUsageResetWorker
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -78,7 +79,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
 
         // Schedule daily usage reset
-        scheduleDailyUsageResetWork(this)
+//        scheduleDailyUsageResetWork(this)
+        BroadcastReceiverService.scheduleExactReset(this)
 
         // Set default fragment
         loadFragment(TimerFragment())
@@ -106,7 +108,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         return loadFragment(fragment)
     }
-
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -218,4 +219,5 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     private fun cancelScheduleDaily(context: Context) {
         WorkManager.getInstance(context).cancelUniqueWork("DailyUsageResetWork")
     }
+
 }
