@@ -6,7 +6,7 @@
             android:shape="ring"
             android:thickness="8dp"
             android:useLevel="false">
-            <solid android:color="#F1F5F9" />
+            <solid android:color="?attr/colorContainer" />
         </shape>
     </item>
     <item android:id="@android:id/progress">
@@ -18,8 +18,8 @@
                 android:shape="ring"
                 android:thickness="8dp">
                 <gradient
-                    android:endColor="@color/colorProgressEnd"
-                    android:startColor="@color/colorProgressStart"
+                    android:endColor="@color/colorAccent"
+                    android:startColor="@color/colorPrimary"
                     android:type="sweep" />
             </shape>
         </rotate>

@@ -2,27 +2,19 @@ package com.example.tlnapp_timemanagement.service
 
 import android.accessibilityservice.AccessibilityService
 import android.annotation.SuppressLint
-import android.app.usage.UsageEvents
-import android.app.usage.UsageStatsManager
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
-import android.os.Build
 import android.util.Log
 import android.view.accessibility.AccessibilityEvent
-import android.view.accessibility.AccessibilityNodeInfo
-import androidx.lifecycle.ViewModelStore
-import com.example.tlnapp_timemanagement.MyApplication
 import com.example.tlnapp_timemanagement.data.AppDatabase
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.repository.HistoryAppRepository
-import com.example.tlnapp_timemanagement.data.viewmodel.MapDailyShareViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.time.Instant
 
 //Accessibility trigger
 class FocusDetectService : AccessibilityService() {
@@ -76,12 +68,11 @@ class FocusDetectService : AccessibilityService() {
         val pkg = ev.packageName?.toString() ?: return
         val timestamp = System.currentTimeMillis()
 
-
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             Log.d("FDService", "App chuyển foreground: $pkg at $timestamp")
             val currentApp = getCurrentApp()
             if (currentApp == null) return@launch
-            Log.d("FDService", "App current : " + currentApp.packageName + "________" + isOpen)
+//            Log.d("FDService", ":::::" + currentTrackedPackage + "____" + currentApp.packageName + "____" + pkg + "___" + isOpen)
             if (pkg == currentApp.packageName && isOpen == false) {
                 stopJob?.cancel()
                 isOpen = true
@@ -96,8 +87,7 @@ class FocusDetectService : AccessibilityService() {
                 stopJob?.cancel()
                 stopJob = launch {
                     delay(STOP_DEBOUNCE_MS)
-//                    if (currentTrackedPackage == currentApp.packageName && pkg == "com.google.android.apps.nexuslauncher" && isOpen == true) {
-                    if (currentTrackedPackage == currentApp.packageName && pkg == homePackage && isOpen == true) {
+                        if (currentTrackedPackage == currentApp.packageName && pkg == homePackage && isOpen == true) {
                         isOpen = false
                         Log.d("FDService", "CLOSE")
                         repo.onAppSessionEnd(currentApp)
@@ -107,6 +97,7 @@ class FocusDetectService : AccessibilityService() {
                         })
                         currentTrackedPackage = null
                     }
+
                 }
             }
         }
