@@ -69,9 +69,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         checkNotificationPermissionAndSend()
 
         // AccessibilityService
-        if (!isAccessibilityServiceEnabled(this, FocusDetectService::class.java)) {
-            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        }
+//        if (!isAccessibilityServiceEnabled(this, FocusDetectService::class.java)) {
+//            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+//        }
 
         // UsageStats
         if (!hasUsageStatsPermission(this)) {
@@ -141,7 +141,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         return loadFragment(fragment)
     }
-
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -258,7 +257,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         super.onSaveInstanceState(outState)
         outState.putInt("SELECTED_TAB_ID", selectedTabId)
     }
-
 
     private fun applySavedLanguage() {
         val sharedPref = getSharedPreferences("app_settings", Context.MODE_PRIVATE)

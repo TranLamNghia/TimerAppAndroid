@@ -138,6 +138,21 @@
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal|bottom">
+
+                <!-- Chart Bars -->
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/line_chart"
+                    android:layout_width="300dp"
+                    android:layout_height="190dp"
+                    android:layout_margin="20dp"/>
+
+            </LinearLayout>
+
             <!-- App Usage List -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/app_usage_recycler_view"

@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
@@ -19,6 +20,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tlnapp_timemanagement.R
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.google.android.material.button.MaterialButtonToggleGroup
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -53,6 +59,61 @@ class StatisticsFragment : Fragment() {
 
         setupToggleGroup()
         checkUsageStatsPermission()
+
+        val entries = listOf(
+            Entry(0f, 60f),
+            Entry(1f, 42f),
+            Entry(2f, 16f),
+            Entry(3f, 32f),
+            Entry(4f, 32f),
+            Entry(5f, 60f),
+            Entry(6f, 60f),
+            Entry(7f, 0f),
+            Entry(8f, 32f),
+            Entry(9f, 40f)
+
+        )
+
+        val dataSet = LineDataSet(entries, "Sample Data")
+        dataSet.color = Color.BLUE
+        dataSet.valueTextColor = Color.BLACK
+        dataSet.setDrawCircles(true)
+        dataSet.setDrawValues(true)
+        dataSet.lineWidth = 2f
+
+        val lineData = LineData(dataSet)
+
+        val lineChart = view.findViewById<LineChart>(R.id.line_chart)
+        lineChart.setTouchEnabled(true)
+        lineChart.setDragEnabled(true)
+        lineChart.setScaleEnabled(false)
+        lineChart.description.isEnabled = false
+        lineChart.setPinchZoom(false)
+        lineChart.isDragEnabled = true
+        lineChart.data = lineData
+        lineChart.animateX(500)
+        lineChart.setVisibleXRangeMaximum(5f) // Chỉ hiển thị 5 điểm một lúc
+        lineChart.moveViewToX(0f)             // Bắt đầu từ đầu
+        lineChart.invalidate()
+
+        val xAxis = lineChart.xAxis
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        xAxis.setDrawGridLines(false)
+        xAxis.granularity = 1f
+
+        val yAxisRight = lineChart.axisRight
+        yAxisRight.isEnabled = false
+
+        val yAxisLeft = lineChart.axisLeft
+        yAxisLeft.setDrawGridLines(true)
+        yAxisLeft.axisMinimum = 0f     // Giá trị thấp nhất của trục Y
+        yAxisLeft.axisMaximum = 60f
+        yAxisLeft.setLabelCount(6, true)  // 6 nhãn, force fixed spacing
+        yAxisLeft.granularity = 10f       // mỗi bước là 10 đơn vị
+
+        lineChart.setBackgroundColor(Color.WHITE)
+        lineChart.legend.isEnabled = true
+        lineChart.invalidate()
     }
 
     private fun setupToggleGroup() {
@@ -150,7 +211,7 @@ class StatisticsFragment : Fragment() {
             if (totalTimeInForeground > 0) {
                 Log.d("loadUsageStats", "packageName : " + packageName.toString() + "______" + "totalTimeInForeground : " + totalTimeInForeground.toString())
             }
-            
+
             if (totalTimeInForeground > 0) {
                 appUsageMap[packageName] = appUsageMap.getOrDefault(packageName, 0L) + totalTimeInForeground
             }
