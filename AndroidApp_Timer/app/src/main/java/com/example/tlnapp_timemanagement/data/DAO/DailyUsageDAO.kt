@@ -18,16 +18,13 @@ interface DailyUsageDAO {
     suspend fun update(dailyUsage: DailyUsage)
 
     @Query("DELETE FROM DAILYUSAGE")
-    suspend fun deleteAll()
+    suspend fun resetNewDailyUsage()
 
     @Query("SELECT * FROM DAILYUSAGE WHERE idHistory = :idHistory")
     suspend fun getDailyUsageByIdHistory(idHistory: Int): DailyUsage
 
     @Query("SELECT DAILYUSAGE.idHistory, dateKey, userSEC FROM DAILYUSAGE, HISTORYAPP WHERE DAILYUSAGE.idHistory = HISTORYAPP.idHistory AND HISTORYAPP.packageName = :packageName")
     suspend fun getDailyUsageByPackageName(packageName: String): DailyUsage
-
-    @Query("UPDATE DAILYUSAGE SET dateKey = :dateKey, userSEC = 0 WHERE idHistory = :idHistory")
-    suspend fun resetNewDailyUsage(idHistory: Int, dateKey: String)
 
     @Query("UPDATE DAILYUSAGE SET userSEC = :userSEC WHERE idHistory = :idHistory")
     suspend fun updateTimeInDailyUsage(idHistory: Int, userSEC: Long)

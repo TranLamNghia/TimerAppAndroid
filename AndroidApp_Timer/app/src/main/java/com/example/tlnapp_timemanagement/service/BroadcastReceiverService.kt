@@ -7,14 +7,28 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import com.example.tlnapp_timemanagement.data.AppDatabase
+import com.example.tlnapp_timemanagement.data.repository.DailyUsageRepository
 import com.example.tlnapp_timemanagement.dialog.Notification
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
 class BroadcastReceiverService : BroadcastReceiver() {
 
+    lateinit var dailyUsageRepository : DailyUsageRepository
+
+
     override fun onReceive(p0: Context, p1: Intent?) {
+        val db = AppDatabase.getDatabase(p0)
+        dailyUsageRepository = DailyUsageRepository(db.dailyUsageDao())
+        CoroutineScope(Dispatchers.IO).launch {
+            dailyUsageRepository.resetNewDailyUsage()
+        }
+
         val now = SimpleDateFormat("HH:mm:ss dd/MM/yyyy", Locale.getDefault()).format(System.currentTimeMillis())
         Notification.showSimpleNotification(p0, "Reset Usage Stats", "Daily usage reset in: $now")
         scheduleExactReset(p0)
@@ -42,7 +56,7 @@ class BroadcastReceiverService : BroadcastReceiver() {
                     pendingIntent
                 )
             } else {
-                // Có thể log / thông báo cho user rằng họ cần bật quyền
+
             }
         }
 
@@ -50,7 +64,6 @@ class BroadcastReceiverService : BroadcastReceiver() {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 val am = context.getSystemService(AlarmManager::class.java)
                 if (!am.canScheduleExactAlarms()) {
-                    // Chưa có quyền, dẫn user vào Settings để bật
                     Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM).also {
                         it.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                         context.startActivity(it)

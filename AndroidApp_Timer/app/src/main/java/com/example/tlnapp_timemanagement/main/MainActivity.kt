@@ -21,16 +21,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.work.ExistingPeriodicWorkPolicy
-import androidx.work.PeriodicWorkRequestBuilder
-import androidx.work.WorkManager
 import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.dialog.Notification
 import com.example.tlnapp_timemanagement.service.BroadcastReceiverService
 import com.example.tlnapp_timemanagement.service.FocusDetectService
-import com.example.tlnapp_timemanagement.worker.DailyUsageResetWorker
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import java.util.Calendar
 
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
@@ -79,7 +74,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
 
         // Schedule daily usage reset
-//        scheduleDailyUsageResetWork(this)
         BroadcastReceiverService.scheduleExactReset(this)
 
         // Set default fragment
@@ -189,35 +183,6 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         } catch (e: Exception) {
             return false
         }
-    }
-
-    private fun scheduleDailyUsageResetWork(context: Context) {
-        // Delay = 4AM next day
-        val now = Calendar.getInstance()
-        val target = now.clone() as Calendar
-        target.set(Calendar.HOUR_OF_DAY, 4)
-        target.set(Calendar.MINUTE, 0)
-        target.set(Calendar.SECOND, 0)
-        target.set(Calendar.MILLISECOND, 0)
-        if (target.before(now)) {
-            target.add(Calendar.DATE, 1)
-        }
-        val initialDelay = target.timeInMillis - now.timeInMillis
-
-        val workRequest = PeriodicWorkRequestBuilder<DailyUsageResetWorker>(1, java.util.concurrent.TimeUnit.DAYS)
-            .setInitialDelay(initialDelay, java.util.concurrent.TimeUnit.MILLISECONDS)
-            .addTag("DAILY_USAGE_RESET")
-            .build()
-
-        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
-            "DailyUsageResetWork",
-            ExistingPeriodicWorkPolicy.UPDATE,
-            workRequest
-        )
-    }
-
-    private fun cancelScheduleDaily(context: Context) {
-        WorkManager.getInstance(context).cancelUniqueWork("DailyUsageResetWork")
     }
 
 }
