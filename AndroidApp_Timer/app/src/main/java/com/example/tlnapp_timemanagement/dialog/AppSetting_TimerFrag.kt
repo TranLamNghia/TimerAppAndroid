@@ -1,22 +1,19 @@
 package com.example.tlnapp_timemanagement.dialog
 
-import android.annotation.SuppressLint
+import android.app.usage.UsageEvents
+import android.app.usage.UsageStatsManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.provider.Settings
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.*
 import androidx.fragment.app.DialogFragment
 import com.example.tlnapp_timemanagement.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AppSetting_TimerFrag : DialogFragment() {
 
@@ -26,12 +23,10 @@ class AppSetting_TimerFrag : DialogFragment() {
     private lateinit var btnSave: Button
     private lateinit var btnClose: Button
 
-    private val timeOptions = listOf(2, 15, 30, 45, 60, 90, 120, 180)
+    private val timeOptions = listOf(15, 30, 45, 60, 90, 120, 180)
     private var filteredApps: List<ApplicationInfo> = emptyList()
 
-    private var allApps: List<ApplicationInfo> = emptyList()
-
-    // Interface to callback about TimerFragment
+    // Interface để callback về TimerFragment
     interface OnAppSettingListener {
         fun onAppSettingSaved(appInfo: ApplicationInfo, timeLimit: Int)
     }
@@ -47,13 +42,17 @@ class AppSetting_TimerFrag : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        // Inflate layout dialog vừa tạo
         return inflater.inflate(R.layout.dialog_app_settings, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        if (!hasUsageStatsPermission(requireContext())) {
+            val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
+            requireContext().startActivity(intent)
+        }
 
         editTextAppName = view.findViewById(R.id.app_edittext)
         spinnerApps = view.findViewById(R.id.app_spinner)
@@ -62,48 +61,35 @@ class AppSetting_TimerFrag : DialogFragment() {
         btnClose = view.findViewById(R.id.btn_cancel)
 
         initTimeLimits()
-        loadAllApps()
         setupAppNameWatcher()
         setupButtons()
     }
 
-    private fun loadAllApps() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val pm = requireContext().packageManager
-            val intent = Intent(Intent.ACTION_MAIN, null).apply {
-                addCategory(Intent.CATEGORY_LAUNCHER)
-            }
-            val resolveInfoList = pm.queryIntentActivities(intent, 0)
-            allApps = resolveInfoList
-                .map { it.activityInfo.applicationInfo }
-                .distinctBy { it.packageName }
-                .filter{pm.getApplicationLabel(it).toString() != "App Timer"}
-                .sortedBy { pm.getApplicationLabel(it).toString() }
-            withContext(Dispatchers.Main) {
-                updateAppSpinner(allApps)
-            }
+
+
+    fun hasUsageStatsPermission(context: Context): Boolean {
+        try {
+            val appOps = context.getSystemService(Context.APP_OPS_SERVICE) as android.app.AppOpsManager
+            val mode = appOps.checkOpNoThrow(
+                "android:get_usage_stats",
+                android.os.Process.myUid(),
+                context.packageName
+            )
+            return mode == android.app.AppOpsManager.MODE_ALLOWED
+        } catch (e: Exception) {
+            return false
         }
     }
 
     private fun setupAppNameWatcher() {
-        var searchHandler = Handler(Looper.getMainLooper())
-        var searchRunnable: Runnable? = null
         editTextAppName.addTextChangedListener(
             object : TextWatcher {
                 override fun afterTextChanged(s: Editable?) {
                     val input = s.toString().trim()
-                    searchRunnable?.let { searchHandler.removeCallbacks(it) }
-                    searchRunnable = Runnable {
-                        if (input.isEmpty()) {
-                            updateAppSpinner(allApps)
-                        } else {
-                            val filtered = allApps.filter {
-                                requireContext().packageManager.getApplicationLabel(it).toString().contains(input, ignoreCase = true)
-                            }
-                            updateAppSpinner(filtered)
-                        }
-                    }
-                    searchHandler.postDelayed(searchRunnable!!, 300)
+//                    getAppsByName(input)
+                    val app = getRecentUsedApps(requireContext(), 7, input)
+//                    updateAppSpinner(getAppsByName(input))
+                    updateAppSpinner(app)
                 }
 
                 override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -140,24 +126,48 @@ class AppSetting_TimerFrag : DialogFragment() {
         return view
     }
 
-    @SuppressLint("QueryPermissionsNeeded")
     private fun getAppsByName(input: String): List<ApplicationInfo> {
         val pm = requireContext().packageManager
-        val intent = Intent(Intent.ACTION_MAIN, null).apply {
+        val intent = Intent(Intent.ACTION_DEFAULT, null).apply {
             addCategory(Intent.CATEGORY_LAUNCHER)
         }
-        val resolveInfoList = pm.queryIntentActivities(intent, 0)
-        return resolveInfoList
+        val apps = pm.queryIntentActivities(intent, 0)
             .map { it.activityInfo.applicationInfo }
             .distinctBy { it.packageName }
+
+        return apps
             .filter { pm.getApplicationLabel(it).toString().contains(input, ignoreCase = true) }
             .sortedBy { pm.getApplicationLabel(it).toString() }
     }
 
+    fun getRecentUsedApps(context: Context, days: Int = 7, filter: String = ""): List<ApplicationInfo> {
+        val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+        val endTime = System.currentTimeMillis()
+        val beginTime = endTime - days * 24 * 60 * 60 * 1000L
+
+        val usageEvents = usageStatsManager.queryEvents(beginTime, endTime)
+        val appPackages = mutableSetOf<String>()
+        val event = UsageEvents.Event()
+        while (usageEvents.hasNextEvent()) {
+            usageEvents.getNextEvent(event)
+            if (event.eventType == UsageEvents.Event.MOVE_TO_FOREGROUND) {
+                appPackages.add(event.packageName)
+            }
+        }
+        val pm = context.packageManager
+        return appPackages.mapNotNull { pkg ->
+            try {
+                val info = pm.getApplicationInfo(pkg, 0)
+                // Nếu cần lọc theo tên ứng dụng:
+                if (pm.getApplicationLabel(info).toString().contains(filter, ignoreCase = true)) info else null
+            } catch (e: Exception) { null }
+        }.sortedBy { pm.getApplicationLabel(it).toString() }
+    }
+
+
     private fun updateAppSpinner(apps: List<ApplicationInfo>) {
         val pm = requireContext().packageManager
-        filteredApps = apps
-        val adapter = object : ArrayAdapter<ApplicationInfo>(requireContext(), 0, filteredApps) {
+        val adapter = object : ArrayAdapter<ApplicationInfo>(requireContext(), 0, apps) {
             override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
                 return createAppView(position, convertView, parent, pm)
             }
@@ -168,15 +178,23 @@ class AppSetting_TimerFrag : DialogFragment() {
         spinnerApps.adapter = adapter
     }
 
+    private fun initAppSelection () {
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, timeOptions)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinnerTimerLimits.adapter = adapter
+        spinnerTimerLimits.setSelection(3)
+    }
+
     private fun setupButtons() {
         btnClose.setOnClickListener {
             dismiss()
         }
 
         btnSave.setOnClickListener {
-            if (spinnerApps.selectedItemPosition >= 0) {
+            if (filteredApps.isNotEmpty() && spinnerApps.selectedItemPosition >= 0) {
                 val selectedApp = filteredApps[spinnerApps.selectedItemPosition]
                 val selectedTimeLimit = timeOptions[spinnerTimerLimits.selectedItemPosition]
+
                 listener?.onAppSettingSaved(selectedApp, selectedTimeLimit)
                 dismiss()
             } else {

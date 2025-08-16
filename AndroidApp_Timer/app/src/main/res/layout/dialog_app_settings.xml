@@ -34,6 +34,7 @@
         android:minWidth="250dp"
         android:layout_height="56dp"
         android:layout_marginTop="8dp"
+        android:background="@color/colorPrimaryDark"
         android:hint="Nhập tên ứng dụng"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
