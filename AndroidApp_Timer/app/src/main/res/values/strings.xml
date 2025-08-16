@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">App Timer</string>
-    <string name="app_timer">App Timer</string>
+    <string name="app_name">Time Management</string>
+    <string name="app_timer">Time Management</string>
     <string name="timer">Hẹn giờ</string>
     <string name="practice">Luyện tập</string>
     <string name="profile">Cá nhân</string>
 
     <string name="app_icon">App Icon</string>
-    <string name="selected_app_icon">Selected App Icon</string>
-
-    <string name="instagram">Instagram</string>
-    <string name="youtube">YouTube</string>
-    <string name="facebook">Facebook</string>
-    <string name="twitter">Twitter</string>
-    <string name="chrome">Chrome</string>
+    <string name="selected_app">Chọn ứng dụng</string>
+    <string name="selected_app_icon">Chọn biểu tượng ứng dụng</string>
 
     <string name="time_limit_60_minutes">Thời gian giới hạn: %d phút</string>
     <string name="time_remaining">Thời gian còn lại</string>
@@ -29,4 +24,85 @@
 
     <string name="cancel">Hủy</string>
     <string name="save">Lưu</string>
+
+
+    <!-- Profile Settings __________________________________________-->
+    <string name="profile_settings">Cài đặt</string>
+    <string name="settings">Cài đặt</string>
+    <string name="accessibility_settings">Đi đến trợ năng</string>
+    <string name="accessibility_description">Cấp quyền truy cập để ứng dụng hoạt động</string>
+    <string name="premium">Premium</string>
+    <string name="premium_description">Nâng cấp để mở khóa tất cả tính năng</string>
+    <string name="upgrade">NÂNG CẤP</string>
+
+    <!-- Settings Options -->
+    <string name="dark_mode">Chế độ tối</string>
+    <string name="language">Ngôn ngữ</string>
+
+    <!-- Premium Dialog -->
+    <string name="premium_upgrade">Nâng cấp Premium</string>
+    <string name="premium_features_description">Mở khóa tất cả tính năng cao cấp và trải nghiệm không quảng cáo</string>
+    <string name="feature_unlimited_apps">Không giới hạn số lượng ứng dụng</string>
+    <string name="feature_advanced_stats">Thống kê chi tiết và báo cáo</string>
+    <string name="feature_no_ads">Không có quảng cáo</string>
+    <string name="upgrade_now">NÂNG CẤP NGAY</string>
+
+    <!-- App Info -->
+    <string name="app_version">Phiên bản 1.0.0</string>
+    <string name="developed_by">Phát triển bởi TLN</string>
+
+    <!-- Profile New Strings -->
+    <string name="welcome_user">Chào mừng bạn!</string>
+    <string name="manage_your_time">Quản lý thời gian hiệu quả</string>
+
+    <!-- FAQ Strings -->
+    <string name="faq">Câu hỏi thường gặp</string>
+    <string name="faq_description">Tìm hiểu cách sử dụng ứng dụng</string>
+    <string name="faq_welcome">Câu hỏi thường gặp</string>
+    <string name="faq_subtitle">Tìm câu trả lời cho những thắc mắc phổ biến về ứng dụng</string>
+
+    <!-- Feedback Strings -->
+    <string name="feedback">Góp ý</string>
+    <string name="feedback_description">Chia sẻ ý kiến của bạn với tôi</string>
+    <string name="feedback_welcome">Góp ý &amp; Đánh giá</string>
+    <string name="feedback_subtitle">Chia sẻ trải nghiệm và giúp tôi cải thiện ứng dụng</string>
+    <string name="feedback_type">Loại góp ý</string>
+    <string name="subject">Tiêu đề</string>
+    <string name="subject_hint">Nhập tiêu đề góp ý</string>
+    <string name="message">Nội dung</string>
+    <string name="message_hint">Mô tả chi tiết góp ý của bạn...</string>
+    <string name="email">Email liên hệ</string>
+    <string name="email_hint">your.email@example.com</string>
+    <string name="yourname">Tên của bạn</string>
+    <string name="yourname_hint">Bạn có thể để trống</string>
+    <string name="submit_feedback">Gửi góp ý</string>
+    <string name="rate_app">Đánh giá ứng dụng</string>
+
+
+    <string name="ac_service_desc">
+        App Timer cần quyền Trợ năng để nhận biết khi bạn mở ứng dụng,
+        ghi thời gian sử dụng và nhắc khi vượt giới hạn. Ứng dụng KHÔNG đọc
+        nội dung màn hình hay thu thập dữ liệu cá nhân.
+    </string>
+
+    <string name="practice_icon_description">Biểu tượng luyện tập</string>
+    <string name="feature_in_development">Tính năng đang phát triển</string>
+    <string name="back_button_description">Nút quay lại</string>
+    <string name="feedback_icon_description">Biểu tượng góp ý</string>
+    <string name="check_icon_description">Biểu tượng kiểm tra</string>
+    <string name="user_avatar_description">Ảnh đại diện người dùng</string>
+    <string name="settings_icon_description">Biểu tượng cài đặt</string>
+    <string name="expand_settings_description">Mở rộng cài đặt</string>
+    <string name="dark_mode_icon_description">Biểu tượng chế độ tối</string>
+    <string name="language_icon_description">Biểu tượng ngôn ngữ</string>
+    <string name="accessibility_icon_description">Biểu tượng trợ năng</string>
+    <string name="go_to_accessibility_description">Đi đến cài đặt trợ năng</string>
+    <string name="faq_icon_description">Biểu tượng câu hỏi thường gặp</string>
+    <string name="go_to_faq_description">Đi đến câu hỏi thường gặp</string>
+    <string name="go_to_feedback_description">Đi đến góp ý</string>
+    <string name="premium_icon_description">Biểu tượng Premium</string>
+    <string name="app_icon_description">Biểu tượng ứng dụng</string>
+    <string name="enter_app_name_hint">Nhập tên ứng dụng</string>
+
+
 </resources>

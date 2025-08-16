@@ -2,11 +2,11 @@ package com.example.tlnapp_timemanagement.main
 
 import android.Manifest
 import android.accessibilityservice.AccessibilityService
-import android.annotation.SuppressLint
+import android.content.Context
+import android.content.res.Configuration
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.ComponentName
-import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -21,16 +21,23 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.example.tlnapp_timemanagement.ProfileFragment
 import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.dialog.Notification
-import com.example.tlnapp_timemanagement.service.BroadcastReceiverService
 import com.example.tlnapp_timemanagement.service.FocusDetectService
+import com.example.tlnapp_timemanagement.worker.DailyUsageResetWorker
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.util.Calendar
+import java.util.Locale
 
 
 class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     private val CHANNEL_ID = "timer_channel"
+    private var selectedTabId: Int = R.id.nav_timer
 
     private val requestPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
@@ -51,6 +58,9 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        loadAndApplySettings()
+        applySavedLanguage()
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -60,13 +70,13 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         // AccessibilityService
         if (!isAccessibilityServiceEnabled(this, FocusDetectService::class.java)) {
-            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+//            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         }
 
         // UsageStats
         if (!hasUsageStatsPermission(this)) {
             val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
-            this.startActivity(intent)
+//            this.startActivity(intent)
         }
 
         // Initialize bottom navigation
@@ -74,10 +84,37 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
 
         // Schedule daily usage reset
-        BroadcastReceiverService.scheduleExactReset(this)
+        scheduleDailyUsageResetWork(this)
 
         // Set default fragment
-        loadFragment(TimerFragment())
+        if (savedInstanceState != null) {
+            selectedTabId = savedInstanceState.getInt("SELECTED_TAB_ID", R.id.nav_timer)
+            bottomNavigationView.selectedItemId = selectedTabId
+        } else {
+            bottomNavigationView.selectedItemId = R.id.nav_timer
+            loadFragment(TimerFragment())
+        }
+    }
+
+    private fun loadAndApplySettings() {
+        val sharedPref = getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+
+        // Load dark mode setting
+        val isDarkMode = sharedPref.getBoolean("dark_mode_enabled", false)
+        if (isDarkMode) {
+            setTheme(R.style.AppTheme_Dark)
+        } else {
+            setTheme(R.style.AppTheme)
+        }
+
+        // Load language setting
+        val languageCode = sharedPref.getString("language_code", "vi") ?: "vi"
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val config = Configuration()
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
     }
 
     private fun loadFragment(fragment: Fragment?): Boolean {
@@ -92,6 +129,8 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        if (selectedTabId == item.itemId) return false
+        selectedTabId = item.itemId
         var fragment: Fragment? = null
 
         when (item.itemId) {
@@ -102,6 +141,7 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
 
         return loadFragment(fragment)
     }
+
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -185,4 +225,49 @@ class MainActivity : AppCompatActivity(), BottomNavigationView.OnNavigationItemS
         }
     }
 
+    private fun scheduleDailyUsageResetWork(context: Context) {
+        // Delay = 4AM next day
+        val now = Calendar.getInstance()
+        val target = now.clone() as Calendar
+        target.set(Calendar.HOUR_OF_DAY, 4)
+        target.set(Calendar.MINUTE, 0)
+        target.set(Calendar.SECOND, 0)
+        target.set(Calendar.MILLISECOND, 0)
+        if (target.before(now)) {
+            target.add(Calendar.DATE, 1)
+        }
+        val initialDelay = target.timeInMillis - now.timeInMillis
+
+        val workRequest = PeriodicWorkRequestBuilder<DailyUsageResetWorker>(1, java.util.concurrent.TimeUnit.DAYS)
+            .setInitialDelay(initialDelay, java.util.concurrent.TimeUnit.MILLISECONDS)
+            .addTag("DAILY_USAGE_RESET")
+            .build()
+
+        WorkManager.getInstance(context).enqueueUniquePeriodicWork(
+            "DailyUsageResetWork",
+            ExistingPeriodicWorkPolicy.UPDATE,
+            workRequest
+        )
+    }
+
+    private fun cancelScheduleDaily(context: Context) {
+        WorkManager.getInstance(context).cancelUniqueWork("DailyUsageResetWork")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("SELECTED_TAB_ID", selectedTabId)
+    }
+
+
+    private fun applySavedLanguage() {
+        val sharedPref = getSharedPreferences("app_settings", Context.MODE_PRIVATE)
+        val languageCode = sharedPref.getString("language_code", "vi") ?: "vi"
+        val locale = Locale(languageCode)
+        Locale.setDefault(locale)
+
+        val config = Configuration()
+        config.setLocale(locale)
+        resources.updateConfiguration(config, resources.displayMetrics)
+    }
 }

@@ -46,8 +46,8 @@ class UsageCountTimeService() : LifecycleService(){
             notificationProgress = false
             currentIdAppPackage = inputIdAppPackage
         }
-        startTime = System.currentTimeMillis() - 1000
-        job = lifecycleScope.launch(Dispatchers.IO) {
+        startTime = System.currentTimeMillis()
+        job = lifecycleScope.launch(Dispatchers.Main) {
             timeLimit = historyAppRepository.getTimeLimit(currentIdAppPackage) * 60 * 1000L
             while(isActive) {
                 userSEC = dailyUsageRepository.getDailyUsageTimeOneTime(currentIdAppPackage)

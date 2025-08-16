@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="?attr/colorSurface">
 
     <TextView
         android:id="@+id/dialog_title"
@@ -11,7 +12,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
         android:text="@string/setup_time"
-        android:textColor="@color/textPrimary"
+        android:textColor="?attr/android:textColorPrimary"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +24,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="sans-serif-medium"
         android:text="@string/select_app_name"
-        android:textColor="@color/textPrimary"
+        android:textColor="?attr/android:textColorPrimary"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dialog_title" />
@@ -34,12 +35,14 @@
         android:minWidth="250dp"
         android:layout_height="56dp"
         android:layout_marginTop="8dp"
-        android:background="@color/colorPrimaryDark"
-        android:hint="Nhập tên ứng dụng"
+        android:hint="@string/enter_app_name_hint"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
         android:textSize="16sp"
         android:singleLine="true"
+        android:background="@drawable/edittext_background"
+        android:textColor="?attr/android:textColorPrimary"
+        android:textColorHint="?attr/android:textColorSecondary"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_name_label" />
 
@@ -50,7 +53,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="sans-serif-medium"
         android:text="@string/select_app"
-        android:textColor="@color/textPrimary"
+        android:textColor="?attr/android:textColorPrimary"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_edittext" />
@@ -75,7 +78,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="sans-serif-medium"
         android:text="@string/time_limit_minutes"
-        android:textColor="@color/textPrimary"
+        android:textColor="?attr/android:textColorPrimary"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/app_spinner" />
@@ -95,13 +98,13 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_cancel"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        style="@style/Widget.MaterialComponents.Button.TextButton.Themed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:fontFamily="sans-serif-medium"
         android:text="@string/cancel"
-        android:textColor="@color/textSecondary"
+        android:textColor="?attr/android:textColorSecondary"
         app:layout_constraintEnd_toStartOf="@+id/btn_save"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintHorizontal_chainStyle="packed"
@@ -110,11 +113,12 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_save"
+        style="@style/Widget.MaterialComponents.Button.Colored.Themed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:backgroundTint="?attr/colorPrimary"
         android:fontFamily="sans-serif-medium"
         android:text="@string/save"
         android:textColor="@android:color/white"

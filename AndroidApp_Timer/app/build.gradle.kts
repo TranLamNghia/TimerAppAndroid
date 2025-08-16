@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -10,12 +11,17 @@ android {
 
     defaultConfig {
         applicationId = "com.example.tlnapp_timemanagement"
-        minSdk = 24
+        minSdk = 29
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    defaultConfig {
+        buildConfigField ("String", "AIRTABLE_BASE_ID", "\"${property("AIRTABLE_BASE_ID")}\"")
+        buildConfigField ("String", "AIRTABLE_PAT", "\"Bearer ${property("AIRTABLE_PAT")}\"")
     }
 
     buildTypes {
@@ -36,6 +42,11 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
+    }
+
+    lint {
+        disable += "NullSafeMutableLiveData"
     }
 
 }
@@ -53,6 +64,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.coordinatorlayout)
     implementation(libs.material)
+    implementation(libs.androidx.lifecycle.service)
+    implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -63,4 +76,18 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.8.3")
     implementation ("androidx.navigation:navigation-ui-ktx:2.8.3")
+
+
+    val room_version = "2.7.1"
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+
+    val lottieVersion = "6.4.0"
+    implementation ("com.airbnb.android:lottie:$lottieVersion")
+
+    implementation ("com.squareup.okhttp3:okhttp:4.9.0")
+    implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
+    implementation ("com.google.code.gson:gson:2.8.6")
+
 }

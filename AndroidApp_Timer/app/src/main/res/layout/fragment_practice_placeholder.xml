@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:screenOrientation="portrait"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?attr/colorBackground">
 
     <ImageView
         android:id="@+id/practice_icon"
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:src="@drawable/ic_dumbbell"
-        app:tint="@color/textSecondary"
+        app:tint="?attr/android:textColorSecondary"
         app:layout_constraintBottom_toTopOf="@+id/practice_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintVertical_chainStyle="packed"
+        android:contentDescription="@string/practice_icon_description" />
 
     <TextView
         android:id="@+id/practice_title"
@@ -23,7 +26,7 @@
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-medium"
         android:text="@string/practice"
-        android:textColor="@color/textPrimary"
+        android:textColor="?attr/android:textColorPrimary"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/practice_subtitle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,8 +39,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif"
-        android:text="Tính năng đang phát triển"
-        android:textColor="@color/textSecondary"
+        android:text="@string/feature_in_development"
+        android:textColor="?attr/android:textColorSecondary"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

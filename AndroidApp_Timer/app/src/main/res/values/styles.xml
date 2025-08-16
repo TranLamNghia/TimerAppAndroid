@@ -2,11 +2,80 @@
 <resources>
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:statusBarColor">?attr/colorBackground</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowBackground">@drawable/gradient_background</item>
+        <item name="strokeNavColor">@color/strokeNavColor_Light</item>
+
+
+        <!-- Custom Theme Attributes for Light Mode -->
+        <item name="colorBackground">@color/background_light</item>
+        <item name="colorSurface">@color/surface_light</item>
+        <item name="colorOnSurface">@color/textPrimary</item>
+        <item name="colorContainer">@color/container_light</item> <!-- For setting item backgrounds -->
+        <item name="colorOnContainer">@color/textPrimary</item> <!-- For text on setting items -->
+        <item name="android:textColorPrimary">@color/textPrimary</item>
+        <item name="android:textColorSecondary">@color/textSecondary</item>
+    </style>
+
+    <!-- Dark Theme -->
+    <style name="AppTheme.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:statusBarColor">?attr/colorBackground</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowBackground">@drawable/gradient_background_dark</item>
+        <item name="strokeNavColor">@color/strokeNavColor_Dark</item>
+
+        <!-- Custom Theme Attributes for Dark Mode -->
+        <item name="colorBackground">@color/dark_background</item>
+        <item name="colorSurface">@color/dark_surface</item>
+        <item name="colorOnSurface">@color/textPrimary_dark</item>
+        <item name="colorContainer">@color/dark_surface_variant</item>
+        <item name="colorOnContainer">@color/textPrimary_dark</item>
+        <item name="android:textColorPrimary">@color/textPrimary_dark</item>
+        <item name="android:textColorSecondary">@color/textSecondary_dark</item>
+    </style>
+
+    <!-- Custom Switch Theme (Light) - Corrected parent -->
+    <style name="CustomSwitchTheme" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="colorAccent">?attr/colorPrimary</item>
+        <item name="colorControlActivated">?attr/colorPrimary</item>
+        <!-- Removed android:colorForeground and colorSwitchThumbNormal as they might conflict or be redundant with colorControlActivated on newer APIs -->
+    </style>
+
+    <!-- Custom Switch Theme (Dark) - Corrected parent -->
+    <style name="CustomSwitchTheme.Dark" parent="Widget.AppCompat.CompoundButton.Switch">
+        <item name="colorAccent">?attr/colorPrimary</item>
+        <item name="colorControlActivated">?attr/colorPrimary</item>
+    </style>
+
+    <!-- Themed Material Button Styles -->
+    <style name="Widget.MaterialComponents.Button.OutlinedButton.Themed" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:textColor">@color/colorDanger</item>
+        <item name="strokeColor">@color/colorDangerLight</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <!-- Corrected parent style for colored button -->
+    <style name="Widget.MaterialComponents.Button.Colored.Themed" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">@android:color/white</item>
+        <item name="backgroundTint">?attr/colorPrimary</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <style name="Widget.MaterialComponents.Button.TextButton.Themed" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:textColor">?attr/android:textColorSecondary</item>
+    </style>
+
+    <!-- Custom RatingBar Theme -->
+    <style name="CustomRatingBar" parent="@android:style/Widget.RatingBar">
+        <item name="android:progressTint">@color/premium_gold</item>
+        <item name="android:secondaryProgressTint">@color/premium_gold</item>
+        <item name="android:backgroundTint">?attr/colorContainer</item>
     </style>
 </resources>

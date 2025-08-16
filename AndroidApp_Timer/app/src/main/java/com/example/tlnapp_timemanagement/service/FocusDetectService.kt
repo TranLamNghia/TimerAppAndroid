@@ -68,12 +68,11 @@ class FocusDetectService : AccessibilityService() {
         val pkg = ev.packageName?.toString() ?: return
         val timestamp = System.currentTimeMillis()
 
-
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             Log.d("FDService", "App chuyển foreground: $pkg at $timestamp")
             val currentApp = getCurrentApp()
             if (currentApp == null) return@launch
-            Log.d("FDService", "App current : " + currentApp.packageName + "________" + isOpen)
+//            Log.d("FDService", ":::::" + currentTrackedPackage + "____" + currentApp.packageName + "____" + pkg + "___" + isOpen)
             if (pkg == currentApp.packageName && isOpen == false) {
                 stopJob?.cancel()
                 isOpen = true
@@ -88,8 +87,7 @@ class FocusDetectService : AccessibilityService() {
                 stopJob?.cancel()
                 stopJob = launch {
                     delay(STOP_DEBOUNCE_MS)
-//                    if (currentTrackedPackage == currentApp.packageName && pkg == "com.google.android.apps.nexuslauncher" && isOpen == true) {
-                    if (currentTrackedPackage == currentApp.packageName && pkg == homePackage && isOpen == true) {
+                        if (currentTrackedPackage == currentApp.packageName && pkg == homePackage && isOpen == true) {
                         isOpen = false
                         Log.d("FDService", "CLOSE")
                         repo.onAppSessionEnd(currentApp)
@@ -99,6 +97,7 @@ class FocusDetectService : AccessibilityService() {
                         })
                         currentTrackedPackage = null
                     }
+
                 }
             }
         }
