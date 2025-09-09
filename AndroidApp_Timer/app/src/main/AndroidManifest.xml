@@ -37,7 +37,12 @@
         <service android:name=".service.UsageCountTimeService"
             tools:ignore="MissingClass" />
 
-
+        <receiver android:name=".reset.BootReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
     <queries>

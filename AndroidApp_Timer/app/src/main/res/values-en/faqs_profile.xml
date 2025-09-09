@@ -1,32 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="faq_questions">
-        <item>How to set time limit for an app?</item>
-        <item>Does the app work in background?</item>
-        <item>Can I set time for multiple apps?</item>
-        <item>How to enable notifications?</item>
-        <item>Why isn\'t the app working?</item>
+        <item>What actions are required for the app to function properly?</item>
+        <item>Why are the above permissions needed, and are they safe for users?</item>
+        <item>Can I set up multiple apps at the same time?</item>
+        <item>How do I know if the desired app has started timing?</item>
+        <item>How can I check if \"Accessibility\" is enabled?</item>
         <item>Where is my data stored?</item>
-        <item>How to reset to default?</item>
-        <item>What are Premium features?</item>
+        <item>Will the app still work normally when \"Time Management\" is turned off?</item>
     </string-array>
     <string-array name="faq_answers">
-        <item>You can set a timer by tapping "Setup" in the Timer tab, then select the app and the desired time.</item>
-        <item>Yes, the app continues counting down even if you don\'t open it. You must enable accessibility permission.</item>
-        <item>The free version supports only 1 app. Upgrade to Premium to use multiple apps.</item>
-        <item>Go to Profile &gt; Settings &gt; turn on Notifications. Make sure you allow notification permission in system settings.</item>
-        <item>Please check if you have granted accessibility permission in Settings &gt; Accessibility. This is required for the app to work.</item>
-        <item>All data is stored locally on your device. We do not collect or store your personal data on our server.</item>
-        <item>You can uninstall and reinstall the app, or contact us via the Feedback tab for support.</item>
-        <item>Premium includes: unlimited apps, detailed statistics, no ads, and many more features.</item>
+        <item>You need to grant three permissions: \"Usage Stats\", \"Accessibility\", and \"Notification\" for the app to work properly.</item>
+        <item>With the \"Usage Stats\" permission, the app can know which apps are installed on your phone.
+            With the \"Accessibility\" permission, the app can detect when apps are opened or closed in real time.
+            With the \"Notification\" permission, the app can notify users.
+            These permissions are not intended to track or collect users personal information.
+        </item>
+        <item>The free version currently supports only 1 app. To use multiple apps, you need to upgrade to Premium.</item>
+        <item>When the app you want to track is opened, you will receive a notification that it has started; when closed, you will also get a notification. If no notification appears, it means the \"Accessibility\" permission is missing.</item>
+        <item>The simplest way is to go to the \"Personal\" section of the app, then tap \"Go to Accessibility\", find the \"Time Management\" app, and turn it on.
+                Note: the status of the app must be \"On\". If not, try toggling the permission off and on again. If that doesn\’t work, reset the app so it can function again.
+        </item>
+        <item>All data is stored locally on your device. We do not collect or store any personal data on servers.</item>
+        <item>Yes, the app will continue counting down even if you don\’t open it.</item>
     </string-array>
     <string-array name="faq_images">
-        <item>img_test_faq</item>
-        <item>img_test_faq</item>
         <item></item>
         <item></item>
         <item></item>
         <item></item>
+        <item>img_faq_6</item>
         <item></item>
         <item></item>
     </string-array>

@@ -1,32 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="faq_questions">
-        <item>Làm thế nào để thiết lập thời gian cho ứng dụng?</item>
-        <item>Ứng dụng có hoạt động khi tôi không mở nó không?</item>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string-array name="faq_questions" tools:ignore="InconsistentArrays">
+        <item>Thao tác cần thiết để ứng dụng hoạt động bình thường là gì?</item>
+        <item>Tại sao lại cần các quyền hạn trên, chúng có đảm bảo an toàn cho người dùng không</item>
         <item>Tôi có thể thiết lập nhiều ứng dụng cùng lúc không?</item>
-        <item>Làm thế nào để bật thông báo?</item>
-        <item>Tại sao ứng dụng không hoạt động?</item>
+        <item>Làm sao để tôi biết ứng dụng mong muốn được bắt đầu tính thời gian?</item>
+        <item>Bằng cách nào để tôi biết \"Accessibility\" đã được bật?</item>
         <item>Dữ liệu của tôi có được lưu trữ ở đâu?</item>
-        <item>Làm thế nào để khôi phục cài đặt mặc định?</item>
-        <item>Premium có những tính năng gì?</item>
+        <item>Khi tắt \"Time Management\" thì ứng dụng còn hoạt động bình thường không?</item>
     </string-array>
-    <string-array name="faq_answers">
-        <item>Bạn có thể thiết lập thời gian bằng cách nhấn nút "Thiết lập" trong tab Hẹn giờ, sau đó chọn ứng dụng và thời gian mong muốn.</item>
-        <item>Có, ứng dụng sẽ tiếp tục đếm ngược thời gian ngay cả khi bạn không mở nó. Tuy nhiên, bạn cần cấp quyền truy cập trong cài đặt trợ năng.</item>
+    <string-array name="faq_answers" tools:ignore="InconsistentArrays">
+        <item>Bạn cần cấp 3 quyền \"Usage Stats\", \"Accessibility\" và \"Notification\" để ứng dụng có thể họat động bình thường.</item>
+        <item>Với quyền \"Usage Stats\", ứng dụng sẽ có thể biết được điện thoại của bạn đang cài đặt những ứng dụng nào. Với quyền \"Accessibility\", ứng dụng có thể biết được khi nào ứng dụng yêu cầu được mở và tắt trong thời gian thực. Với quyền \"Notification\", ứng dụng có thông báo cho người dùng. Các quyền trên không chứa mục đích theo dõi hoặc thu thập thông tin cá nhân của người sử dụng. </item>
         <item>Hiện tại phiên bản miễn phí chỉ hỗ trợ 1 ứng dụng. Để sử dụng nhiều ứng dụng, bạn cần nâng cấp lên Premium.</item>
-        <item>Vào tab Cá nhân &gt; Cài đặt &gt; bật công tắc Thông báo. Đảm bảo bạn đã cấp quyền thông báo cho ứng dụng trong cài đặt hệ thống.</item>
-        <item>Hãy kiểm tra xem bạn đã cấp quyền truy cập trong Cài đặt &gt; Trợ năng chưa. Đây là quyền bắt buộc để ứng dụng có thể giám sát thời gian sử dụng.</item>
+        <item>Khi ứng dụng bạn mong muốn thiết lập được mở, bạn sẽ nhập được 1 thông báo ứng dụng đã mở; khi đóng cũng tương tự. Nếu không có thông báo trên, ứng dụng đã thiếu quyền \"Accessibility\".</item>
+        <item>Cách đơn giản là bạn hãy vào mục "Cá nhân" của ứng dụng, sau đó nhấn vào \"Đi đến trợ năng\", tìm ứng dụng \"Time Management\" và bật chúng lên. Lưu ý, trạng thái của ứng dụng bắt buôc phải là \"Bật\", nếu không phải hãy thử bật tắt lại quyền, nếu không được hãy reset lại ứng dụng để có thể hoạt động lại. </item>
         <item>Tất cả dữ liệu được lưu trữ cục bộ trên thiết bị của bạn. Chúng tôi không thu thập hay lưu trữ dữ liệu cá nhân trên server.</item>
-        <item>Bạn có thể gỡ cài đặt và cài đặt lại ứng dụng, hoặc liên hệ với chúng tôi qua tab Góp ý để được hỗ trợ.</item>
-        <item>Premium bao gồm: không giới hạn số ứng dụng, thống kê chi tiết, không quảng cáo, và nhiều tính năng cao cấp khác.</item>
+        <item>Có, ứng dụng sẽ tiếp tục đếm ngược thời gian ngay cả khi bạn không mở nó.</item>
     </string-array>
-    <string-array name="faq_images">
-        <item>img_test_faq</item>
-        <item>img_test_faq</item>
+    <string-array name="faq_images" tools:ignore="InconsistentArrays">
         <item></item>
         <item></item>
         <item></item>
         <item></item>
+        <item>img_faq_6</item>
         <item></item>
         <item></item>
     </string-array>

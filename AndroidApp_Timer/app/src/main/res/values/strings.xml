@@ -104,5 +104,8 @@
     <string name="app_icon_description">Biểu tượng ứng dụng</string>
     <string name="enter_app_name_hint">Nhập tên ứng dụng</string>
 
-
+    <string name="warming">Cảnh báo</string>
+    <string name="using_50_percent">Bạn đã sử dụng 50%% thời gian</string>
+    <string name="remaining_1_minute">Bạn còn 1 phút sử dụng</string>
+    <string name="out_of_time">Bạn đã sử dụng hết thời gian.</string>
 </resources>

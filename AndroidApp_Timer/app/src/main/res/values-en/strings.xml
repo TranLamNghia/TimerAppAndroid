@@ -102,4 +102,8 @@
     <string name="app_icon_description">App icon</string>
     <string name="enter_app_name_hint">Enter app name</string>
 
+    <string name="warming">Warming</string>
+    <string name="using_50_percent">You have used 50%% of your time</string>
+    <string name="remaining_1_minute">You have 1 minute left</string>
+    <string name="out_of_time">You have used up all your time.</string>
 </resources>

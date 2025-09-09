@@ -43,7 +43,7 @@ class BroadcastReceiverService : BroadcastReceiver() {
 
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
-                set(Calendar.HOUR_OF_DAY, 4)
+                set(Calendar.HOUR_OF_DAY, 22)
                 set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0)
                 set(Calendar.MILLISECOND, 0)

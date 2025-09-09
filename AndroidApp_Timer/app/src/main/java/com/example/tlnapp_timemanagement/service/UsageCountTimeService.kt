@@ -5,6 +5,7 @@ import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
+import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.data.AppDatabase
 import com.example.tlnapp_timemanagement.data.repository.DailyUsageRepository
 import com.example.tlnapp_timemanagement.data.repository.HistoryAppRepository
@@ -53,20 +54,19 @@ class UsageCountTimeService() : LifecycleService(){
                 userSEC = dailyUsageRepository.getDailyUsageTimeOneTime(currentIdAppPackage)
                 val now = System.currentTimeMillis()
                 userSEC += (now - startTime) / 1000
-                Log.d("UsageCountTimeService", "Time: ${userSEC}")
 
                 if (userSEC * 1000 >= timeLimit * valueProgress && notificationProgress == false) {
                     launch {
                         notificationProgress = true
-                        Notification.showProgressNotification(applicationContext, "App Timer", "Bạn đã sử dụng 50% thời gian", 50)
+                        Notification.showProgressNotification(applicationContext, getString(R.string.warming), getString(R.string.using_50_percent), 50)
                     }
                 }
                 if(userSEC * 1000 + 60000 == timeLimit) {
-                    Notification.showSimpleNotification_HighPriority(applicationContext, "App Timer", "Bạn còn 1 phút sử dụng")
+                    Notification.showSimpleNotification_HighPriority(applicationContext, getString(R.string.warming), getString(R.string.remaining_1_minute))
                 }
                 if (userSEC * 1000 >= timeLimit) {
                     FocusDetectService.instance?.redirectToHome()
-                    Notification.showSimpleNotification(applicationContext, "App Timer", "Bạn đã sử dụng hết thời gian")
+                    Notification.showSimpleNotification(applicationContext, getString(R.string.warming), getString(R.string.out_of_time))
                     break
                 }
                 delay(1000L)

@@ -1,5 +1,6 @@
 package com.example.tlnapp_timemanagement.main
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -67,7 +68,7 @@ class FAQFrag_ProfileFragment : Fragment() {
             }
             radius = 48f
             cardElevation = 5f
-            setCardBackgroundColor(resources.getColor(android.R.color.white))
+            setCardBackgroundColor(Color.parseColor("#707070"))
         }
 
         val mainLayout = LinearLayout(requireContext()).apply {
@@ -134,7 +135,7 @@ class FAQFrag_ProfileFragment : Fragment() {
                     ).apply {
                         setMargins(0, 24, 0, 0)
                     }
-                    visibility = View.GONE // Ẩn cùng với answer ban đầu
+                    visibility = View.GONE
                 }
             }
         }

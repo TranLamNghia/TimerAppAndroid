@@ -1,5 +1,7 @@
 package com.example.tlnapp_timemanagement.data.repository
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import com.example.tlnapp_timemanagement.data.DAO.DailyUsageDAO
 import com.example.tlnapp_timemanagement.data.DAO.HistoryAppDAO
@@ -25,6 +27,7 @@ class HistoryAppRepository(private val historyAppDao: HistoryAppDAO, private val
 
     suspend fun deleteHistoryApp(status: String) = historyAppDao.deleteHistoryApp(status)
 
+    @RequiresApi(Build.VERSION_CODES.O)
     suspend fun onAppForeground(currentApp: HistoryApp) {
         val now = LocalDate.now().format(DateTimeFormatter.BASIC_ISO_DATE)
         val activeApp = historyAppDao.getAppByStatus("ACTIVE")
