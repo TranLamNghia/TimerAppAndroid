@@ -2,4 +2,5 @@
 <resources>
     <attr name="colorBackground" format="color" />
     <attr name="strokeNavColor" format="color"/>
+    <attr format="color" name="colorSurface"/>
 </resources>

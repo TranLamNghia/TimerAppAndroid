@@ -11,6 +11,9 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import com.example.tlnapp_timemanagement.R
+import com.google.android.material.color.MaterialColors
+import android.util.TypedValue
+import androidx.core.content.ContextCompat
 
 class FAQFrag_ProfileFragment : Fragment() {
 
@@ -59,6 +62,11 @@ class FAQFrag_ProfileFragment : Fragment() {
     }
 
     private fun createFAQItemView(faqItem: FAQItem, index: Int): View {
+        val typedValue = TypedValue()
+        val theme = requireContext().theme
+        theme.resolveAttribute(R.attr.colorSurface, typedValue, true)
+        val surfaceColor = typedValue.data
+
         val cardView = CardView(requireContext()).apply {
             layoutParams = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -68,7 +76,7 @@ class FAQFrag_ProfileFragment : Fragment() {
             }
             radius = 48f
             cardElevation = 5f
-            setCardBackgroundColor(Color.parseColor("#707070"))
+            setCardBackgroundColor(surfaceColor)
         }
 
         val mainLayout = LinearLayout(requireContext()).apply {
