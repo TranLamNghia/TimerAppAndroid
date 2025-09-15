@@ -14,12 +14,17 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.example.tlnapp_timemanagement.BuildConfig
 import com.example.tlnapp_timemanagement.dialog.AppSetting_TimerFrag
 import com.example.tlnapp_timemanagement.R
 import com.example.tlnapp_timemanagement.data.model.HistoryApp
 import com.example.tlnapp_timemanagement.data.viewmodel.DailyUsageViewModel
 import com.example.tlnapp_timemanagement.data.viewmodel.HistoryAppViewModel
 import com.example.tlnapp_timemanagement.dialog.LoadingFrag
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.*
 
 
@@ -32,7 +37,6 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
         timeLimit = 0,
         status = "PENDING"
     )
-
 
     private lateinit var timerText: TextView
     private lateinit var timerStatus: TextView
@@ -64,6 +68,15 @@ class TimerFragment : Fragment(), AppSetting_TimerFrag.OnAppSettingListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        MobileAds.initialize(requireContext()) {}
+        val adView = view.findViewById<AdView>(R.id.header_ad_view)
+        adView.setAdSize(AdSize.BANNER)
+        val unitId = BuildConfig.ADMOB_BANNER_UNIT_ID
+        adView.adUnitId = if (unitId.isNullOrBlank())
+            "ca-app-pub-3940256099942544/6300978111"
+        else unitId
+        adView.loadAd(AdRequest.Builder().build())
 
         // Initialize ViewModel
         historyAppViewModel = ViewModelProvider(this).get(HistoryAppViewModel::class.java)

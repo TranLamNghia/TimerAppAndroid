@@ -22,6 +22,9 @@ android {
     defaultConfig {
         buildConfigField ("String", "AIRTABLE_BASE_ID", "\"${property("AIRTABLE_BASE_ID")}\"")
         buildConfigField ("String", "AIRTABLE_PAT", "\"Bearer ${property("AIRTABLE_PAT")}\"")
+        manifestPlaceholders["ADMOB_APP_ID"] = (project.findProperty("ADMOB_APP_ID")).toString()
+        val admobBannerId = project.findProperty("ADMOB_BANNER_UNIT_ID") ?: ""
+        buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"$admobBannerId\"")
     }
 
     buildTypes {
@@ -90,4 +93,5 @@ dependencies {
     implementation ("com.squareup.okhttp3:logging-interceptor:4.9.0")
     implementation ("com.google.code.gson:gson:2.8.6")
 
+    implementation ("com.google.android.gms:play-services-ads:23.3.0")
 }

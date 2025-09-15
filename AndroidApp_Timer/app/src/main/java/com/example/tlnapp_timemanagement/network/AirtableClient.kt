@@ -12,7 +12,6 @@ import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import okio.IOException
 
-
 object AirtableClient {
     private const val BASE_ID = BuildConfig.AIRTABLE_BASE_ID
     private const val TABLE_NAME = "tbliaN3TonmzeV61K"
